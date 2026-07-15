@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+shared/node_modules/
+
+# Next.js generated output
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Backend generated output
+backend/dist/
+backend/build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+backend/.env
+backend/.env.local
+backend/.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Editors and OS
+.vs*ode/
+.idea/
+.DS_Store
+Thumbs.db
+``*
