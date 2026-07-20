@@ -1,0 +1,46 @@
+{
+  "name": "@mynsut/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Framework-independent roles, permissions, and API contracts shared by MyNSUT frontend and backend.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./constants/roles": {
+      "types": "./dist/constants/roles.d.ts",
+      "import": "./dist/constants/roles.js"
+    },
+    "./constants/permissions": {
+      "types": "./dist/constants/permissions.d.ts",
+      "import": "./dist/constants/permissions.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
+    },
+    "./types/api": {
+      "types": "./dist/types/api.d.ts",
+      "import": "./dist/types/api.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
