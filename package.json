@@ -1,0 +1,53 @@
+{
+  "name": "mynsut",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MyNSUT monorepo containing separate frontend, backend, and shared packages.",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace frontend\" \"npm run dev --workspace backend\"",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "dev:backend": "npm run dev --workspace backend",
+    "build": "npm run build --workspace frontend && npm run build --workspace backend",
+    "build:frontend": "npm run build --workspace frontend",
+    "build:backend": "npm run build --workspace backend",
+    "lint": "npm run lint --workspace frontend && npm run lint --workspace backend",
+    "lint:frontend": "npm run lint --workspace frontend",
+    "lint:backend": "npm run lint --workspace backend",
+    "format": "npm run format --workspace frontend && npm run format --workspace backend",
+    "format:frontend": "npm run format --workspace frontend",
+    "format:backend": "npm run format --workspace backend",
+    "prisma:generate": "npm run prisma:generate --workspace backend",
+    "prisma:migrate": "npm run prisma:migrate --workspace backend",
+    "prisma:studio": "npm run prisma:studio --workspace backend",
+    "db:seed": "npm run db:seed --workspace backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanshh4/MyNSUT2.git"
+  },
+  "keywords": [
+    "mynsut",
+    "nsut",
+    "student-platform",
+    "nextjs",
+    "express",
+    "postgresql",
+    "prisma"
+  ],
+  "author": "Vansh Bhardwaj",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vanshh4/MyNSUT2/issues"
+  },
+  "homepage": "https://github.com/vanshh4/MyNSUT2#readme",
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  },
+  "allowScripts": {}
+}

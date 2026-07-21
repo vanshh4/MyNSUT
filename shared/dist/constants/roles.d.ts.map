@@ -1,1 +1,0 @@
-{"version":3,"file":"roles.d.ts","sourceRoot":"","sources":["../../src/constants/roles.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,eAAO,MAAM,KAAK;;;;;;;CAOR,CAAC;AAEX,MAAM,MAAM,QAAQ,GAAG,CAAC,OAAO,KAAK,CAAC,CAAC,MAAM,OAAO,KAAK,CAAC,CAAC;AAE1D,eAAO,MAAM,UAAU,EAA0C,SAAS,QAAQ,EAAE,CAAC;AAErF,wBAAgB,UAAU,CAAC,KAAK,EAAE,OAAO,GAAG,KAAK,IAAI,QAAQ,CAE5D"}
