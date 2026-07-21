@@ -15,7 +15,7 @@ export default function Page() {
         description="Find the communities that make campus feel like yours."
       />
       <div className="relative mb-6 max-w-xl">
-        <Search className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-slate-400" />
+        <Search className="absolute top-1/2 left-135 size-4 -translate-y-1/2 text-slate-400" />
         <input className="pill-input pl-11" placeholder="Search societies" />
       </div>
       <motion.div
