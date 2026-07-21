@@ -33,6 +33,8 @@ pnpm-debug.log*
 # TypeScript
 *.tsbuildinfo
 
+shared/dist/
+
 # Editors and OS
 .vs*ode/
 .idea/
