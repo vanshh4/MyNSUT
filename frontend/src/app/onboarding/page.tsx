@@ -15,7 +15,7 @@ export default function Page() {
           className="glass mt-12 rounded-[36px] p-7 sm:p-9"
         >
           <p className="eyebrow">Getting started</p>
-          <h1 className="page-title mt-3">Make MyNSUT yours.</h1>
+          <h1 className="page-title mt-3">Make NSUT yours.</h1>
           <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
             Enter your UMS roll number and choose your section. We will derive your branch and
             admission year.
@@ -23,7 +23,7 @@ export default function Page() {
           <form className="mt-8 space-y-5">
             <label className="block">
               <span className="mb-2 block text-sm font-bold">UMS roll number</span>
-              <input className="pill-input" placeholder="2023UIT3324" />
+              <input className="pill-input" placeholder="2023UIN3324" />
             </label>
             <div className="grid gap-4 sm:grid-cols-2">
               <input

@@ -28,7 +28,7 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
     window.dispatchEvent(new Event(EVENT));
   }
   return (
-    <header className="glass sticky top-3 z-30 mx-3 flex min-h-16 items-center gap-3 rounded-full px-3 sm:px-5 lg:ml-0">
+    <header className="glass sticky top-3 z-30 mx-3 flex min-h-18 items-center gap-3 rounded-full px-3 sm:px-5 lg:ml-0">
       <button
         onClick={onMenuClick}
         className="grid size-10 place-items-center rounded-full lg:hidden"
@@ -36,13 +36,13 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
         <Menu className="size-5" />
       </button>
       <form
-        className="relative ml-auto hidden w-[min(38vw,32rem)] md:block"
+        className="relative ml-auto hidden w-[min(70vw,70rem)] md:block"
         onSubmit={(e) => {
           e.preventDefault();
           if (q.trim()) location.href = `/search?q=${encodeURIComponent(q.trim())}`;
         }}
       >
-        <Search className="absolute top-1/2 left-112 size-4 -translate-y-1/2 text-slate-400" />
+        <Search className="absolute top-1/2 left-188 size-4 -translate-y-1/2 text-slate-400" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
