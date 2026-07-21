@@ -3,10 +3,15 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist/**", "node_modules/**", "coverage/**"] },
+  {
+    ignores: ["dist/**", "node_modules/**", "coverage/**"],
+  },
+
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
+
   {
+    files: ["src/**/*.ts", "prisma/**/*.ts", "prisma.config.ts"],
     languageOptions: {
       globals: globals.node,
       parserOptions: {
@@ -19,6 +24,22 @@ export default tseslint.config(
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-misused-promises": "error",
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ]
+    },
+  },
+
+  {
+    files: ["**/*.mjs", "**/*.js"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: {
+      globals: globals.node,
     },
   }
 );

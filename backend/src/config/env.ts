@@ -19,7 +19,7 @@ const envSchema = z.object({
   SUPER_ADMIN_EMAIL: z.string().email().optional(),
   SUPER_ADMIN_ROLL_NUMBER: z.string().optional(),
   SUPER_ADMIN_NAME: z.string().optional(),
-  TRUST_PROXY: booleanString.default("false"),
+  TRUST_PROXY: booleanString.default(false),
 });
 
 const parsed = envSchema.safeParse(process.env);
