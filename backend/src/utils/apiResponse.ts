@@ -10,7 +10,5 @@ export function apiResponse<T>(
   message = "Request completed successfully.",
   meta?: Record<string, unknown>
 ): ApiSuccessResponse<T> {
-  return meta
-    ? { success: true, message, data, meta }
-    : { success: true, message, data };
+  return meta ? { success: true, message, data, meta } : { success: true, message, data };
 }

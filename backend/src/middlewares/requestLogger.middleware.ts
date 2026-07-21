@@ -14,8 +14,13 @@ export const requestIdMiddleware: RequestHandler = (request, response, next) => 
   next();
 };
 
-morgan.token("request-id", (_request, response) => String(response.getHeader("X-Request-ID") ?? "-"));
+morgan.token("request-id", (_request, response) =>
+  String(response.getHeader("X-Request-ID") ?? "-")
+);
 
-export const requestLogger = morgan(`:method :url :status :response-time ms request-id=:request-id`, {
-  skip: () => env.NODE_ENV === "test",
-});
+export const requestLogger = morgan(
+  `:method :url :status :response-time ms request-id=:request-id`,
+  {
+    skip: () => env.NODE_ENV === "test",
+  }
+);

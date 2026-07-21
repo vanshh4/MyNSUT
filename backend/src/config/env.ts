@@ -2,9 +2,7 @@ import "dotenv/config";
 
 import { z } from "zod";
 
-const booleanString = z
-  .enum(["true", "false"])
-  .transform((value) => value === "true");
+const booleanString = z.enum(["true", "false"]).transform((value) => value === "true");
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),

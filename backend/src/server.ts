@@ -11,7 +11,9 @@ async function startServer() {
   await prisma.$connect();
 
   server = app.listen(appConfig.port, () => {
-    console.log(`${appConfig.name} is running at http://localhost:${appConfig.port}${appConfig.apiPrefix}`);
+    console.log(
+      `${appConfig.name} is running at http://localhost:${appConfig.port}${appConfig.apiPrefix}`
+    );
   });
 }
 
