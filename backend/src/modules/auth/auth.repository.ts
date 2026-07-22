@@ -5,11 +5,15 @@ import type { GoogleIdentity } from "./auth.types.js";
 export type DatabaseClient = PrismaClient | Prisma.TransactionClient;
 
 export function findUserByEmail(client: DatabaseClient, email: string) {
-  return client.user.findUnique({ where: { email } });
+  return client.user.findUnique({
+    where: { email },
+  });
 }
 
 export function findUserByGoogleSubject(client: DatabaseClient, googleSubject: string) {
-  return client.user.findUnique({ where: { googleSubject } });
+  return client.user.findUnique({
+    where: { googleSubject },
+  });
 }
 
 export function createGoogleUser(client: DatabaseClient, identity: GoogleIdentity) {
@@ -19,31 +23,39 @@ export function createGoogleUser(client: DatabaseClient, identity: GoogleIdentit
       emailVerified: identity.emailVerified,
       googleSubject: identity.subject,
       fullName: identity.fullName,
-      profileImageUrl: identity.profileImageUrl,
       onboardingCompleted: false,
+      ...(identity.profileImageUrl ? { profileImageUrl: identity.profileImageUrl } : {}),
     },
   });
 }
 
-export function linkGoogleIdentity(client: DatabaseClient, userId: string, identity: GoogleIdentity) {
+export function linkGoogleIdentity(
+  client: DatabaseClient,
+  userId: string,
+  identity: GoogleIdentity
+) {
   return client.user.update({
     where: { id: userId },
     data: {
       googleSubject: identity.subject,
       emailVerified: true,
       fullName: identity.fullName,
-      profileImageUrl: identity.profileImageUrl,
+      ...(identity.profileImageUrl ? { profileImageUrl: identity.profileImageUrl } : {}),
     },
   });
 }
 
-export function updateGoogleProfile(client: DatabaseClient, userId: string, identity: GoogleIdentity) {
+export function updateGoogleProfile(
+  client: DatabaseClient,
+  userId: string,
+  identity: GoogleIdentity
+) {
   return client.user.update({
     where: { id: userId },
     data: {
       emailVerified: true,
       fullName: identity.fullName,
-      profileImageUrl: identity.profileImageUrl,
+      ...(identity.profileImageUrl ? { profileImageUrl: identity.profileImageUrl } : {}),
     },
   });
 }
@@ -59,7 +71,11 @@ export function findSessionByTokenHash(client: DatabaseClient, tokenHash: string
             include: {
               role: {
                 include: {
-                  permissions: { include: { permission: true } },
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
                 },
               },
             },
@@ -80,42 +96,84 @@ export function createSession(
     userAgent?: string;
   }
 ) {
-  return client.session.create({ data });
+  return client.session.create({
+    data,
+  });
 }
 
 export function findActiveSessions(client: DatabaseClient, userId: string, now: Date) {
   return client.session.findMany({
-    where: { userId, revokedAt: null, expiresAt: { gt: now } },
-    orderBy: { createdAt: "asc" },
-    select: { id: true },
+    where: {
+      userId,
+      revokedAt: null,
+      expiresAt: {
+        gt: now,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+    select: {
+      id: true,
+    },
   });
 }
 
 export function revokeSessionsByIds(client: DatabaseClient, sessionIds: string[], revokedAt: Date) {
-  if (sessionIds.length === 0) return Promise.resolve({ count: 0 });
+  if (sessionIds.length === 0) {
+    return Promise.resolve({ count: 0 });
+  }
+
   return client.session.updateMany({
-    where: { id: { in: sessionIds }, revokedAt: null },
-    data: { revokedAt },
+    where: {
+      id: {
+        in: sessionIds,
+      },
+      revokedAt: null,
+    },
+    data: {
+      revokedAt,
+    },
   });
 }
 
 export function revokeSessionById(client: DatabaseClient, sessionId: string, revokedAt: Date) {
   return client.session.updateMany({
-    where: { id: sessionId, revokedAt: null },
-    data: { revokedAt },
+    where: {
+      id: sessionId,
+      revokedAt: null,
+    },
+    data: {
+      revokedAt,
+    },
   });
 }
 
 export function revokeAllUserSessions(client: DatabaseClient, userId: string, revokedAt: Date) {
   return client.session.updateMany({
-    where: { userId, revokedAt: null },
-    data: { revokedAt },
+    where: {
+      userId,
+      revokedAt: null,
+    },
+    data: {
+      revokedAt,
+    },
   });
 }
 
-export function renewSession(client: DatabaseClient, sessionId: string, expiresAt: Date, lastUsedAt: Date) {
+export function renewSession(
+  client: DatabaseClient,
+  sessionId: string,
+  expiresAt: Date,
+  lastUsedAt: Date
+) {
   return client.session.update({
-    where: { id: sessionId },
-    data: { expiresAt, lastUsedAt },
+    where: {
+      id: sessionId,
+    },
+    data: {
+      expiresAt,
+      lastUsedAt,
+    },
   });
 }

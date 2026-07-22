@@ -37,8 +37,8 @@ export function createOAuthAttempt(): OAuthAttempt {
   const codeChallenge = sha256Base64Url(codeVerifier);
 
   const url = new URL(authConfig.google.authorizationEndpoint);
-  url.searchParams.set("client_id", authConfig.google.clientId!);
-  url.searchParams.set("redirect_uri", authConfig.google.callbackUrl!);
+  url.searchParams.set("client_id", authConfig.google.clientId);
+  url.searchParams.set("redirect_uri", authConfig.google.callbackUrl);
   url.searchParams.set("response_type", "code");
   url.searchParams.set("scope", authConfig.google.scopes.join(" "));
   url.searchParams.set("state", state);
@@ -62,9 +62,9 @@ export async function exchangeAuthorizationCode(
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       code,
-      client_id: authConfig.google.clientId!,
-      client_secret: authConfig.google.clientSecret!,
-      redirect_uri: authConfig.google.callbackUrl!,
+      client_id: authConfig.google.clientId,
+      client_secret: authConfig.google.clientSecret,
+      redirect_uri: authConfig.google.callbackUrl,
       grant_type: "authorization_code",
       code_verifier: codeVerifier,
     }),
@@ -84,13 +84,16 @@ export async function exchangeAuthorizationCode(
   return token as GoogleTokenResponse;
 }
 
-export async function verifyGoogleIdentity(idToken: string, nonce: string): Promise<GoogleIdentity> {
+export async function verifyGoogleIdentity(
+  idToken: string,
+  nonce: string
+): Promise<GoogleIdentity> {
   assertGoogleOAuthConfigured();
 
   try {
     const { payload } = await jwtVerify(idToken, googleJwks, {
       issuer: ["https://accounts.google.com", "accounts.google.com"],
-      audience: authConfig.google.clientId!,
+      audience: authConfig.google.clientId,
     });
 
     if (typeof payload.nonce !== "string" || !securelyEqual(payload.nonce, nonce)) {
@@ -110,7 +113,8 @@ export async function verifyGoogleIdentity(idToken: string, nonce: string): Prom
       throw invalidEmailDomain();
     }
 
-    const fullName = typeof payload.name === "string" && payload.name.trim() ? payload.name.trim() : email;
+    const fullName =
+      typeof payload.name === "string" && payload.name.trim() ? payload.name.trim() : email;
     const profileImageUrl = typeof payload.picture === "string" ? payload.picture : undefined;
 
     return {

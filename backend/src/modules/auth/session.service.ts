@@ -4,18 +4,9 @@ import { UserStatus } from "@prisma/client";
 
 import { authConfig } from "../../config/auth.js";
 import { prisma } from "../../db/prisma.js";
-import {
-  accountDeleted,
-  accountSuspended,
-  invalidSession,
-  sessionExpired,
-} from "./auth.errors.js";
+import { accountDeleted, accountSuspended, invalidSession, sessionExpired } from "./auth.errors.js";
 import * as authRepository from "./auth.repository.js";
-import type {
-  ResolvedSession,
-  SafeAuthenticatedUser,
-  SessionMetadata,
-} from "./auth.types.js";
+import type { ResolvedSession, SafeAuthenticatedUser, SessionMetadata } from "./auth.types.js";
 
 function hashToken(rawToken: string): string {
   return createHash("sha256").update(rawToken).digest("hex");
@@ -25,7 +16,9 @@ function createRawToken(): string {
   return randomBytes(48).toString("base64url");
 }
 
-function mapUser(record: NonNullable<Awaited<ReturnType<typeof authRepository.findSessionByTokenHash>>>["user"]): SafeAuthenticatedUser {
+function mapUser(
+  record: NonNullable<Awaited<ReturnType<typeof authRepository.findSessionByTokenHash>>>["user"]
+): SafeAuthenticatedUser {
   const roles = [...new Set(record.globalRoles.map(({ role }) => role.code))];
   const permissions = [
     ...new Set(
@@ -100,7 +93,8 @@ export async function resolveSession(rawSessionToken: string): Promise<ResolvedS
   if (record.user.status === UserStatus.SUSPENDED) throw accountSuspended();
   if (record.user.status === UserStatus.DELETED) throw accountDeleted();
 
-  const shouldRenew = record.expiresAt.getTime() - now.getTime() <= authConfig.session.refreshThresholdMs;
+  const shouldRenew =
+    record.expiresAt.getTime() - now.getTime() <= authConfig.session.refreshThresholdMs;
   let expiresAt = record.expiresAt;
 
   if (shouldRenew) {

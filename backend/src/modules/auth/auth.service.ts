@@ -1,11 +1,7 @@
 import { UserStatus } from "@prisma/client";
 
 import { prisma } from "../../db/prisma.js";
-import {
-  accountDeleted,
-  accountSuspended,
-  googleSubjectConflict,
-} from "./auth.errors.js";
+import { accountDeleted, accountSuspended, googleSubjectConflict } from "./auth.errors.js";
 import * as authRepository from "./auth.repository.js";
 import { issueSession } from "./session.service.js";
 import type { AuthenticationResult, GoogleIdentity, SessionMetadata } from "./auth.types.js";

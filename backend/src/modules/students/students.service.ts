@@ -1,6 +1,8 @@
 import { Prisma } from "@prisma/client";
 
-import { BRANCHES } from "../../constants/branches.js";
+import { BRANCHES, isBranchCode } from "../../constants/branches.js";
+import { isSectionCode } from "../../constants/sections.js";
+
 import { prisma } from "../../db/prisma.js";
 import { resolveExistingClass } from "../classes/classAssignment.service.js";
 import { studentErrors } from "./students.errors.js";
@@ -8,19 +10,29 @@ import * as studentsRepository from "./students.repository.js";
 import type { OnboardingInput, StudentProfile } from "./students.types.js";
 import { parseUmsRollNumber } from "./rollNumber.service.js";
 
-function mapStudent(record: NonNullable<Awaited<ReturnType<typeof studentsRepository.findStudentByUserId>>>): StudentProfile {
+function mapStudent(
+  record: NonNullable<Awaited<ReturnType<typeof studentsRepository.findStudentByUserId>>>
+): StudentProfile {
+  if (!isBranchCode(record.branchCode)) {
+    throw studentErrors.unsupportedBranch();
+  }
+
+  if (!isSectionCode(record.section)) {
+    throw studentErrors.invalidSection();
+  }
+
   return {
     id: record.id,
     userId: record.userId,
     umsRollNumber: record.umsRollNumber,
     admissionYear: record.admissionYear,
-    branchCode: record.branchCode as StudentProfile["branchCode"],
-    branchName: BRANCHES[record.branchCode as StudentProfile["branchCode"]],
+    branchCode: record.branchCode,
+    branchName: BRANCHES[record.branchCode],
     rollNumber: record.rollNumber,
-    section: record.section as StudentProfile["section"],
-    graduationYear: record.graduationYear!,
+    section: record.section,
+    graduationYear: record.graduationYear,
     currentSemester: null,
-    classId: record.classId!,
+    classId: record.classId,
   };
 }
 
@@ -30,13 +42,19 @@ export async function getOwnStudentProfile(userId: string): Promise<StudentProfi
   return mapStudent(student);
 }
 
-export async function completeOnboarding(userId: string, input: OnboardingInput): Promise<StudentProfile> {
+export async function completeOnboarding(
+  userId: string,
+  input: OnboardingInput
+): Promise<StudentProfile> {
   const user = await prisma.user.findUnique({ where: { id: userId }, include: { student: true } });
   if (!user) throw studentErrors.profileNotFound();
   if (user.onboardingCompleted || user.student) throw studentErrors.alreadyOnboarded();
 
   const parsed = parseUmsRollNumber(input.umsRollNumber);
-  const existing = await studentsRepository.findStudentByRollNumber(prisma, parsed.normalizedRollNumber);
+  const existing = await studentsRepository.findStudentByRollNumber(
+    prisma,
+    parsed.normalizedRollNumber
+  );
   if (existing) throw studentErrors.rollNumberTaken();
 
   try {

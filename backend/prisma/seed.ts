@@ -61,7 +61,10 @@ async function seedRoles(): Promise<void> {
   );
 }
 
-async function grantPermissions(roleCode: string, permissionCodes: readonly string[]): Promise<void> {
+async function grantPermissions(
+  roleCode: string,
+  permissionCodes: readonly string[]
+): Promise<void> {
   const [role, permissions] = await Promise.all([
     prisma.role.findUniqueOrThrow({ where: { code: roleCode } }),
     prisma.permission.findMany({ where: { code: { in: [...permissionCodes] } } }),

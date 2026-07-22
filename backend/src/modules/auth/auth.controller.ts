@@ -12,11 +12,7 @@ import {
   securelyEqual,
   verifyGoogleIdentity,
 } from "./googleOAuth.service.js";
-import {
-  resolveSession,
-  revokeAllSessions,
-  revokeCurrentSession,
-} from "./session.service.js";
+import { resolveSession, revokeAllSessions, revokeCurrentSession } from "./session.service.js";
 
 function signedCookie(request: Request, name: string): string | undefined {
   const value: unknown = request.signedCookies?.[name];
@@ -87,7 +83,8 @@ export async function handleGoogleCallback(request: Request, response: Response)
     response.redirect(302, authConfig.redirects.success);
   } catch (error: unknown) {
     clearOAuthCookies(response);
-    const code = error instanceof AuthError ? error.code : AUTH_ERROR_CODES.GOOGLE_AUTHENTICATION_FAILED;
+    const code =
+      error instanceof AuthError ? error.code : AUTH_ERROR_CODES.GOOGLE_AUTHENTICATION_FAILED;
     response.redirect(302, failureUrl(code));
   }
 }

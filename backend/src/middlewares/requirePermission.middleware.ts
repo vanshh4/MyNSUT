@@ -9,7 +9,9 @@ export function requirePermission(...requiredPermissions: PermissionCode[]): Req
       next(authenticationRequired());
       return;
     }
-    if (!requiredPermissions.every((permission) => request.auth!.permissions.includes(permission))) {
+    if (
+      !requiredPermissions.every((permission) => request.auth!.permissions.includes(permission))
+    ) {
       next(insufficientPermission());
       return;
     }
