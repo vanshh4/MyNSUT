@@ -36,12 +36,27 @@ function normalizeError(error: unknown): ApiError {
       });
     }
 
+    if (error.code === "P2003") {
+      return new ApiError(409, "The operation conflicts with a related database record.", {
+        code: "RELATION_CONFLICT",
+        details: error.meta,
+        cause: error,
+      });
+    }
+
     if (error.code === "P2025") {
       return new ApiError(404, "The requested database record was not found.", {
         code: "RECORD_NOT_FOUND",
         cause: error,
       });
     }
+  }
+
+  if (error instanceof SyntaxError && "body" in error) {
+    return new ApiError(400, "The request body contains invalid JSON.", {
+      code: "INVALID_JSON",
+      cause: error,
+    });
   }
 
   return new ApiError(500, "An unexpected server error occurred.", {

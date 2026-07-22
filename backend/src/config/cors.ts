@@ -2,13 +2,15 @@ import type { CorsOptions } from "cors";
 
 import { env } from "./env.js";
 
-const allowedOrigins = env.FRONTEND_URL.split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const allowedOrigins = new Set(
+  env.FRONTEND_URL.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+);
 
 export const corsOptions: CorsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.has(origin)) {
       callback(null, true);
       return;
     }
@@ -17,7 +19,7 @@ export const corsOptions: CorsOptions = {
   },
   credentials: true,
   methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Request-ID"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Request-ID", "X-CSRF-Token"],
   exposedHeaders: ["X-Request-ID"],
   maxAge: 86_400,
 };
