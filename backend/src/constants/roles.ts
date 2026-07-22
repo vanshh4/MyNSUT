@@ -1,10 +1,2 @@
-export const ROLES = {
-  SUPER_ADMIN: "SUPER_ADMIN",
-  STUDENT: "STUDENT",
-  CLASS_CR: "CLASS_CR",
-  SOCIETY_PRESIDENT: "SOCIETY_PRESIDENT",
-  SOCIETY_VICE_PRESIDENT: "SOCIETY_VICE_PRESIDENT",
-  SOCIETY_MEMBER: "SOCIETY_MEMBER",
-} as const;
-
-export type RoleCode = (typeof ROLES)[keyof typeof ROLES];
+export { ROLES, ROLE_CODES, isRoleCode } from "@mynsut/shared/constants/roles";
+export type { RoleCode } from "@mynsut/shared/constants/roles";
