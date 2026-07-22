@@ -16,7 +16,32 @@ const roleDefinitions = [
   { code: ROLES.SOCIETY_MEMBER, name: "Society Member", scope: RoleScope.SOCIETY },
 ] as const;
 
-async function seedPermissions() {
+const studentPermissionCodes = [
+  PERMISSIONS.AUTH_LOGIN,
+  PERMISSIONS.ONBOARDING_COMPLETE_SELF,
+  PERMISSIONS.PROFILE_VIEW_SELF,
+  PERMISSIONS.PROFILE_VIEW_PUBLIC,
+  PERMISSIONS.PROFILE_UPDATE_SELF,
+  PERMISSIONS.PRIVACY_UPDATE_SELF,
+  PERMISSIONS.ACADEMIC_VIEW_SELF,
+  PERMISSIONS.ACADEMIC_VIEW_PUBLIC_IF_ALLOWED,
+  PERMISSIONS.CLASS_VIEW_OWN,
+  PERMISSIONS.CLASS_VIEW_MEMBERS_OWN,
+  PERMISSIONS.CLASS_ANNOUNCEMENT_VIEW,
+  PERMISSIONS.CLASS_TASK_COMPLETE_SELF,
+  PERMISSIONS.NOTICE_VIEW,
+  PERMISSIONS.SOCIETY_VIEW_PUBLIC,
+  PERMISSIONS.SOCIETY_ACCEPT_INVITE_SELF,
+  PERMISSIONS.SOCIETY_REQUEST_MEMBERSHIP_SELF,
+  PERMISSIONS.EVENT_VIEW,
+  PERMISSIONS.EVENT_MARK_INTERESTED,
+  PERMISSIONS.EVENT_REGISTER_SELF,
+  PERMISSIONS.EVENT_CANCEL_REGISTRATION_SELF,
+  PERMISSIONS.EVENT_JOIN_WAITLIST,
+  PERMISSIONS.FILE_UPLOAD_PROFILE_IMAGE,
+] as const;
+
+async function seedPermissions(): Promise<void> {
   await Promise.all(
     Object.values(PERMISSIONS).map((code) =>
       prisma.permission.upsert({
@@ -28,7 +53,7 @@ async function seedPermissions() {
   );
 }
 
-async function seedRoles() {
+async function seedRoles(): Promise<void> {
   await Promise.all(
     roleDefinitions.map((role) =>
       prisma.role.upsert({ where: { code: role.code }, update: role, create: role })
@@ -36,10 +61,10 @@ async function seedRoles() {
   );
 }
 
-async function grantSuperAdminPermissions() {
+async function grantPermissions(roleCode: string, permissionCodes: readonly string[]): Promise<void> {
   const [role, permissions] = await Promise.all([
-    prisma.role.findUniqueOrThrow({ where: { code: ROLES.SUPER_ADMIN } }),
-    prisma.permission.findMany(),
+    prisma.role.findUniqueOrThrow({ where: { code: roleCode } }),
+    prisma.permission.findMany({ where: { code: { in: [...permissionCodes] } } }),
   ]);
 
   await prisma.rolePermission.createMany({
@@ -48,7 +73,12 @@ async function grantSuperAdminPermissions() {
   });
 }
 
-async function seedOptionalSuperAdmin() {
+async function seedRolePermissions(): Promise<void> {
+  await grantPermissions(ROLES.SUPER_ADMIN, Object.values(PERMISSIONS));
+  await grantPermissions(ROLES.STUDENT, studentPermissionCodes);
+}
+
+async function seedOptionalSuperAdmin(): Promise<void> {
   const email = process.env.SUPER_ADMIN_EMAIL?.trim().toLowerCase();
   if (!email) return;
 
@@ -75,12 +105,12 @@ async function seedOptionalSuperAdmin() {
   });
 }
 
-async function main() {
+async function main(): Promise<void> {
   await seedPermissions();
   await seedRoles();
-  await grantSuperAdminPermissions();
+  await seedRolePermissions();
   await seedOptionalSuperAdmin();
-  console.log("MyNSUT database seed completed successfully.");
+  console.log("MyNSUT Phase 2 seed completed successfully.");
 }
 
 main()
