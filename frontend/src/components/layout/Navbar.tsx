@@ -1,71 +1,114 @@
 "use client";
+
 import { Menu, Moon, Search, Sun } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
+
 import { MotionButton } from "@/components/ui/MotionButton";
-const KEY = "mynsut-theme",
-  EVENT = "theme-change";
-function subscribe(cb: () => void) {
-  window.addEventListener(EVENT, cb);
-  window.addEventListener("storage", cb);
+
+const THEME_KEY = "mynsut-theme";
+const THEME_CHANGE_EVENT = "theme-change";
+
+function subscribeToTheme(callback: () => void) {
+  window.addEventListener(THEME_CHANGE_EVENT, callback);
+  window.addEventListener("storage", callback);
+
   return () => {
-    window.removeEventListener(EVENT, cb);
-    window.removeEventListener("storage", cb);
+    window.removeEventListener(THEME_CHANGE_EVENT, callback);
+    window.removeEventListener("storage", callback);
   };
 }
-function snapshot() {
-  return localStorage.getItem(KEY) === "dark";
+
+function getThemeSnapshot() {
+  return localStorage.getItem(THEME_KEY) === "dark";
 }
-function server() {
+
+function getServerThemeSnapshot() {
   return false;
 }
-export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
-  const dark = useSyncExternalStore(subscribe, snapshot, server);
-  const [q, setQ] = useState("");
-  function toggle() {
-    const n = dark ? "light" : "dark";
-    localStorage.setItem(KEY, n);
-    document.documentElement.classList.toggle("dark", n === "dark");
-    window.dispatchEvent(new Event(EVENT));
+
+interface NavbarProps {
+  onMenuClick: () => void;
+}
+
+export function Navbar({ onMenuClick }: NavbarProps) {
+  const dark = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot
+  );
+
+  const [query, setQuery] = useState("");
+
+  function toggleTheme() {
+    const nextTheme = dark ? "light" : "dark";
+
+    localStorage.setItem(THEME_KEY, nextTheme);
+    document.documentElement.classList.toggle(
+      "dark",
+      nextTheme === "dark"
+    );
+
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   }
+
+  function handleSearch(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const trimmedQuery = query.trim();
+
+    if (trimmedQuery) {
+      window.location.href = `/search?q=${encodeURIComponent(trimmedQuery)}`;
+    }
+  }
+
   return (
-    <header className="glass sticky top-3 z-30 mx-3 flex min-h-18 items-center gap-3 rounded-full px-3 sm:px-5 lg:ml-0">
+    <header className="glass sticky top-3 z-30 mx-3 flex min-h-18 max-w-full items-center gap-3 overflow-hidden rounded-full px-3 sm:px-5 lg:ml-0">
       <button
+        type="button"
         onClick={onMenuClick}
-        className="grid size-10 place-items-center rounded-full lg:hidden"
+        className="grid size-10 shrink-0 place-items-center rounded-full lg:hidden"
+        aria-label="Open navigation"
       >
         <Menu className="size-5" />
       </button>
+
       <form
-        className="relative ml-auto hidden w-[min(70vw,70rem)] md:block"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (q.trim()) location.href = `/search?q=${encodeURIComponent(q.trim())}`;
-        }}
+        className="relative min-w-0 flex-1"
+        role="search"
+        onSubmit={handleSearch}
       >
-        <Search className="absolute top-1/2 left-188 size-4 -translate-y-1/2 text-slate-400" />
         <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          className="pill-input pl-11"
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          className="pill-input block w-full min-w-0 pl-5 pr-12"
           placeholder="Search events, societies or students"
+          aria-label="Search events, societies or students"
         />
+
+        <button
+          type="submit"
+          className="absolute right-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-blue-50 hover:text-[#4968f2] dark:hover:bg-white/10 dark:hover:text-[#91a2ff]"
+          aria-label="Submit search"
+        >
+          <Search className="size-4" />
+        </button>
       </form>
+
       <MotionButton
         variant="ghost"
-        className="size-11 px-0"
-        onClick={toggle}
-        aria-label="Toggle theme"
+        className="size-11 shrink-0 px-0"
+        onClick={toggleTheme}
+        aria-label={
+          dark ? "Switch to light theme" : "Switch to dark theme"
+        }
       >
-        {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+        {dark ? (
+          <Sun className="size-4" />
+        ) : (
+          <Moon className="size-4" />
+        )}
       </MotionButton>
-      <motion.div
-        whileHover={{ scale: 1.06 }}
-        whileTap={{ scale: 0.94 }}
-        className="grid size-11 place-items-center rounded-full bg-[#172033] text-xs font-bold text-white"
-      >
-        VB
-      </motion.div>
     </header>
   );
 }
-import { motion } from "framer-motion";
