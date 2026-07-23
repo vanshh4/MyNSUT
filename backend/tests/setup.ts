@@ -1,0 +1,15 @@
+process.env.NODE_ENV = "test";
+process.env.PORT = "4000";
+process.env.API_PREFIX = "/api/v1";
+process.env.APP_NAME = "MyNSUT API Test";
+process.env.LOG_LEVEL = "tiny";
+process.env.TRUST_PROXY = "false";
+process.env.FRONTEND_URL = "http://localhost:3000";
+process.env.DATABASE_URL = "postgresql://postgres:password@localhost:5432/mynsut_test?schema=public";
+process.env.AUTH_SECRET = "test-auth-secret-that-is-at-least-32-characters";
+process.env.GOOGLE_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
+process.env.GOOGLE_CLIENT_SECRET = "test-client-secret";
+process.env.GOOGLE_CALLBACK_URL = "http://localhost:3000/api/backend/auth/google/callback";
+process.env.FRONTEND_AUTH_SUCCESS_URL = "http://localhost:3000/auth/callback";
+process.env.FRONTEND_AUTH_FAILURE_URL = "http://localhost:3000/auth/error";
+process.env.SESSION_COOKIE_NAME = "mynsut_session";
