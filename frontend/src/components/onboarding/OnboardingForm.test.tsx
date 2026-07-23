@@ -8,7 +8,9 @@ const submitOnboarding = vi.fn();
 vi.mock("next/navigation", () => ({ useRouter: () => ({ replace }) }));
 vi.mock("@/hooks/useAuth", () => ({ useAuth: () => ({ refreshAuth }) }));
 vi.mock("@/lib/api/students", () => ({ submitOnboarding }));
-vi.mock("@/components/ui/MotionButton", () => ({ MotionButton: (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => <button {...props} /> }));
+vi.mock("@/components/ui/MotionButton", () => ({
+  MotionButton: (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => <button {...props} />,
+}));
 
 const { OnboardingForm } = await import("./OnboardingForm");
 
@@ -41,7 +43,9 @@ describe("OnboardingForm", () => {
     await user.type(screen.getByLabelText(/UMS roll number/i), "2023uit3324");
     await user.selectOptions(screen.getByLabelText(/Section/i), "2");
     await user.click(screen.getByRole("button", { name: /complete onboarding/i }));
-    await waitFor(() => expect(submitOnboarding).toHaveBeenCalledWith({ umsRollNumber: "2023UIT3324", section: "2" }));
+    await waitFor(() =>
+      expect(submitOnboarding).toHaveBeenCalledWith({ umsRollNumber: "2023UIT3324", section: "2" })
+    );
     await waitFor(() => expect(replace).toHaveBeenCalledWith("/dashboard"));
   });
 

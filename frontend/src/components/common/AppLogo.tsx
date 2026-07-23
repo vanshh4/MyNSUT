@@ -23,9 +23,7 @@ function MaterialSchoolIcon({ className = "" }: { className?: string }) {
 }
 
 export function AppLogo({ compact = false, className = "" }: AppLogoProps) {
-  const rootClassName = ["inline-flex items-center gap-3", className]
-    .filter(Boolean)
-    .join(" ");
+  const rootClassName = ["inline-flex items-center gap-3", className].filter(Boolean).join(" ");
 
   return (
     <Link href="/" className={rootClassName} aria-label="MyNSUT home">
@@ -42,7 +40,7 @@ export function AppLogo({ compact = false, className = "" }: AppLogoProps) {
             My<span className="text-[#4968f2] dark:text-[#91a2ff]">NSUT</span>
           </span>
 
-          <span className="mt-1 block text-[9px] font-extrabold uppercase tracking-[0.19em] text-slate-500 dark:text-slate-400">
+          <span className="mt-1 block text-[9px] font-extrabold tracking-[0.19em] text-slate-500 uppercase dark:text-slate-400">
             Student platform
           </span>
         </span>

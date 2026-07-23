@@ -1,8 +1,4 @@
-import {
-  BRANCHES,
-  isBranchCode,
-  type BranchCode,
-} from "@mynsut/shared/constants/branches";
+import { BRANCHES, isBranchCode, type BranchCode } from "@mynsut/shared/constants/branches";
 import {
   SECTIONS,
   type OnboardingRequest,

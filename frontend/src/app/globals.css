@@ -101,7 +101,7 @@ select {
 .pill-input {
   height: 48px;
   width: 100%;
-  min-width:0;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.72);
@@ -143,12 +143,7 @@ select {
   border-radius: 18px;
 
   color: #ffffff;
-  background: linear-gradient(
-    135deg,
-    #4968f2 0%,
-    #637cf4 55%,
-    #7c6ff2 100%
-  );
+  background: linear-gradient(135deg, #4968f2 0%, #637cf4 55%, #7c6ff2 100%);
 
   box-shadow:
     0 14px 32px rgba(73, 104, 242, 0.28),

@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
-const backendOrigin = (process.env.BACKEND_INTERNAL_URL ?? "http://localhost:4000").replace(/\/$/, "");
+const backendOrigin = (process.env.BACKEND_INTERNAL_URL ?? "http://localhost:4000").replace(
+  /\/$/,
+  ""
+);
 
 const nextConfig: NextConfig = {
   devIndicators: false,

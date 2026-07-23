@@ -1,6 +1,10 @@
 "use client";
 
-import { AUTH_ERROR_CODES, isAuthErrorCode, type AuthErrorCode } from "@mynsut/shared/constants/auth";
+import {
+  AUTH_ERROR_CODES,
+  isAuthErrorCode,
+  type AuthErrorCode,
+} from "@mynsut/shared/constants/auth";
 import { AlertTriangle, ArrowLeft, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -79,9 +83,8 @@ const messages: Record<AuthErrorCode, { title: string; description: string }> = 
 export default function AuthErrorPage() {
   const searchParams = useSearchParams();
   const rawCode = searchParams.get("code");
-  const code = rawCode && isAuthErrorCode(rawCode)
-    ? rawCode
-    : AUTH_ERROR_CODES.GOOGLE_AUTHENTICATION_FAILED;
+  const code =
+    rawCode && isAuthErrorCode(rawCode) ? rawCode : AUTH_ERROR_CODES.GOOGLE_AUTHENTICATION_FAILED;
   const content = messages[code];
 
   return (

@@ -7,9 +7,7 @@ import type {
 import { apiClient } from "@/lib/api/client";
 import { apiEndpoints } from "@/lib/api/endpoints";
 
-export async function submitOnboarding(
-  input: OnboardingRequest
-): Promise<OnboardingResponse> {
+export async function submitOnboarding(input: OnboardingRequest): Promise<OnboardingResponse> {
   const response = await apiClient<OnboardingResponse>(apiEndpoints.onboarding, {
     method: "POST",
     body: JSON.stringify(input),

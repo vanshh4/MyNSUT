@@ -12,10 +12,7 @@ import { routes } from "@/config/routes";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiClientError } from "@/lib/api/client";
 import { submitOnboarding } from "@/lib/api/students";
-import {
-  onboardingFormSchema,
-  previewRollNumber,
-} from "@/lib/validations/onboarding";
+import { onboardingFormSchema, previewRollNumber } from "@/lib/validations/onboarding";
 
 interface FormErrors {
   umsRollNumber?: string;
@@ -109,7 +106,10 @@ export function OnboardingForm() {
       </div>
 
       {errors.form ? (
-        <div className="flex gap-3 rounded-[24px] bg-motion-rose p-4 text-sm text-rose-800" role="alert">
+        <div
+          className="flex gap-3 rounded-[24px] bg-motion-rose p-4 text-sm text-rose-800"
+          role="alert"
+        >
           <AlertCircle className="size-5 shrink-0" />
           {errors.form}
         </div>

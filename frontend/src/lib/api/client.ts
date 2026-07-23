@@ -48,7 +48,12 @@ export async function apiClient<T>(path: string, init: RequestInit = {}): Promis
   }
 
   if (!body || typeof body !== "object" || !("success" in body)) {
-    throw new ApiClientError(response.status, "The server returned an invalid response.", "INVALID_API_RESPONSE", body);
+    throw new ApiClientError(
+      response.status,
+      "The server returned an invalid response.",
+      "INVALID_API_RESPONSE",
+      body
+    );
   }
   return body as ApiResponse<T>;
 }

@@ -8,11 +8,7 @@ interface Props extends HTMLMotionProps<"div"> {
   children?: ReactNode;
 }
 
-export function MotionCard({
-  className,
-  children,
-  ...props
-}: Props) {
+export function MotionCard({ className, children, ...props }: Props) {
   return (
     <motion.div
       whileHover={{ y: -5, scale: 1.01 }}

@@ -35,7 +35,7 @@ export function RollNumberPreview({ value }: { value: ParsedRollNumber | null })
       <dl className="mt-4 grid gap-3 sm:grid-cols-2">
         {fields.map(([label, fieldValue]) => (
           <div key={label}>
-            <dt className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-emerald-700/70 dark:text-emerald-300/65">
+            <dt className="text-[10px] font-extrabold tracking-[0.12em] text-emerald-700/70 uppercase dark:text-emerald-300/65">
               {label}
             </dt>
             <dd className="mt-1 text-sm font-bold text-emerald-950 dark:text-emerald-100">

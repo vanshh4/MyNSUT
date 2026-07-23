@@ -1,10 +1,6 @@
 import type { AuthErrorDescriptor, AuthenticatedUser } from "@mynsut/shared/types/auth";
 
-export type FrontendAuthStatus =
-  | "loading"
-  | "authenticated"
-  | "unauthenticated"
-  | "error";
+export type FrontendAuthStatus = "loading" | "authenticated" | "unauthenticated" | "error";
 
 export interface AuthContextValue {
   status: FrontendAuthStatus;
