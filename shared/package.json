@@ -1,15 +1,23 @@
 {
   "name": "@mynsut/shared",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Framework-independent roles, permissions, and API contracts shared by MyNSUT frontend and backend.",
+  "description": "Framework-independent roles, permissions, authentication, student, and API contracts shared by MyNSUT.",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/types/index.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
+    },
+    "./constants/auth": {
+      "types": "./dist/constants/auth.d.ts",
+      "import": "./dist/constants/auth.js"
+    },
+    "./constants/branches": {
+      "types": "./dist/constants/branches.d.ts",
+      "import": "./dist/constants/branches.js"
     },
     "./constants/roles": {
       "types": "./dist/constants/roles.d.ts",
@@ -26,6 +34,14 @@
     "./types/api": {
       "types": "./dist/types/api.d.ts",
       "import": "./dist/types/api.js"
+    },
+    "./types/auth": {
+      "types": "./dist/types/auth.d.ts",
+      "import": "./dist/types/auth.js"
+    },
+    "./types/student": {
+      "types": "./dist/types/student.d.ts",
+      "import": "./dist/types/student.js"
     }
   },
   "files": [

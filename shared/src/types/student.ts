@@ -1,15 +1,17 @@
 import type { BranchCode, BranchName } from "../constants/branches.js";
-import type { EntityId, IsoDateString } from "./index.js";
+
+export type EntityId = string;
+export type IsoDateString = string;
 
 export const SECTIONS = ["1", "2", "3"] as const;
 export type SectionCode = (typeof SECTIONS)[number];
-
 export function isSectionCode(value: unknown): value is SectionCode {
-  return (
-    typeof value === "string" &&
-    SECTIONS.includes(value as SectionCode)
-  );
+  return typeof value === "string" && SECTIONS.includes(value as SectionCode);
 }
+
+export const ACADEMIC_CLASS_STATUSES = { ACTIVE: "ACTIVE", ARCHIVED: "ARCHIVED" } as const;
+export type AcademicClassStatus =
+  (typeof ACADEMIC_CLASS_STATUSES)[keyof typeof ACADEMIC_CLASS_STATUSES];
 
 export interface ParsedRollNumber {
   normalizedRollNumber: string;
@@ -26,13 +28,10 @@ export interface AcademicClassSummary {
   branchCode: BranchCode;
   branchName: BranchName;
   section: SectionCode;
-  status: "ACTIVE" | "ARCHIVED";
+  status: AcademicClassStatus;
 }
 
-export interface OnboardingRequest {
-  umsRollNumber: string;
-  section: SectionCode;
-}
+export interface OnboardingRequest { umsRollNumber: string; section: SectionCode; }
 
 export interface StudentProfile {
   id: EntityId;
