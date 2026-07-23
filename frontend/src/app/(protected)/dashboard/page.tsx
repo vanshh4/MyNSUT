@@ -1,7 +1,6 @@
 "use client";
 import { CalendarDays, Megaphone, MapPin, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
 import { MotionButton } from "@/components/ui/MotionButton";
@@ -16,7 +15,7 @@ const stats = [
 ];
 export default function Dashboard() {
   return (
-    <AppShell>
+    <>
       <PageHeader
         eyebrow="Monday · 13 July"
         title="Good afternoon, Vansh"
@@ -98,6 +97,6 @@ export default function Dashboard() {
           </MotionButton>
         </MotionCard>
       </div>
-    </AppShell>
+    </>
   );
 }

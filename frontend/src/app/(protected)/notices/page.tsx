@@ -1,7 +1,6 @@
 "use client";
 import { ExternalLink, Search } from "lucide-react";
 import { motion } from "framer-motion";
-import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
 const rows = [
@@ -11,7 +10,7 @@ const rows = [
 ];
 export default function Page() {
   return (
-    <AppShell>
+    <>
       <PageHeader
         eyebrow="Official updates"
         title="Notices & circulars"
@@ -45,6 +44,6 @@ export default function Page() {
           </motion.div>
         ))}
       </motion.div>
-    </AppShell>
+    </>
   );
 }

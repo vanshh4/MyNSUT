@@ -1,14 +1,13 @@
 "use client";
 import { Search, UsersRound } from "lucide-react";
 import { motion } from "framer-motion";
-import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
 import { MotionButton } from "@/components/ui/MotionButton";
 const list = ["IEEE NSUT", "Enactus NSUT", "DebSoc NSUT", "The Alliance", "Ashwamedh", "Canvas"];
 export default function Page() {
   return (
-    <AppShell>
+    <>
       <PageHeader
         eyebrow="Campus communities"
         title="Societies & clubs"
@@ -46,6 +45,6 @@ export default function Page() {
           </motion.div>
         ))}
       </motion.div>
-    </AppShell>
+    </>
   );
 }

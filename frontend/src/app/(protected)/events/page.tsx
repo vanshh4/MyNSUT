@@ -1,7 +1,6 @@
 "use client";
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
-import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
 import { MotionButton } from "@/components/ui/MotionButton";
@@ -12,7 +11,7 @@ const events = [
 ];
 export default function Page() {
   return (
-    <AppShell>
+    <>
       <PageHeader
         eyebrow="What’s happening"
         title="Events & fests"
@@ -54,6 +53,6 @@ export default function Page() {
           </motion.div>
         ))}
       </div>
-    </AppShell>
+    </>
   );
 }

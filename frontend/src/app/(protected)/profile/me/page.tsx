@@ -1,7 +1,6 @@
 "use client";
 import { Award, BookOpen, Building2, GraduationCap, UsersRound } from "lucide-react";
 import { motion } from "framer-motion";
-import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
 import { MotionButton } from "@/components/ui/MotionButton";
@@ -19,7 +18,7 @@ const metrics = [
 ];
 export default function Page() {
   return (
-    <AppShell>
+    <>
       <PageHeader
         eyebrow="Student profile"
         title="Vansh Bhardwaj"
@@ -69,6 +68,6 @@ export default function Page() {
           </MotionCard>
         </div>
       </div>
-    </AppShell>
+    </>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 import { Building2, FileSearch, Megaphone, ShieldCheck, UsersRound } from "lucide-react";
 import { motion } from "framer-motion";
-import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
 const modules = [
@@ -12,7 +11,7 @@ const modules = [
 ];
 export default function Page() {
   return (
-    <AppShell>
+    <>
       <PageHeader
         eyebrow="Super Admin"
         title="Administration"
@@ -45,6 +44,6 @@ export default function Page() {
           </motion.div>
         ))}
       </div>
-    </AppShell>
+    </>
   );
 }
