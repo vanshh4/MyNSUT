@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Archivo, Manrope } from "next/font/google";
+
+import { AuthProvider } from "@/components/auth/AuthProvider";
+
 import "./globals.css";
 
 const archivo = Archivo({ subsets: ["latin"], variable: "--font-display", display: "swap" });
@@ -13,7 +16,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${archivo.variable} ${manrope.variable}`}>{children}</body>
+      <body className={`${archivo.variable} ${manrope.variable}`}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
