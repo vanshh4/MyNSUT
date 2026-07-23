@@ -1,19 +1,16 @@
+import type { ApiResponse as SharedApiResponse } from "@mynsut/shared/types/api";
+import type { PermissionCode } from "@mynsut/shared/constants/permissions";
 import type { LucideIcon } from "lucide-react";
+
 import type { AppRoute } from "@/config/routes";
-import type { Role } from "@/types/roles";
 
 export type Nullable<T> = T | null;
 export type ApiStatus = "idle" | "loading" | "success" | "error";
+export type ApiResponse<T> = SharedApiResponse<T>;
 
 export interface NavigationItem {
   label: string;
   href: AppRoute;
   icon: LucideIcon;
-  roles?: Role[];
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
+  permissions?: readonly PermissionCode[];
 }
