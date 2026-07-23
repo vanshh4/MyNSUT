@@ -1,10 +1,8 @@
+import type { OnboardingRequest } from "@mynsut/shared/types/student";
+import { SECTIONS } from "@mynsut/shared/types/student";
 import { z } from "zod";
 
-import { SECTIONS } from "../../constants/sections.js";
-
-export const onboardingSchema = z.object({
+export const onboardingSchema: z.ZodType<OnboardingRequest> = z.object({
   umsRollNumber: z.string().trim().min(1).max(30),
   section: z.enum(SECTIONS),
 });
-
-export type OnboardingRequest = z.infer<typeof onboardingSchema>;

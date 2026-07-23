@@ -1,5 +1,5 @@
-import type { BranchCode } from "../../constants/branches.js";
-import type { SectionCode } from "../../constants/sections.js";
+import type { BranchCode } from "@mynsut/shared/constants/branches";
+import type { SectionCode } from "@mynsut/shared/types/student";
 
 export interface ClassIdentity {
   admissionYear: number;

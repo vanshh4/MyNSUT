@@ -1,6 +1,7 @@
+import type { ParsedRollNumber } from "@mynsut/shared/types/student";
+
 import { BRANCHES, isBranchCode } from "../../constants/branches.js";
 import { studentErrors } from "./students.errors.js";
-import type { ParsedRollNumber } from "./students.types.js";
 
 const ROLL_NUMBER_PATTERN = /^(\d{4})([A-Z]+)(\d+)$/;
 const MINIMUM_ADMISSION_YEAR = 2020;
@@ -14,16 +15,11 @@ export function parseUmsRollNumber(
   if (!match) throw studentErrors.invalidRollNumber();
 
   const [, yearPart, branchPart, numericPart] = match;
+  if (!yearPart || !branchPart || !numericPart) throw studentErrors.invalidRollNumber();
   const admissionYear = Number(yearPart);
-  if (
-    !Number.isInteger(admissionYear) ||
-    admissionYear < MINIMUM_ADMISSION_YEAR ||
-    admissionYear > currentYear
-  ) {
-    throw studentErrors.invalidAdmissionYear();
-  }
-  if (!branchPart || !isBranchCode(branchPart)) throw studentErrors.unsupportedBranch();
-  if (!numericPart) throw studentErrors.invalidRollNumber();
+  if (!Number.isInteger(admissionYear) || admissionYear < MINIMUM_ADMISSION_YEAR ||
+      admissionYear > currentYear) throw studentErrors.invalidAdmissionYear();
+  if (!isBranchCode(branchPart)) throw studentErrors.unsupportedBranch();
 
   return {
     normalizedRollNumber,
@@ -33,7 +29,6 @@ export function parseUmsRollNumber(
     graduationYear: admissionYear + 4,
   };
 }
-
 export function getBranchName(branchCode: keyof typeof BRANCHES): string {
   return BRANCHES[branchCode];
 }
