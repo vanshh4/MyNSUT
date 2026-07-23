@@ -12,6 +12,7 @@ import { useSearchParams } from "next/navigation";
 import { MotionButton } from "@/components/ui/MotionButton";
 import { routes } from "@/config/routes";
 import { beginGoogleSignIn } from "@/lib/api/auth";
+import { Suspense } from "react";
 
 const messages: Record<AuthErrorCode, { title: string; description: string }> = {
   [AUTH_ERROR_CODES.INVALID_EMAIL_DOMAIN]: {
@@ -80,7 +81,7 @@ const messages: Record<AuthErrorCode, { title: string; description: string }> = 
   },
 };
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
   const rawCode = searchParams.get("code");
   const code =
@@ -113,5 +114,19 @@ export default function AuthErrorPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="motion-page grid min-h-screen place-items-center">
+          <p className="text-sm text-[var(--muted)]">Loading authentication details…</p>
+        </main>
+      }
+    >
+      <AuthErrorContent />
+    </Suspense>
   );
 }

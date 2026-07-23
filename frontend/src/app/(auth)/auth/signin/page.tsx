@@ -9,8 +9,9 @@ import { AppLogo } from "@/components/common/AppLogo";
 import { GuestGuard } from "@/components/auth/GuestGuard";
 import { MotionButton } from "@/components/ui/MotionButton";
 import { beginGoogleSignIn } from "@/lib/api/auth";
+import { Suspense } from "react";
 
-export default function SignInPage() {
+function SignInContent() {
   const searchParams = useSearchParams();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const nextPath = searchParams.get("next");
@@ -79,5 +80,19 @@ export default function SignInPage() {
         </section>
       </main>
     </GuestGuard>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="motion-page grid min-h-screen place-items-center">
+          <p className="text-sm text-[var(--muted)]">Loading sign-in…</p>
+        </main>
+      }
+    >
+      <SignInContent />
+    </Suspense>
   );
 }
