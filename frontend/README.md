@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MyNSUT Frontend
 
-## Getting Started
+Next.js frontend for MyNSUT using the Motion Light design system.
 
-First, run the development server:
+## Phase 2 capabilities
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Google sign-in through the backend OAuth flow
+- Same-origin API proxy through `/api/backend/*`
+- Central `AuthProvider` and typed `useAuth` hook
+- Guest and protected route guards
+- Authentication callback and safe error pages
+- UMS roll-number parsing preview
+- Backend-connected onboarding
+- Permission-aware navigation
+- Current-device logout
+
+## Setup
+
+Run from the monorepo root:
+
+```powershell
+npm install
+npm run build --workspace @mynsut/shared
+Copy-Item frontend\.env.example frontend\.env.local
+npm run dev --workspace frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The backend should run at `http://localhost:4000` and the frontend at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_APP_NAME="MyNSUT"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_API_BASE_URL="/api/backend"
+BACKEND_INTERNAL_URL="http://localhost:4000"
+```
 
-## Learn More
+`BACKEND_INTERNAL_URL` is server-only. Never expose backend secrets using a `NEXT_PUBLIC_` prefix.
 
-To learn more about Next.js, take a look at the following resources:
+## Route groups
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Authentication pages should live under:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+src/app/(auth)/auth/signin/page.tsx
+src/app/(auth)/auth/callback/page.tsx
+src/app/(auth)/auth/error/page.tsx
+src/app/(auth)/onboarding/page.tsx
+```
 
-## Deploy on Vercel
+Protected pages should live under:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+src/app/(protected)/dashboard/page.tsx
+src/app/(protected)/profile/me/page.tsx
+src/app/(protected)/notices/page.tsx
+src/app/(protected)/societies/page.tsx
+src/app/(protected)/events/page.tsx
+src/app/(protected)/admin/page.tsx
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Route groups do not change the public URLs.
+
+## Important migration step
+
+After moving each protected page, remove its page-level `AppShell` import and wrapper because `src/app/(protected)/layout.tsx` supplies the shell centrally.
+
+## Validation
+
+```powershell
+npm run format --workspace frontend
+npm run lint --workspace frontend
+npm run build --workspace frontend
+```
+
+## OAuth callback
+
+The Google OAuth client should register:
+
+```text
+http://localhost:3000/api/backend/auth/google/callback
+```
+
+The Next.js rewrite forwards that callback to the Express backend while preserving the browser-facing same origin.
