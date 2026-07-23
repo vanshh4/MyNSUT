@@ -3,23 +3,42 @@ import request from "supertest";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../src/modules/auth/auth.controller.js", () => ({
-  startGoogleLogin: (_req: express.Request, res: express.Response) =>
-    res.redirect(302, "https://accounts.google.com/o/oauth2/v2/auth"),
-  handleGoogleCallback: async (_req: express.Request, res: express.Response) => {
-    res.redirect(302, "http://localhost:3000/auth/callback");
+  startGoogleLogin: (_request: express.Request, response: express.Response) => {
+    response.redirect(302, "https://accounts.google.com/o/oauth2/v2/auth");
   },
-  getCurrentUser: (req: express.Request, res: express.Response) =>
-    res.status(200).json({ success: true, data: req.auth?.user ?? null }),
-  refreshSession: async (_req: express.Request, res: express.Response) => {
-    res.status(200).json({ success: true });
+
+  handleGoogleCallback: (_request: express.Request, response: express.Response) => {
+    response.redirect(302, "http://localhost:3000/auth/callback");
+
+    return Promise.resolve();
   },
-  logout: async (_req: express.Request, res: express.Response) => {
-    res.status(200).json({ success: true });
+
+  getCurrentUser: (request: express.Request, response: express.Response) => {
+    response.status(200).json({
+      success: true,
+      data: request.auth?.user ?? null,
+    });
   },
-  logoutAllDevices: async (_req: express.Request, res: express.Response) => {
-    res.status(200).json({ success: true });
+
+  refreshSession: (_request: express.Request, response: express.Response) => {
+    response.status(200).json({ success: true });
+
+    return Promise.resolve();
+  },
+
+  logout: (_request: express.Request, response: express.Response) => {
+    response.status(200).json({ success: true });
+
+    return Promise.resolve();
+  },
+
+  logoutAllDevices: (_request: express.Request, response: express.Response) => {
+    response.status(200).json({ success: true });
+
+    return Promise.resolve();
   },
 }));
+
 vi.mock("../../src/middlewares/authenticate.middleware.js", () => ({
   authenticateMiddleware: (
     req: express.Request,

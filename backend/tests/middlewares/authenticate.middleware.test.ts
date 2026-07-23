@@ -1,12 +1,22 @@
 import type { NextFunction, Request, Response } from "express";
+import type { CookieOptions } from "express";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const resolveSession = vi.fn();
 vi.mock("../../src/modules/auth/session.service.js", () => ({ resolveSession }));
 const { authenticateMiddleware } = await import("../../src/middlewares/authenticate.middleware.js");
 
-function responseMock() {
-  return { cookie: vi.fn() } as unknown as Response;
+function createResponseMock() {
+  const cookieMock = vi.fn<(name: string, value: string, options: CookieOptions) => void>();
+
+  const response = {
+    cookie: cookieMock,
+  } as unknown as Response;
+
+  return {
+    response,
+    cookieMock,
+  };
 }
 
 describe("authenticateMiddleware", () => {
@@ -15,7 +25,7 @@ describe("authenticateMiddleware", () => {
   it("rejects a missing session cookie", async () => {
     const request = { cookies: {} } as Request;
     const next = vi.fn() as NextFunction;
-    await authenticateMiddleware(request, responseMock(), next);
+    await authenticateMiddleware(request, createResponseMock().response, next);
     expect(next).toHaveBeenCalledWith(expect.objectContaining({ code: "AUTHENTICATION_REQUIRED" }));
   });
 
@@ -51,7 +61,7 @@ describe("authenticateMiddleware", () => {
     });
     const request = { cookies: { mynsut_session: "raw-token" } } as Request;
     const next = vi.fn() as NextFunction;
-    await authenticateMiddleware(request, responseMock(), next);
+    await authenticateMiddleware(request, createResponseMock().response, next);
     expect(request.auth).toMatchObject({
       userId: "user-id",
       sessionId: "session-id",
@@ -64,7 +74,7 @@ describe("authenticateMiddleware", () => {
   it("refreshes the cookie after sliding renewal", async () => {
     resolveSession.mockResolvedValue({
       sessionId: "session-id",
-      expiresAt: new Date(Date.now() + 10000),
+      expiresAt: new Date(Date.now() + 10_000),
       renewed: true,
       user: {
         id: "user-id",
@@ -78,16 +88,25 @@ describe("authenticateMiddleware", () => {
         student: null,
       },
     });
-    const response = responseMock();
+
+    const { response, cookieMock } = createResponseMock();
+
     await authenticateMiddleware(
-      { cookies: { mynsut_session: "raw-token" } } as Request,
+      {
+        cookies: {
+          mynsut_session: "raw-token",
+        },
+      } as Request,
       response,
       vi.fn()
     );
-    expect(response.cookie).toHaveBeenCalledWith(
-      "mynsut_session",
-      "raw-token",
-      expect.objectContaining({ expires: expect.any(Date) })
-    );
+
+    expect(cookieMock).toHaveBeenCalledOnce();
+
+    const cookieCall = cookieMock.mock.calls[0];
+
+    expect(cookieCall?.[0]).toBe("mynsut_session");
+    expect(cookieCall?.[1]).toBe("raw-token");
+    expect(cookieCall?.[2].expires).toBeInstanceOf(Date);
   });
 });

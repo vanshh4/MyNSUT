@@ -8,14 +8,14 @@ export default tseslint.config(
   },
 
   eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
 
   {
-    files: ["src/**/*.ts", "prisma/**/*.ts", "prisma.config.ts"],
+    files: ["**/*.ts"],
+    extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       globals: globals.node,
       parserOptions: {
-        projectService: true,
+        project: "./tsconfig.eslint.json",
         tsconfigRootDir: import.meta.dirname,
       },
     },
