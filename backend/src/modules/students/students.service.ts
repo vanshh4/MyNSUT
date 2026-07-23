@@ -44,7 +44,10 @@ export async function completeOnboarding(
   if (user.onboardingCompleted || user.student) throw studentErrors.alreadyOnboarded();
 
   const parsed = parseUmsRollNumber(input.umsRollNumber);
-  const existing = await studentsRepository.findStudentByRollNumber(prisma, parsed.normalizedRollNumber);
+  const existing = await studentsRepository.findStudentByRollNumber(
+    prisma,
+    parsed.normalizedRollNumber
+  );
   if (existing) throw studentErrors.rollNumberTaken();
 
   try {

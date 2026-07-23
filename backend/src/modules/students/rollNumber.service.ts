@@ -17,8 +17,12 @@ export function parseUmsRollNumber(
   const [, yearPart, branchPart, numericPart] = match;
   if (!yearPart || !branchPart || !numericPart) throw studentErrors.invalidRollNumber();
   const admissionYear = Number(yearPart);
-  if (!Number.isInteger(admissionYear) || admissionYear < MINIMUM_ADMISSION_YEAR ||
-      admissionYear > currentYear) throw studentErrors.invalidAdmissionYear();
+  if (
+    !Number.isInteger(admissionYear) ||
+    admissionYear < MINIMUM_ADMISSION_YEAR ||
+    admissionYear > currentYear
+  )
+    throw studentErrors.invalidAdmissionYear();
   if (!isBranchCode(branchPart)) throw studentErrors.unsupportedBranch();
 
   return {

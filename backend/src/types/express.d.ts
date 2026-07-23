@@ -2,7 +2,9 @@ import type { AuthContext, SafeAuthenticatedUser } from "../modules/auth/auth.ty
 
 declare global {
   namespace Express {
-    interface Request { auth?: AuthContext & { user: SafeAuthenticatedUser }; }
+    interface Request {
+      auth?: AuthContext & { user: SafeAuthenticatedUser };
+    }
   }
 }
 export {};

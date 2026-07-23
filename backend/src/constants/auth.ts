@@ -1,5 +1,8 @@
-export { AUTH_ERROR_CODES, AUTH_PROVIDER, OFFICIAL_EMAIL_DOMAIN }
-  from "@mynsut/shared/constants/auth";
+export {
+  AUTH_ERROR_CODES,
+  AUTH_PROVIDER,
+  OFFICIAL_EMAIL_DOMAIN,
+} from "@mynsut/shared/constants/auth";
 export type { AuthErrorCode } from "@mynsut/shared/constants/auth";
 
 /** Backend-only cookie identifiers; never expose cookie values through shared contracts. */

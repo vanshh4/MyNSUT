@@ -30,7 +30,10 @@ export interface AuthenticationResult {
   rawSessionToken: string;
   sessionExpiresAt: Date;
 }
-export interface SessionMetadata { ipAddress?: string; userAgent?: string; }
+export interface SessionMetadata {
+  ipAddress?: string;
+  userAgent?: string;
+}
 export interface ResolvedSession {
   sessionId: string;
   user: SafeAuthenticatedUser;
