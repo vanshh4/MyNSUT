@@ -31,38 +31,68 @@ describe("Google OAuth service", () => {
   });
 
   it("accepts a verified NSUT Google identity", async () => {
-    jwtVerify.mockResolvedValue({ payload: {
-      sub: "google-subject", email: "student@nsut.ac.in", email_verified: true,
-      name: "Student Name", picture: "https://example.com/avatar.png", nonce: "expected-nonce",
-    }});
+    jwtVerify.mockResolvedValue({
+      payload: {
+        sub: "google-subject",
+        email: "student@nsut.ac.in",
+        email_verified: true,
+        name: "Student Name",
+        picture: "https://example.com/avatar.png",
+        nonce: "expected-nonce",
+      },
+    });
 
     await expect(verifyGoogleIdentity("signed-id-token", "expected-nonce")).resolves.toEqual({
-      subject: "google-subject", email: "student@nsut.ac.in", emailVerified: true,
-      fullName: "Student Name", profileImageUrl: "https://example.com/avatar.png",
+      subject: "google-subject",
+      email: "student@nsut.ac.in",
+      emailVerified: true,
+      fullName: "Student Name",
+      profileImageUrl: "https://example.com/avatar.png",
     });
   });
 
   it("rejects an unverified email", async () => {
-    jwtVerify.mockResolvedValue({ payload: {
-      sub: "google-subject", email: "student@nsut.ac.in", email_verified: false,
-      name: "Student Name", nonce: "expected-nonce",
-    }});
-    await expect(verifyGoogleIdentity("token", "expected-nonce")).rejects.toMatchObject({ code: "EMAIL_NOT_VERIFIED" });
+    jwtVerify.mockResolvedValue({
+      payload: {
+        sub: "google-subject",
+        email: "student@nsut.ac.in",
+        email_verified: false,
+        name: "Student Name",
+        nonce: "expected-nonce",
+      },
+    });
+    await expect(verifyGoogleIdentity("token", "expected-nonce")).rejects.toMatchObject({
+      code: "EMAIL_NOT_VERIFIED",
+    });
   });
 
   it("rejects an account outside the NSUT domain", async () => {
-    jwtVerify.mockResolvedValue({ payload: {
-      sub: "google-subject", email: "student@gmail.com", email_verified: true,
-      name: "Student Name", nonce: "expected-nonce",
-    }});
-    await expect(verifyGoogleIdentity("token", "expected-nonce")).rejects.toMatchObject({ code: "INVALID_EMAIL_DOMAIN" });
+    jwtVerify.mockResolvedValue({
+      payload: {
+        sub: "google-subject",
+        email: "student@gmail.com",
+        email_verified: true,
+        name: "Student Name",
+        nonce: "expected-nonce",
+      },
+    });
+    await expect(verifyGoogleIdentity("token", "expected-nonce")).rejects.toMatchObject({
+      code: "INVALID_EMAIL_DOMAIN",
+    });
   });
 
   it("rejects a nonce mismatch", async () => {
-    jwtVerify.mockResolvedValue({ payload: {
-      sub: "google-subject", email: "student@nsut.ac.in", email_verified: true,
-      name: "Student Name", nonce: "wrong-nonce",
-    }});
-    await expect(verifyGoogleIdentity("token", "expected-nonce")).rejects.toMatchObject({ code: "INVALID_OAUTH_STATE" });
+    jwtVerify.mockResolvedValue({
+      payload: {
+        sub: "google-subject",
+        email: "student@nsut.ac.in",
+        email_verified: true,
+        name: "Student Name",
+        nonce: "wrong-nonce",
+      },
+    });
+    await expect(verifyGoogleIdentity("token", "expected-nonce")).rejects.toMatchObject({
+      code: "INVALID_OAUTH_STATE",
+    });
   });
 });

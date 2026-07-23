@@ -5,7 +5,8 @@ process.env.APP_NAME = "MyNSUT API Test";
 process.env.LOG_LEVEL = "tiny";
 process.env.TRUST_PROXY = "false";
 process.env.FRONTEND_URL = "http://localhost:3000";
-process.env.DATABASE_URL = "postgresql://postgres:password@localhost:5432/mynsut_test?schema=public";
+process.env.DATABASE_URL =
+  "postgresql://postgres:password@localhost:5432/mynsut_test?schema=public";
 process.env.AUTH_SECRET = "test-auth-secret-that-is-at-least-32-characters";
 process.env.GOOGLE_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
 process.env.GOOGLE_CLIENT_SECRET = "test-client-secret";

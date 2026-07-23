@@ -19,9 +19,12 @@ describe("parseUmsRollNumber", () => {
     expect(parseUmsRollNumber(" 2023uit3324 ", 2026).normalizedRollNumber).toBe("2023UIT3324");
   });
 
-  it.each(["", "2023", "UIT3324", "2023UIT", "2023-UI-3324"])("rejects malformed input: %s", (value) => {
-    expect(() => parseUmsRollNumber(value, 2026)).toThrow();
-  });
+  it.each(["", "2023", "UIT3324", "2023UIT", "2023-UI-3324"])(
+    "rejects malformed input: %s",
+    (value) => {
+      expect(() => parseUmsRollNumber(value, 2026)).toThrow();
+    }
+  );
 
   it("rejects unsupported branches", () => {
     expect(() => parseUmsRollNumber("2023XYZ3324", 2026)).toThrow(/unsupported branch/i);
