@@ -35,6 +35,9 @@ pnpm-debug.log*
 
 shared/dist/
 
+# Guiding documents used for preparation of the project
+guide_docs/
+
 # Editors and OS
 .vs*ode/
 .idea/
