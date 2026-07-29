@@ -37,6 +37,7 @@ shared/dist/
 
 # Guiding documents used for preparation of the project
 guide_docs/
+skills.md
 
 # Editors and OS
 .vs*ode/
