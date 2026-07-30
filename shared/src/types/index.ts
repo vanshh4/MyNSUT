@@ -13,7 +13,9 @@ export { BRANCHES, BRANCH_CODES, BRANCH_OPTIONS, getBranchName, isBranchCode }
 export type { BranchCode, BranchDefinition, BranchName } from "../constants/branches.js";
 export { PERMISSIONS, PERMISSION_CODES, isPermissionCode } from "../constants/permissions.js";
 export type { PermissionCode } from "../constants/permissions.js";
-export { ROLES, ROLE_CODES, isRoleCode } from "../constants/roles.js";
+export { SCOPES, SCOPE_CODES, isScopeCode } from "../constants/scopes.js";
+export type { ScopeCode } from "../constants/scopes.js";
+export { ROLES, ROLE_DEFINITIONS, ROLE_CODES, isRoleCode } from "../constants/roles.js";
 export type { RoleCode } from "../constants/roles.js";
 
 export type { ApiErrorDetails, ApiErrorResponse, ApiResponse, ApiSuccessResponse,
@@ -24,3 +26,5 @@ export type { AuthClientState, AuthenticatedUser, AuthErrorDescriptor,
 export { ACADEMIC_CLASS_STATUSES, SECTIONS, isSectionCode } from "./student.js";
 export type { AcademicClassStatus, AcademicClassSummary, OnboardingRequest,
   OnboardingResponse, ParsedRollNumber, SectionCode, StudentProfile } from "./student.js";
+export type { AuthorizationSummary, ScopedRoleAssignment, RoleAssignmentPayload, RoleAssignmentResponse, RoleRevocationPayload, SafeRoleAssignment, UserRolesSummary } from "./rbac.js";
+export type { SafeAuditEntry, AuditFilters, PaginatedAuditResponse } from "./audit.js";
