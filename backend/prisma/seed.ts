@@ -41,6 +41,60 @@ const studentPermissionCodes = [
   PERMISSIONS.FILE_UPLOAD_PROFILE_IMAGE,
 ] as const;
 
+const classCrPermissionCodes = [
+  ...studentPermissionCodes,
+  PERMISSIONS.CLASS_ANNOUNCEMENT_CREATE,
+  PERMISSIONS.CLASS_ANNOUNCEMENT_UPDATE,
+  PERMISSIONS.CLASS_ANNOUNCEMENT_DELETE,
+  PERMISSIONS.CLASS_TASK_VIEW_COMPLETION_SUMMARY,
+] as const;
+
+const societyPresidentPermissionCodes = [
+  ...studentPermissionCodes,
+  PERMISSIONS.SOCIETY_UPDATE_PROFILE,
+  PERMISSIONS.SOCIETY_INVITE_MEMBER,
+  PERMISSIONS.SOCIETY_REVIEW_JOIN_REQUEST,
+  PERMISSIONS.SOCIETY_REMOVE_MEMBER,
+  PERMISSIONS.SOCIETY_VIEW_PRIVATE_SPACE,
+  PERMISSIONS.SOCIETY_ASSIGN_POR,
+  PERMISSIONS.NOTICE_CREATE_SOCIETY,
+  PERMISSIONS.NOTICE_UPDATE_OWN,
+  PERMISSIONS.NOTICE_DELETE,
+  PERMISSIONS.EVENT_CREATE,
+  PERMISSIONS.EVENT_UPDATE_OWN_SOCIETY,
+  PERMISSIONS.EVENT_CANCEL,
+  PERMISSIONS.EVENT_VIEW_REGISTRATIONS,
+  PERMISSIONS.EVENT_EXPORT_REGISTRATIONS,
+  PERMISSIONS.FILE_UPLOAD_NOTICE_ATTACHMENT,
+  PERMISSIONS.FILE_UPLOAD_EVENT_POSTER,
+  PERMISSIONS.ROLE_ASSIGN_SOCIETY,
+] as const;
+
+const societyVicePresidentPermissionCodes = [
+  ...studentPermissionCodes,
+  PERMISSIONS.SOCIETY_UPDATE_PROFILE,
+  PERMISSIONS.SOCIETY_INVITE_MEMBER,
+  PERMISSIONS.SOCIETY_REVIEW_JOIN_REQUEST,
+  PERMISSIONS.SOCIETY_REMOVE_MEMBER,
+  PERMISSIONS.SOCIETY_VIEW_PRIVATE_SPACE,
+  PERMISSIONS.SOCIETY_ASSIGN_POR,
+  PERMISSIONS.NOTICE_CREATE_SOCIETY,
+  PERMISSIONS.NOTICE_UPDATE_OWN,
+  PERMISSIONS.EVENT_CREATE,
+  PERMISSIONS.EVENT_UPDATE_OWN_SOCIETY,
+  PERMISSIONS.EVENT_CANCEL,
+  PERMISSIONS.EVENT_VIEW_REGISTRATIONS,
+  PERMISSIONS.EVENT_EXPORT_REGISTRATIONS,
+  PERMISSIONS.FILE_UPLOAD_NOTICE_ATTACHMENT,
+  PERMISSIONS.FILE_UPLOAD_EVENT_POSTER,
+  PERMISSIONS.ROLE_ASSIGN_SOCIETY,
+] as const;
+
+const societyMemberPermissionCodes = [
+  ...studentPermissionCodes,
+  PERMISSIONS.SOCIETY_VIEW_PRIVATE_SPACE,
+] as const;
+
 async function seedPermissions(): Promise<void> {
   await Promise.all(
     Object.values(PERMISSIONS).map((code) =>
@@ -79,6 +133,10 @@ async function grantPermissions(
 async function seedRolePermissions(): Promise<void> {
   await grantPermissions(ROLES.SUPER_ADMIN, Object.values(PERMISSIONS));
   await grantPermissions(ROLES.STUDENT, studentPermissionCodes);
+  await grantPermissions(ROLES.CLASS_CR, classCrPermissionCodes);
+  await grantPermissions(ROLES.SOCIETY_PRESIDENT, societyPresidentPermissionCodes);
+  await grantPermissions(ROLES.SOCIETY_VICE_PRESIDENT, societyVicePresidentPermissionCodes);
+  await grantPermissions(ROLES.SOCIETY_MEMBER, societyMemberPermissionCodes);
 }
 
 async function seedOptionalSuperAdmin(): Promise<void> {
@@ -113,7 +171,7 @@ async function main(): Promise<void> {
   await seedRoles();
   await seedRolePermissions();
   await seedOptionalSuperAdmin();
-  console.log("MyNSUT Phase 2 seed completed successfully.");
+  console.log("MyNSUT Phase 3 seed completed successfully.");
 }
 
 main()
