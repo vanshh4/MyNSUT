@@ -3,12 +3,12 @@ import type { UserRolesSummary } from "@mynsut/shared/types/rbac";
 import { SCOPES, type ScopeCode } from "@mynsut/shared/constants/scopes";
 import { ROLE_DEFINITIONS, ROLES } from "@mynsut/shared/constants/roles";
 import { AUDIT_ACTIONS, AUDIT_TARGET_TYPES } from "../../../constants/audit.js";
-import { prisma } from "../../../../db/prisma.js";
+import { prisma } from "../../../db/prisma.js";
 import * as adminRolesRepository from "./adminRoles.repository.js";
 import * as rbacRepository from "../../rbac/rbac.repository.js";
 import * as auditService from "../../audit/audit.service.js";
 import { duplicateRoleAssignment, invalidRoleScopeAssignment, cannotRevokeMandatoryRole, roleAssignmentNotFound } from "../../rbac/rbac.errors.js";
-import { ApiError } from "../../../../utils/apiError.js";
+import { ApiError } from "../../../utils/apiError.js";
 
 export async function listRoles(scopeFilter?: ScopeCode): Promise<SafeRoleDefinition[]> {
   const roles = await adminRolesRepository.findAllRolesWithCounts(prisma);

@@ -1,7 +1,7 @@
 import type { UserSearchFilters, SafeAdminUser, SafeAdminUserDetail } from "./adminUsers.types.js";
-import { prisma } from "../../../../db/prisma.js";
+import { prisma } from "../../../db/prisma.js";
 import * as adminUsersRepository from "./adminUsers.repository.js";
-import { ApiError } from "../../../../utils/apiError.js";
+import { ApiError } from "../../../utils/apiError.js";
 
 function mapToSafeAdminUser(user: any): SafeAdminUser {
   return {
