@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { authenticate } from "../../auth/auth.middleware.js";
+import { authenticateMiddleware } from "../../../middlewares/authenticate.middleware.js";
 import { requireSuperAdmin } from "../../../middlewares/requireSuperAdmin.middleware.js";
 import * as adminRolesController from "./adminRoles.controller.js";
 
 export const adminRolesRouter = Router();
 
-adminRolesRouter.use(authenticate, requireSuperAdmin);
+adminRolesRouter.use(authenticateMiddleware, requireSuperAdmin);
 
 adminRolesRouter.get("/", ...adminRolesController.listRoles);
 adminRolesRouter.get("/users/:userId", ...adminRolesController.listUserAssignments);
