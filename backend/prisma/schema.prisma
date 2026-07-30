@@ -37,8 +37,17 @@ model User {
   updatedAt           DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
   student             Student?
   sessions            Session[]
-  globalRoles         UserGlobalRole[] @relation("UserRoles")
-  rolesAssigned       UserGlobalRole[] @relation("RoleAssigner")
+  globalRoles          UserGlobalRole[] @relation("UserRoles")
+  rolesAssigned        UserGlobalRole[] @relation("RoleAssigner")
+  globalRolesRevoked   UserGlobalRole[] @relation("GlobalRoleRevoker")
+  classRoles           ClassRole[]      @relation("UserClassRoles")
+  classRolesAssigned   ClassRole[]      @relation("ClassRoleAssigner")
+  classRolesRevoked    ClassRole[]      @relation("ClassRoleRevoker")
+  societyRoles         SocietyRole[]    @relation("UserSocietyRoles")
+  societyRolesAssigned SocietyRole[]    @relation("SocietyRoleAssigner")
+  societyRolesRevoked  SocietyRole[]    @relation("SocietyRoleRevoker")
+  auditLogsPerformed   AuditLog[]       @relation("AuditActor")
+  auditLogsReceived    AuditLog[]       @relation("AuditTarget")
 
   @@index([status])
   @@map("users")
@@ -71,6 +80,7 @@ model AcademicClass {
   createdAt     DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
   students      Student[]
+  classRoles    ClassRole[]
 
   @@unique([admissionYear, branchCode, section])
   @@index([status])
@@ -107,6 +117,8 @@ model Role {
   createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   permissions RolePermission[]
   users       UserGlobalRole[]
+  classRoles  ClassRole[]
+  societyRoles SocietyRole[]
 
   @@map("roles")
 }
@@ -134,13 +146,78 @@ model RolePermission {
 model UserGlobalRole {
   userId     String   @map("user_id") @db.Uuid
   roleId     String   @map("role_id") @db.Uuid
-  assignedBy String?  @map("assigned_by") @db.Uuid
-  assignedAt DateTime @default(now()) @map("assigned_at") @db.Timestamptz(6)
-  user       User     @relation("UserRoles", fields: [userId], references: [id], onDelete: Cascade)
-  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  assigner   User?    @relation("RoleAssigner", fields: [assignedBy], references: [id], onDelete: SetNull)
+  assignedBy String?   @map("assigned_by") @db.Uuid
+  assignedAt DateTime  @default(now()) @map("assigned_at") @db.Timestamptz(6)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(6)
+  revokedBy  String?   @map("revoked_by") @db.Uuid
+  user       User      @relation("UserRoles", fields: [userId], references: [id], onDelete: Cascade)
+  role       Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assigner   User?     @relation("RoleAssigner", fields: [assignedBy], references: [id], onDelete: SetNull)
+  revoker    User?     @relation("GlobalRoleRevoker", fields: [revokedBy], references: [id], onDelete: SetNull)
 
   @@id([userId, roleId])
   @@index([roleId])
   @@map("user_global_roles")
+}
+
+model ClassRole {
+  id         String        @id @default(uuid()) @db.Uuid
+  userId     String        @map("user_id") @db.Uuid
+  roleId     String        @map("role_id") @db.Uuid
+  classId    String        @map("class_id") @db.Uuid
+  assignedBy String?       @map("assigned_by") @db.Uuid
+  assignedAt DateTime      @default(now()) @map("assigned_at") @db.Timestamptz(6)
+  revokedAt  DateTime?     @map("revoked_at") @db.Timestamptz(6)
+  revokedBy  String?       @map("revoked_by") @db.Uuid
+  user       User          @relation("UserClassRoles", fields: [userId], references: [id], onDelete: Cascade)
+  role       Role          @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  class      AcademicClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  assigner   User?         @relation("ClassRoleAssigner", fields: [assignedBy], references: [id], onDelete: SetNull)
+  revoker    User?         @relation("ClassRoleRevoker", fields: [revokedBy], references: [id], onDelete: SetNull)
+
+  @@unique([userId, roleId, classId, revokedAt])
+  @@index([classId])
+  @@index([roleId])
+  @@map("class_roles")
+}
+
+/// FK to Society deferred to Phase 7 when the Society model is introduced.
+model SocietyRole {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  roleId     String    @map("role_id") @db.Uuid
+  societyId  String    @map("society_id") @db.Uuid
+  assignedBy String?   @map("assigned_by") @db.Uuid
+  assignedAt DateTime  @default(now()) @map("assigned_at") @db.Timestamptz(6)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(6)
+  revokedBy  String?   @map("revoked_by") @db.Uuid
+  user       User      @relation("UserSocietyRoles", fields: [userId], references: [id], onDelete: Cascade)
+  role       Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assigner   User?     @relation("SocietyRoleAssigner", fields: [assignedBy], references: [id], onDelete: SetNull)
+  revoker    User?     @relation("SocietyRoleRevoker", fields: [revokedBy], references: [id], onDelete: SetNull)
+
+  @@unique([userId, roleId, societyId, revokedAt])
+  @@index([societyId])
+  @@index([roleId])
+  @@map("society_roles")
+}
+
+model AuditLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  actorId      String   @map("actor_id") @db.Uuid
+  action       String   @db.VarChar(120)
+  targetType   String   @map("target_type") @db.VarChar(80)
+  targetId     String   @map("target_id") @db.VarChar(255)
+  targetUserId String?  @map("target_user_id") @db.Uuid
+  metadata     Json?    @db.JsonB
+  ipAddress    String?  @map("ip_address") @db.VarChar(64)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  actor        User     @relation("AuditActor", fields: [actorId], references: [id], onDelete: Cascade)
+  targetUser   User?    @relation("AuditTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([targetUserId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
 }
