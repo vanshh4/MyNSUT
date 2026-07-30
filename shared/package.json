@@ -42,6 +42,18 @@
     "./types/student": {
       "types": "./dist/types/student.d.ts",
       "import": "./dist/types/student.js"
+    },
+    "./constants/scopes": {
+      "types": "./dist/constants/scopes.d.ts",
+      "import": "./dist/constants/scopes.js"
+    },
+    "./types/rbac": {
+      "types": "./dist/types/rbac.d.ts",
+      "import": "./dist/types/rbac.js"
+    },
+    "./types/audit": {
+      "types": "./dist/types/audit.d.ts",
+      "import": "./dist/types/audit.js"
     }
   },
   "files": [
