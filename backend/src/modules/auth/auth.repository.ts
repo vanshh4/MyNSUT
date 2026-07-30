@@ -68,6 +68,7 @@ export function findSessionByTokenHash(client: DatabaseClient, tokenHash: string
         include: {
           student: true,
           globalRoles: {
+            where: { revokedAt: null },
             include: {
               role: {
                 include: {
