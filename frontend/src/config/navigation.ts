@@ -1,5 +1,7 @@
 import type { PermissionCode } from "@mynsut/shared/constants/permissions";
 import { PERMISSIONS } from "@mynsut/shared/constants/permissions";
+import type { RoleCode } from "@mynsut/shared/constants/roles";
+import { ROLES } from "@mynsut/shared/constants/roles";
 import {
   CalendarDays,
   CircleUserRound,
@@ -7,6 +9,9 @@ import {
   Megaphone,
   ShieldCheck,
   UsersRound,
+  Users,
+  UserPlus,
+  ScrollText,
 } from "lucide-react";
 
 import type { AppRoute } from "@/config/routes";
@@ -16,6 +21,8 @@ export interface NavigationItem {
   href: AppRoute;
   icon: typeof LayoutDashboard;
   permissions?: readonly PermissionCode[];
+  requiredRole?: RoleCode;
+  children?: readonly NavigationItem[];
 }
 
 export const navigation: readonly NavigationItem[] = [
@@ -39,5 +46,11 @@ export const navigation: readonly NavigationItem[] = [
     href: "/admin",
     icon: ShieldCheck,
     permissions: [PERMISSIONS.ADMIN_DASHBOARD_VIEW],
+    requiredRole: ROLES.SUPER_ADMIN,
+    children: [
+      { label: "Users", href: "/admin/users", icon: Users, requiredRole: ROLES.SUPER_ADMIN },
+      { label: "Roles", href: "/admin/roles", icon: UserPlus, requiredRole: ROLES.SUPER_ADMIN },
+      { label: "Audit Logs", href: "/admin/audit-logs", icon: ScrollText, requiredRole: ROLES.SUPER_ADMIN },
+    ],
   },
 ];
