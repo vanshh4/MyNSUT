@@ -32,19 +32,22 @@ export default function Page() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: n * 0.07, type: "spring" }}
+            className="h-full"
           >
-            <MotionCard className="p-6">
-              <span className="grid size-14 place-items-center rounded-full bg-motion-lilac text-violet-600">
+            <MotionCard className="p-6 flex flex-col h-full">
+              <span className="grid size-14 place-items-center rounded-full bg-motion-lilac text-violet-600 shrink-0">
                 <Icon />
               </span>
               <h2 className="display-font mt-5 text-xl font-bold">{t}</h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{x}</p>
-              <Link 
-                href={href}
-                className="mt-5 inline-block rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#4968f2] dark:bg-white/5"
-              >
-                Open module →
-              </Link>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)] flex-1">{x}</p>
+              <div className="mt-5">
+                <Link 
+                  href={href}
+                  className="inline-block rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#4968f2] dark:bg-white/5"
+                >
+                  Open module →
+                </Link>
+              </div>
             </MotionCard>
           </motion.div>
         ))}
