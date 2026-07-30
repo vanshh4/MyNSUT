@@ -51,11 +51,11 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
       </AnimatePresence>
       <aside
         className={cn(
-          "glass fixed inset-y-3 left-3 z-50 flex w-72 flex-col rounded-[32px] p-4 transition-transform lg:translate-x-0",
+          "glass fixed inset-y-3 left-3 z-50 flex w-72 flex-col rounded-[32px] p-5 transition-transform lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-[110%]"
         )}
       >
-        <div className="flex items-center justify-between px-2 py-1">
+        <div className="flex shrink-0 items-center justify-between px-1 pt-1">
           <AppLogo />
           <button
             type="button"
@@ -66,7 +66,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
             <X className="size-5" />
           </button>
         </div>
-        <nav className="mt-9 space-y-2">
+        <nav className="mt-8 flex-1 space-y-1.5 overflow-y-auto px-1 pb-4">
           {visibleNavigation.map(({ label, href, icon: Icon }, index) => (
             <motion.div
               key={href}
@@ -90,7 +90,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
             </motion.div>
           ))}
         </nav>
-        <div className="mt-auto space-y-3">
+        <div className="mt-auto shrink-0 space-y-3 px-1 pt-2">
           <div className="rounded-[24px] bg-motion-mint/70 p-4 dark:bg-emerald-400/10">
             <p className="text-xs font-extrabold text-emerald-800 dark:text-emerald-200">
               {user?.fullName ?? "Verified student"}
