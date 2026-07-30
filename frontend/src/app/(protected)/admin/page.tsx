@@ -1,13 +1,15 @@
 "use client";
-import { Building2, FileSearch, Megaphone, ShieldCheck, UsersRound } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionCard } from "@/components/ui/MotionCard";
+import { ShieldCheck, Users, UserPlus, ScrollText, Building2, Megaphone } from "lucide-react";
+import Link from "next/link";
 const modules = [
-  { i: UsersRound, t: "Users & roles", x: "Search students and assign scoped roles." },
-  { i: Building2, t: "Classes & societies", x: "Manage academic groups and campus communities." },
-  { i: Megaphone, t: "Notice selection", x: "Publish selected metadata and source links." },
-  { i: FileSearch, t: "Gazette processing", x: "Upload reports and review parser errors." },
+  { i: Users, t: "Users", x: "Search users and manage scoped role assignments.", href: "/admin/users" },
+  { i: UserPlus, t: "Roles", x: "View all platform roles, scopes, and active counts.", href: "/admin/roles" },
+  { i: ScrollText, t: "Audit Logs", x: "Search immutable audit logs for administrative actions.", href: "/admin/audit-logs" },
+  { i: Building2, t: "Classes & societies", x: "Manage academic groups and campus communities. (Coming Soon)", href: "#" },
+  { i: Megaphone, t: "Notice selection", x: "Publish selected metadata and source links. (Coming Soon)", href: "#" },
 ];
 export default function Page() {
   return (
@@ -24,7 +26,7 @@ export default function Page() {
         }
       />
       <div className="grid gap-5 sm:grid-cols-2">
-        {modules.map(({ i: Icon, t, x }, n) => (
+        {modules.map(({ i: Icon, t, x, href }, n) => (
           <motion.div
             key={t}
             initial={{ opacity: 0, y: 20 }}
@@ -37,9 +39,12 @@ export default function Page() {
               </span>
               <h2 className="display-font mt-5 text-xl font-bold">{t}</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{x}</p>
-              <button className="mt-5 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#4968f2] dark:bg-white/5">
+              <Link 
+                href={href}
+                className="mt-5 inline-block rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#4968f2] dark:bg-white/5"
+              >
                 Open module →
-              </button>
+              </Link>
             </MotionCard>
           </motion.div>
         ))}
