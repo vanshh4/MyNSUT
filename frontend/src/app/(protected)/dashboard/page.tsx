@@ -77,7 +77,7 @@ export default function Dashboard() {
             )}
           </div>
         </MotionCard>
-        <MotionCard className="overflow-hidden bg-[#4968f2] p-6 text-white">
+        <MotionCard className="overflow-hidden !bg-[#4968f2] p-6 text-white border-none">
           <p className="text-xs font-extrabold tracking-[.16em] text-blue-100 uppercase">
             Next event
           </p>
