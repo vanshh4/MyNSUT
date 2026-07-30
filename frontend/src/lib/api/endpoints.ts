@@ -13,5 +13,14 @@ export const apiEndpoints = {
   notices: "/notices",
   societies: "/societies",
   events: "/events",
-  admin: "/admin",
+  admin: {
+    users: { search: "/admin/users", detail: (id: string) => `/admin/users/${id}` },
+    roles: {
+      list: "/admin/roles",
+      userAssignments: (id: string) => `/admin/roles/users/${id}`,
+      assign: "/admin/roles/assign",
+      revoke: (id: string) => `/admin/roles/revoke/${id}`,
+    },
+    auditLogs: { list: "/audit-logs", detail: (id: string) => `/audit-logs/${id}` },
+  },
 } as const;
