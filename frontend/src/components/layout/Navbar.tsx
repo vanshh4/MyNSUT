@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Menu, Moon, Search, Sun } from "lucide-react";
+import { LogOut, Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 
@@ -70,17 +70,28 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          className="pill-input block w-full min-w-0 pr-12 pl-5"
+          className="pill-input block w-full min-w-0 pr-18 pl-5 truncate [&::-webkit-search-cancel-button]:hidden"
           placeholder="Search events, societies or students"
           aria-label="Search events, societies or students"
         />
-        <button
-          type="submit"
-          className="absolute top-1/2 right-2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-blue-50 hover:text-[#4968f2] dark:hover:bg-white/10 dark:hover:text-[#91a2ff]"
-          aria-label="Submit search"
-        >
-          <Search className="size-4" />
-        </button>
+        {query ? (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="absolute top-1/2 right-2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-white/10 dark:hover:text-rose-400"
+            aria-label="Clear search"
+          >
+            <X className="size-4" />
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="absolute top-1/2 right-2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-blue-50 hover:text-[#4968f2] dark:hover:bg-white/10 dark:hover:text-[#91a2ff]"
+            aria-label="Submit search"
+          >
+            <Search className="size-4" />
+          </button>
+        )}
       </form>
       <MotionButton
         variant="ghost"
