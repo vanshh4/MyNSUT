@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 const features = [
-  { icon: Megaphone, title: "Class Announcements", desc: "Never miss important updates from your class." },
+  { icon: Megaphone, title: "Announcements", desc: "Never miss important updates from your class." },
   { icon: CalendarDays, title: "Events & Fests", desc: "Discover, register and participate in events." },
   { icon: Users, title: "Societies & Clubs", desc: "Explore societies, join groups and grow together." },
   { icon: User, title: "Student Profile", desc: "Showcase your journey, achievements and more." },
@@ -51,6 +51,7 @@ export default function Page() {
                 Your Campus,<br />
                 <span className="text-text-muted">moving with you.</span>
               </h2>
+              <br />
               <p className="m-0 max-w-md font-body text-lg text-text-muted">
                 MyNSUT is the official student platform for NSUTians to stay informed, connected and empowered. All in one place.
               </p>
@@ -63,7 +64,7 @@ export default function Page() {
 
           {/* Right Section: Feature Grid */}
           <div className="relative z-10 flex justify-center lg:justify-end">
-            <GlassCard className="grid w-full grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-xl" hoverEffect={false}>
+            <GlassCard className="grid w-full grid-cols-1 md:grid-cols-2 gap-6 p-10 rounded-xl" hoverEffect={false}>
               {features.map((feature, i) => {
                 const Icon = feature.icon;
                 return (
@@ -72,10 +73,10 @@ export default function Page() {
                       <Icon className="w-6 h-6 text-primary-container" />
                     </div>
                     <div>
-                      <h3 className="m-0 mb-1 font-label text-sm font-semibold text-text-main">
+                      <h3 className="m-0 mb-1 font-label text-xl font-semibold text-text-main">
                         {feature.title}
                       </h3>
-                      <p className="m-0 font-label text-xs font-normal text-text-muted">
+                      <p className="m-0 font-label text-base font-normal text-text-muted">
                         {feature.desc}
                       </p>
                     </div>
@@ -89,7 +90,7 @@ export default function Page() {
       </div>
 
       {/* Footer Component */}
-      <footer className="w-full py-8 flex justify-center items-center gap-[24px] bg-transparent">
+      <footer className="w-full py-2 flex justify-center items-center gap-[24px] bg-transparent">
         <div className="flex flex-col md:flex-row items-center gap-4 opacity-80 hover:opacity-100 transition-opacity">
           <p className="m-0 text-center font-label text-xs text-text-muted">
             © 2025 MyNSUT

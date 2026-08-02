@@ -1,10 +1,9 @@
 "use client";
 
-import { LogOut, Menu, Moon, Search, Sun, X } from "lucide-react";
+import { LogOut, Menu, Moon, Search, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 
-import { MotionButton } from "@/components/ui/MotionButton";
 import { routes } from "@/config/routes";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -56,60 +55,47 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   }
 
   return (
-    <header className="glass sticky top-3 z-30 mx-3 flex min-h-18 max-w-full items-center gap-3 overflow-hidden rounded-full px-3 sm:px-5 lg:ml-0">
+    <header className="bg-glass-surface dark:bg-primary-container/30 rounded-full h-16 backdrop-blur-xl border border-glass-border flex items-center justify-between px-4 md:px-6 w-full max-w-[1280px] mx-auto mb-12 shadow-sm sticky top-4 z-30">
       <button
         type="button"
         onClick={onMenuClick}
-        className="grid size-10 shrink-0 place-items-center rounded-full lg:hidden"
+        className="mr-2 grid size-10 shrink-0 place-items-center rounded-full lg:hidden text-text-muted hover:bg-black/5 dark:hover:bg-white/5"
         aria-label="Open navigation"
       >
         <Menu className="size-5" />
       </button>
-      <form className="relative min-w-0 flex-1" role="search" onSubmit={handleSearch}>
+
+      <form className="flex-1 flex items-center relative focus-within:ring-2 focus-within:ring-primary/20 transition-all rounded-full h-full group" role="search" onSubmit={handleSearch}>
+        <Search className="size-5 text-text-muted absolute left-4 group-focus-within:text-primary transition-colors" />
         <input
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          className="pill-input block w-full min-w-0 pr-18 pl-5 truncate [&::-webkit-search-cancel-button]:hidden"
+          className="w-full bg-transparent border-none focus:ring-0 pl-12 pr-4 font-body text-sm md:text-base text-text-main placeholder:text-text-muted outline-none [&::-webkit-search-cancel-button]:hidden"
           placeholder="Search events, societies or students"
           aria-label="Search events, societies or students"
         />
-        {query ? (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            className="absolute top-1/2 right-2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-white/10 dark:hover:text-rose-400"
-            aria-label="Clear search"
-          >
-            <X className="size-4" />
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className="absolute top-1/2 right-2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition hover:bg-blue-50 hover:text-[#4968f2] dark:hover:bg-white/10 dark:hover:text-[#91a2ff]"
-            aria-label="Submit search"
-          >
-            <Search className="size-4" />
-          </button>
-        )}
       </form>
-      <MotionButton
-        variant="ghost"
-        className="size-11 shrink-0 px-0"
-        onClick={toggleTheme}
-        aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      >
-        {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
-      </MotionButton>
-      <MotionButton
-        variant="ghost"
-        className="hidden size-11 shrink-0 px-0 sm:inline-flex"
-        onClick={() => void handleLogout()}
-        disabled={isLoggingOut}
-        aria-label="Log out"
-      >
-        <LogOut className="size-4" />
-      </MotionButton>
+
+      <div className="flex items-center gap-1 md:gap-2 pl-4 border-l border-glass-border ml-2 md:ml-4">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+        >
+          {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
+        </button>
+        <button
+          type="button"
+          onClick={() => void handleLogout()}
+          disabled={isLoggingOut}
+          className="hidden md:flex w-10 h-10 rounded-full items-center justify-center text-text-muted hover:bg-black/5 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
+          aria-label="Log out"
+        >
+          <LogOut className="size-5" />
+        </button>
+      </div>
     </header>
   );
 }
