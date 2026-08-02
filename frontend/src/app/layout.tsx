@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Manrope } from "next/font/google";
 
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import "./globals.css";
 
@@ -17,7 +18,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${archivo.variable} ${manrope.variable}`}>
-        <AuthProvider>{children}</AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
