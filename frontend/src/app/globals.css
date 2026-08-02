@@ -3,133 +3,118 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-headline: var(--font-headline), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-label: var(--font-label), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  --color-motion-blue: #4968f2;
-  --color-motion-ink: #172033;
-  --color-motion-mint: #dcf8ed;
-  --color-motion-ice: #eaf3ff;
-  --color-motion-rose: #fff0f3;
-  --color-motion-lilac: #f0ecff;
+
+  /* Color Palette Maps */
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-primary: var(--color-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-primary-container: var(--color-primary-container);
+  --color-on-primary-container: var(--color-on-primary-container);
+  --color-outline: var(--color-outline);
+  
+  --color-glass-surface: var(--color-glass-surface);
+  --color-glass-border: var(--color-glass-border);
+  
+  --color-text-main: var(--color-text-main);
+  --color-text-muted: var(--color-text-muted);
+
+  --spacing-stack: 8px;
+  --spacing-gutter: 24px;
 }
+
 :root {
-  --page: #f5f8ff;
-  --surface: rgba(255, 255, 255, 0.68);
-  --ink: #172033;
-  --muted: #68738a;
-  --line: rgba(80, 101, 145, 0.13);
+  /* Light Theme (Academic Glass) */
+  --color-background: #f7f9fb;
+  --color-surface: #ffffff;
+  --color-primary: #031635;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1a2b4b;
+  --color-on-primary-container: #8293b8;
+  --color-outline: #75777f;
+  
+  --color-glass-surface: rgba(255, 255, 255, 0.7);
+  --color-glass-border: rgba(255, 255, 255, 0.4);
+  
+  --color-text-main: #191c1e;
+  --color-text-muted: #44474e;
 }
+
 .dark {
-  --page: #0c1220;
-  --surface: rgba(23, 32, 51, 0.7);
-  --ink: #f7f9ff;
-  --muted: #aab4ca;
-  --line: rgba(255, 255, 255, 0.1);
+  /* Dark Theme (Obsidian Glass) */
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-primary: #b6c6ef;
+  --color-on-primary: #031635;
+  --color-primary-container: #1a2b4b;
+  --color-on-primary-container: #d8e2ff;
+  --color-outline: #8f9099;
+  
+  --color-glass-surface: rgba(15, 23, 42, 0.6);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  
+  --color-text-main: #e2e8f0;
+  --color-text-muted: #94a3b8;
+  
   color-scheme: dark;
 }
+
 * {
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
   margin: 0;
-  background: var(--page);
-  color: var(--ink);
+  background-color: var(--color-background);
+  color: var(--color-text-main);
   font-family: var(--font-body);
   text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 button,
 a,
 input,
 select {
   font: inherit;
 }
-.display-font {
-  font-family: var(--font-display);
-}
+
 .material-symbols-outlined {
   display: inline-block;
-
   font-family: "Material Symbols Outlined";
   font-size: 27px;
   font-style: normal;
   font-weight: normal;
   line-height: 1;
-
   letter-spacing: normal;
   text-transform: none;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-
   -webkit-font-feature-settings: "liga";
   font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
-
   font-variation-settings:
     "FILL" 0,
     "wght" 550,
     "GRAD" 0,
     "opsz" 32;
 }
-.motion-page {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 8% 5%, rgba(167, 206, 255, 0.5), transparent 26rem),
-    radial-gradient(circle at 96% 12%, rgba(218, 203, 255, 0.52), transparent 28rem),
-    radial-gradient(circle at 60% 100%, rgba(190, 247, 226, 0.38), transparent 32rem), var(--page);
-}
-.glass {
-  border: 1px solid var(--line);
-  background: var(--surface);
-  box-shadow:
-    0 22px 65px rgba(59, 79, 130, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.66);
-  backdrop-filter: blur(22px);
-}
-.soft-card {
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  background: var(--surface);
-  box-shadow:
-    0 18px 50px rgba(70, 91, 142, 0.09),
-    0 4px 14px rgba(70, 91, 142, 0.05);
-  backdrop-filter: blur(18px);
-}
-.pill-input {
-  height: 48px;
-  width: 100%;
-  min-width: 0;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  padding: 0 18px;
-  color: var(--ink);
-  outline: none;
-  transition: 0.2s;
-}
-.dark .pill-input {
-  background: rgba(255, 255, 255, 0.06);
-}
-.pill-input:focus {
-  border-color: #7790ff;
-  box-shadow: 0 0 0 5px rgba(73, 104, 242, 0.12);
-}
-.eyebrow {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #4968f2;
-}
-.page-title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.055em;
+
+/* Base Glassmorphism utility for global usage if needed */
+.academic-glass {
+  background: var(--color-glass-surface);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
 }
 
 .brand-logo {
@@ -138,17 +123,13 @@ select {
   height: 48px;
   flex-shrink: 0;
   place-items: center;
-
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 18px;
-
   color: #ffffff;
-  background: linear-gradient(135deg, #4968f2 0%, #637cf4 55%, #7c6ff2 100%);
-
+  background: linear-gradient(135deg, #031635 0%, #1a2b4b 100%);
   box-shadow:
-    0 14px 32px rgba(73, 104, 242, 0.28),
+    0 14px 32px rgba(3, 22, 53, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.32);
-
   transition:
     transform 200ms ease,
     box-shadow 200ms ease;
@@ -156,9 +137,8 @@ select {
 
 .brand-logo:hover {
   transform: translateY(-1px) scale(1.03);
-
   box-shadow:
-    0 18px 38px rgba(73, 104, 242, 0.32),
+    0 18px 38px rgba(3, 22, 53, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
