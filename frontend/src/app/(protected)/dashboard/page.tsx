@@ -1,102 +1,117 @@
 "use client";
-import { CalendarDays, Megaphone, MapPin, ArrowUpRight } from "lucide-react";
+
+import { CalendarDays, Megaphone, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { PageHeader } from "@/components/common/PageHeader";
-import { MotionCard } from "@/components/ui/MotionCard";
-import { MotionButton } from "@/components/ui/MotionButton";
+import { GlassCard } from "@/components/ui/GlassCard";
+
 const stats = [
-  { title: "New notices", value: "7", icon: Megaphone, tone: "bg-motion-rose text-rose-600" },
+  { 
+    title: "New notices", 
+    value: "7", 
+    icon: Megaphone, 
+    bgColor: "bg-rose-100/50 dark:bg-[#93000a]/20", 
+    textColor: "text-rose-600 dark:text-[#ffb4ab]" 
+  },
   {
     title: "Upcoming events",
     value: "3",
     icon: CalendarDays,
-    tone: "bg-motion-ice text-[#4968f2]",
+    bgColor: "bg-blue-100/50 dark:bg-[#e2e2e2]/20",
+    textColor: "text-blue-600 dark:text-[#ffffff]"
   },
 ];
+
+const announcements = [
+  { title: "Submit DBMS assignment", desc: "Due tomorrow" },
+  { title: "Updated lab schedule", desc: "Posted recently" },
+  { title: "Internal assessment dates", desc: "Posted 2 days ago" },
+];
+
 export default function Dashboard() {
   return (
-    <>
-      <PageHeader
-        eyebrow="Monday · 13 July"
-        title="Good afternoon, Vansh"
-        description="A calmer view of everything happening across your class and campus."
-      />
-      <motion.div
+    <div className="w-full">
+      {/* Greeting Section */}
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-12"
+      >
+        <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">MONDAY · 13 JULY</p>
+        <h1 className="font-headline text-5xl text-primary dark:text-primary-container font-bold mb-3 tracking-tight">
+          Good afternoon, Vansh
+        </h1>
+        <p className="font-body text-lg text-text-muted max-w-2xl">
+          A calmer view of everything happening across your class and campus.
+        </p>
+      </motion.section>
+
+      {/* Summary Cards */}
+      <motion.section 
         initial="hidden"
         animate="show"
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-        className="grid gap-5 sm:grid-cols-2"
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
       >
-        {stats.map(({ title, value, icon: Icon, tone }) => (
+        {stats.map(({ title, value, icon: Icon, bgColor, textColor }) => (
           <motion.div
             key={title}
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            transition={{ type: "spring", stiffness: 150, damping: 19 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            whileTap={{ scale: 0.98 }}
+            className="cursor-pointer"
           >
-            <MotionCard className="flex items-center justify-between p-6">
+            <GlassCard className="p-8 flex items-center justify-between rounded-[24px] group shadow-sm transition-shadow hover:shadow-md" hoverEffect={false}>
               <div>
-                <p className="display-font text-4xl font-black">{value}</p>
-                <p className="mt-2 text-sm font-bold">{title}</p>
+                <h2 className="font-headline text-5xl text-primary dark:text-primary-container font-bold mb-1">{value}</h2>
+                <p className="font-body text-base text-text-muted font-medium">{title}</p>
               </div>
-              <span className={`grid size-14 place-items-center rounded-full ${tone}`}>
-                <Icon />
-              </span>
-            </MotionCard>
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${bgColor} ${textColor}`}>
+                <Icon className="w-8 h-8" />
+              </div>
+            </GlassCard>
           </motion.div>
         ))}
-      </motion.div>
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.25fr_.75fr]">
-        <MotionCard className="p-6">
-          <div className="flex items-center justify-between">
+      </motion.section>
+
+      {/* Recent Announcements */}
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <GlassCard className="p-8 rounded-[24px]" hoverEffect={false}>
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <p className="eyebrow">Your class</p>
-              <h2 className="display-font mt-2 text-2xl font-bold">Recent announcements</h2>
+              <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">YOUR CLASS</p>
+              <h2 className="font-headline text-2xl text-primary dark:text-primary-container font-semibold">Recent announcements</h2>
             </div>
-            <MotionButton variant="soft">
-              View all <ArrowUpRight className="size-4" />
-            </MotionButton>
+            <button className="flex items-center gap-2 px-6 py-3 bg-primary/5 hover:bg-primary/10 dark:bg-[#e3e2e2]/20 dark:hover:bg-[#e3e2e2]/40 text-primary dark:text-[#ffffff] rounded-full transition-colors font-label text-sm font-medium">
+              View all
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
           </div>
-          <div className="mt-6 space-y-3">
-            {["Submit DBMS assignment", "Updated lab schedule", "Internal assessment dates"].map(
-              (x, i) => (
-                <motion.div
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  key={x}
-                  className="flex items-center justify-between rounded-[22px] bg-white/60 p-4 dark:bg-white/5"
-                >
-                  <div>
-                    <p className="text-sm font-bold">{x}</p>
-                    <p className="mt-1 text-xs text-[var(--muted)]">
-                      {i === 0 ? "Due tomorrow" : "Posted recently"}
-                    </p>
-                  </div>
-                  <span className="size-2 rounded-full bg-[#4968f2]" />
-                </motion.div>
-              )
-            )}
+
+          <div className="space-y-0 divide-y divide-glass-border">
+            {announcements.map((announcement, i) => (
+              <motion.div 
+                key={i} 
+                whileHover={{ x: 6 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="py-6 flex items-start gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors -mx-4 px-4 rounded-xl cursor-pointer"
+              >
+                <div className="flex-1">
+                  <h3 className="font-body text-lg text-text-main font-medium mb-1">{announcement.title}</h3>
+                  <p className="font-body text-base text-text-muted">{announcement.desc}</p>
+                </div>
+                <div className="w-2 h-2 rounded-full bg-blue-500 dark:bg-[#ffffff] mt-2"></div>
+              </motion.div>
+            ))}
           </div>
-        </MotionCard>
-        <MotionCard className="overflow-hidden !bg-[#4968f2] p-6 text-white border-none">
-          <p className="text-xs font-extrabold tracking-[.16em] text-blue-100 uppercase">
-            Next event
-          </p>
-          <h2 className="display-font mt-3 text-3xl font-black">Designing Better Products</h2>
-          <div className="mt-7 space-y-3 text-sm text-blue-100">
-            <p className="flex items-center gap-2">
-              <CalendarDays className="size-4" />
-              15 July · 3:00 PM
-            </p>
-            <p className="flex items-center gap-2">
-              <MapPin className="size-4" />
-              Mini Auditorium
-            </p>
-          </div>
-          <MotionButton variant="ghost" className="mt-7 bg-white text-[#334cc5]">
-            View event
-          </MotionButton>
-        </MotionCard>
-      </div>
-    </>
+        </GlassCard>
+      </motion.section>
+    </div>
   );
 }
