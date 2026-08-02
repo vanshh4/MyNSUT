@@ -2,15 +2,17 @@
 import { useState, type ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
+import { cn } from "@/lib/utils/cn";
+
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="motion-page min-h-screen">
+    <div className="flex h-screen overflow-hidden bg-background text-text-main">
       <Sidebar open={open} onClose={() => setOpen(false)} />
-      <div className="lg:pl-[19.5rem]">
+      <main className="flex-1 lg:ml-[352px] h-screen overflow-y-auto px-4 md:px-[64px] py-8 md:py-12 relative">
         <Navbar onMenuClick={() => setOpen(true)} />
-        <main className="mx-auto max-w-[1450px] px-4 py-8 sm:px-7 lg:px-9">{children}</main>
-      </div>
+        <div className="mx-auto max-w-[1280px]">{children}</div>
+      </main>
     </div>
   );
 }

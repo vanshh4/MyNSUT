@@ -46,19 +46,19 @@
 
 .dark {
   /* Dark Theme (Obsidian Glass) */
-  --color-background: #0f172a;
-  --color-surface: #1e293b;
-  --color-primary: #b6c6ef;
-  --color-on-primary: #031635;
-  --color-primary-container: #1a2b4b;
-  --color-on-primary-container: #d8e2ff;
-  --color-outline: #8f9099;
+  --color-background: #131313;
+  --color-surface: #1c1b1b;
+  --color-primary: #ffffff;
+  --color-on-primary: #2f3131;
+  --color-primary-container: #e2e2e2;
+  --color-on-primary-container: #636565;
+  --color-outline: #8e9192;
   
-  --color-glass-surface: rgba(15, 23, 42, 0.6);
+  --color-glass-surface: rgba(255, 255, 255, 0.05);
   --color-glass-border: rgba(255, 255, 255, 0.1);
   
-  --color-text-main: #e2e8f0;
-  --color-text-muted: #94a3b8;
+  --color-text-main: #e5e2e1;
+  --color-text-muted: #c4c7c8;
   
   color-scheme: dark;
 }
@@ -69,6 +69,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 80%; /* Scales all rem-based Tailwind utilities down by 20% globally */
 }
 
 body {
