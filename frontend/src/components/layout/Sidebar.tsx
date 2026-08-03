@@ -49,7 +49,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
       </AnimatePresence>
       <aside
         className={cn(
-          "bg-glass-surface dark:bg-primary-container/30 h-[calc(100vh-2rem)] w-80 fixed left-4 top-4 rounded-xl backdrop-blur-xl border border-glass-border shadow-sm flex-col py-8 px-4 z-50 transition-transform flex",
+          "bg-glass-surface h-[calc(100vh-2rem)] w-80 fixed left-4 top-4 rounded-xl backdrop-blur-xl border border-glass-border shadow-sm flex-col py-8 px-4 z-50 transition-transform flex",
           open ? "translate-x-0" : "-translate-x-[120%] lg:translate-x-0"
         )}
       >
@@ -92,7 +92,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
           })}
         </nav>
         <div className="mt-auto px-2 pt-4">
-          <div className="bg-primary/5 dark:bg-primary/10 backdrop-blur-md border border-glass-border rounded-xl p-4 mb-4">
+          <div className="bg-[#dcfce7]/60 dark:bg-emerald-900/30 backdrop-blur-md border border-glass-border rounded-xl p-4 mb-4">
             <p className="font-label text-[10px] text-primary uppercase mb-1 font-bold">
               {user?.fullName ?? "Verified student"}
             </p>

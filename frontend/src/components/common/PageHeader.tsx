@@ -1,6 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
+
 export function PageHeader({
   eyebrow,
   title,
@@ -17,16 +18,16 @@ export function PageHeader({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 170, damping: 21 }}
-      className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
+      className="mb-12 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
     >
       <div>
-        {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
-        <h1 className="page-title">{title}</h1>
+        {eyebrow && <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">{eyebrow}</p>}
+        <h1 className="font-headline text-4xl text-primary dark:text-primary-container font-bold mb-3 tracking-tight">{title}</h1>
         {description && (
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">{description}</p>
+          <p className="font-body text-lg text-text-muted max-w-2xl">{description}</p>
         )}
       </div>
-      {actions}
+      {actions && <div>{actions}</div>}
     </motion.header>
   );
 }
