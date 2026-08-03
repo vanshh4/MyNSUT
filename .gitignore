@@ -36,7 +36,7 @@ pnpm-debug.log*
 shared/dist/
 
 # Guiding documents used for preparation of the project
-guide_docs/
+reference_material/
 skills.md
 
 # Editors and OS
