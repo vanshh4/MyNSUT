@@ -1,58 +1,76 @@
 "use client";
+
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader } from "@/components/common/PageHeader";
-import { MotionCard } from "@/components/ui/MotionCard";
-import { MotionButton } from "@/components/ui/MotionButton";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassButton } from "@/components/ui/GlassButton";
+
 const events = [
   { d: "15 Jul", t: "Designing Better Products", s: "IEEE NSUT", status: "12 seats left" },
   { d: "19 Jul", t: "The Annual Debate Open", s: "DebSoc NSUT", status: "Open" },
   { d: "22 Jul", t: "Social Impact Workshop", s: "Enactus NSUT", status: "Waitlist" },
 ];
+
 export default function Page() {
   return (
-    <>
+    <div className="w-full">
       <PageHeader
-        eyebrow="What’s happening"
+        eyebrow="What's happening"
         title="Events & fests"
         description="Discover, register and keep track of your next campus experience."
       />
-      <div className="grid gap-5 lg:grid-cols-3">
+      
+      <motion.div 
+        initial="hidden"
+        animate="show"
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+        className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+      >
         {events.map((e, i) => (
           <motion.div
             key={e.t}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08, type: "spring" }}
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            whileTap={{ scale: 0.98 }}
+            className="cursor-pointer"
           >
-            <MotionCard className="overflow-hidden p-3">
+            <GlassCard className="overflow-hidden p-3 shadow-sm transition-shadow hover:shadow-md" hoverEffect={false}>
               <div
-                className={`rounded-[25px] p-5 ${i === 0 ? "bg-[#4968f2] text-white" : i === 1 ? "bg-motion-mint text-emerald-900" : "bg-motion-rose text-rose-900"}`}
+                className={`rounded-[20px] p-6 flex flex-col items-center justify-center min-h-[140px] ${
+                  i === 0 ? "bg-blue-600 text-white" : 
+                  i === 1 ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400" : 
+                  "bg-rose-100 dark:bg-[#93000a]/20 text-rose-700 dark:text-[#ffb4ab]"
+                }`}
               >
-                <CalendarDays />
-                <p className="mt-8 text-xs font-black tracking-[.15em] uppercase">{e.d}</p>
+                <CalendarDays className="w-8 h-8 mb-4" />
+                <p className="font-label text-xs font-bold tracking-widest uppercase">{e.d}</p>
               </div>
-              <div className="p-4">
-                <p className="text-xs font-bold text-[#4968f2]">{e.s}</p>
-                <h2 className="display-font mt-2 text-xl font-bold">{e.t}</h2>
-                <div className="mt-4 flex flex-wrap gap-3 text-xs text-[var(--muted)]">
-                  <span className="flex gap-1">
-                    <MapPin className="size-4" />
+              
+              <div className="p-5">
+                <p className="font-label text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">{e.s}</p>
+                <h2 className="font-headline mt-2 text-xl font-bold text-text-main line-clamp-1">{e.t}</h2>
+                
+                <div className="mt-4 flex flex-wrap gap-4 font-body text-sm text-text-muted">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4" />
                     Campus
                   </span>
-                  <span className="flex gap-1">
-                    <Users className="size-4" />
+                  <span className="flex items-center gap-1.5">
+                    <Users className="w-4 h-4" />
                     {e.status}
                   </span>
                 </div>
-                <MotionButton className="mt-5 w-full" variant={i === 2 ? "soft" : "primary"}>
+                
+                <GlassButton className="mt-6 w-full rounded-full" variant={i === 2 ? "secondary" : "primary"}>
                   {i === 2 ? "Join waitlist" : "View event"}
-                </MotionButton>
+                </GlassButton>
               </div>
-            </MotionCard>
+            </GlassCard>
           </motion.div>
         ))}
-      </div>
-    </>
+      </motion.div>
+    </div>
   );
 }
