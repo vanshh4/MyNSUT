@@ -7,7 +7,6 @@ import { useMemo, useState, type FormEvent } from "react";
 
 import { RollNumberPreview } from "@/components/onboarding/RollNumberPreview";
 import { SectionSelect } from "@/components/onboarding/SectionSelect";
-import { MotionButton } from "@/components/ui/MotionButton";
 import { routes } from "@/config/routes";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiClientError } from "@/lib/api/client";
@@ -71,21 +70,21 @@ export function OnboardingForm() {
   }
 
   return (
-    <form className="mt-8 space-y-5" onSubmit={handleSubmit} noValidate>
+    <form className="w-full space-y-5" onSubmit={handleSubmit} noValidate>
       <label className="block">
-        <span className="mb-2 block text-sm font-bold">UMS roll number</span>
+        <span className="mb-2 block font-label text-sm font-semibold text-text-main">UMS roll number</span>
         <input
-          className="pill-input uppercase"
+          className="w-full bg-primary/5 dark:bg-white/5 border border-glass-border rounded-xl px-4 py-3 font-body text-text-main focus:ring-2 focus:ring-primary/20 outline-none transition-all uppercase placeholder:text-text-muted/50 placeholder:normal-case"
           value={umsRollNumber}
           onChange={(event) => setUmsRollNumber(event.target.value.toUpperCase())}
-          placeholder="2023UIN3324"
+          placeholder="e.g. 2023UIN3324"
           autoComplete="off"
           disabled={isSubmitting}
           aria-invalid={Boolean(errors.umsRollNumber)}
           aria-describedby={errors.umsRollNumber ? "roll-number-error" : undefined}
         />
         {errors.umsRollNumber ? (
-          <p id="roll-number-error" className="mt-2 text-xs font-semibold text-rose-600">
+          <p id="roll-number-error" className="mt-2 font-label text-xs font-semibold text-error">
             {errors.umsRollNumber}
           </p>
         ) : null}
@@ -100,14 +99,14 @@ export function OnboardingForm() {
         error={errors.section}
       />
 
-      <div className="flex gap-3 rounded-[24px] bg-motion-ice p-4 text-xs leading-5 text-blue-900 dark:bg-blue-400/10 dark:text-blue-100">
-        <CheckCircle2 className="size-4 shrink-0" />
+      <div className="flex gap-3 rounded-xl bg-primary/5 dark:bg-white/5 border border-glass-border p-4 text-xs font-label leading-5 text-text-main shadow-sm">
+        <CheckCircle2 className="size-4 shrink-0 text-primary" />
         Your roll number can only be corrected later by an administrator.
       </div>
 
       {errors.form ? (
         <div
-          className="flex gap-3 rounded-[24px] bg-motion-rose p-4 text-sm text-rose-800"
+          className="flex gap-3 rounded-xl bg-error-container/20 border border-error/20 p-4 font-label text-sm text-error shadow-sm"
           role="alert"
         >
           <AlertCircle className="size-5 shrink-0" />
@@ -115,10 +114,16 @@ export function OnboardingForm() {
         </div>
       ) : null}
 
-      <MotionButton className="w-full" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? <LoaderCircle className="size-4 animate-spin" /> : null}
-        {isSubmitting ? "Completing onboarding…" : "Complete onboarding"}
-      </MotionButton>
+      <button
+        className="w-full bg-surface border border-glass-border rounded-xl py-3 px-6 flex items-center justify-center gap-3 hover:bg-glass-surface dark:hover:bg-white/10 transition-colors duration-300 active:scale-95 shadow-sm disabled:opacity-50 mt-4"
+        type="submit" 
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? <LoaderCircle className="w-5 h-5 text-primary animate-spin" /> : null}
+        <span className="font-label text-sm font-semibold text-text-main">
+          {isSubmitting ? "Completing onboarding…" : "Complete onboarding"}
+        </span>
+      </button>
     </form>
   );
 }
