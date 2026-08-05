@@ -55,9 +55,9 @@ export default function Page() {
               <p className="m-0 max-w-md font-body text-lg text-text-muted">
                 MyNSUT is the official student platform for NSUTians to stay informed, connected and empowered. All in one place.
               </p>
-              <button className="mt-4 px-6 py-3 bg-primary text-on-primary rounded-xl font-label text-sm font-medium hover:opacity-90 transition-opacity shadow-sm">
+              <Link href="/auth/signin" className="mt-4 inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary rounded-xl font-label text-sm font-medium hover:opacity-90 transition-opacity shadow-sm w-fit">
                 Get Started
-              </button>
+              </Link>
             </div>
 
           </div>
