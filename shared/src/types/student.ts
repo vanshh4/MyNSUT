@@ -1,3 +1,5 @@
+import type { ExtendedStudentProfile } from "./profile.js";
+import type { StudentAcademicSummary } from "./academic.js";
 import type { BranchCode, BranchName } from "../constants/branches.js";
 
 export type EntityId = string;
@@ -48,6 +50,8 @@ export interface StudentProfile {
   academicClass?: AcademicClassSummary;
   createdAt?: IsoDateString;
   updatedAt?: IsoDateString;
+  extendedProfile?: ExtendedStudentProfile;
+  academicSummary?: StudentAcademicSummary;
 }
 
 export interface OnboardingResponse {

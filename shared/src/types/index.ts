@@ -28,3 +28,12 @@ export type { AcademicClassStatus, AcademicClassSummary, OnboardingRequest,
   OnboardingResponse, ParsedRollNumber, SectionCode, StudentProfile } from "./student.js";
 export type { AuthorizationSummary, ScopedRoleAssignment, RoleAssignmentPayload, RoleAssignmentResponse, RoleRevocationPayload, SafeRoleAssignment, UserRolesSummary } from "./rbac.js";
 export type { SafeAuditEntry, AuditFilters, PaginatedAuditResponse } from "./audit.js";
+
+export { PROFILE_VISIBILITY } from "../constants/profileVisibility.js";
+export type { ProfileVisibility } from "../constants/profileVisibility.js";
+export { ACADEMIC_SEMESTER, GRADE, RESULT_STATUS, RANK_TYPE } from "../constants/academic.js";
+export type { AcademicSemester, Grade, ResultStatus, RankType } from "../constants/academic.js";
+
+export type { StudentPrivacySettings, UpdatePrivacyPayload } from "./privacy.js";
+export type { Subject, SubjectGrade, SemesterResult, StudentRank, StudentAcademicSummary } from "./academic.js";
+export type { ExtendedStudentProfile, UpdateProfilePayload, OwnProfileProjection, PublicProfileProjection } from "./profile.js";
