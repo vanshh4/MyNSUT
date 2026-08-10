@@ -166,12 +166,39 @@ async function seedOptionalSuperAdmin(): Promise<void> {
   });
 }
 
+async function seedPrivacyDefaults(): Promise<void> {
+  const students = await prisma.student.findMany({
+    where: { privacySettings: null },
+  });
+
+  if (students.length === 0) return;
+
+  await prisma.studentPrivacySettings.createMany({
+    data: students.map((student) => ({
+      studentId: student.id,
+      bioVisibility: "PLATFORM_ONLY",
+      socialLinksVisibility: "PLATFORM_ONLY",
+      academicSummaryVisibility: "PLATFORM_ONLY",
+      semesterResultsVisibility: "PLATFORM_ONLY",
+    })),
+    skipDuplicates: true,
+  });
+
+  await prisma.studentProfile.createMany({
+    data: students.map((student) => ({
+      studentId: student.id,
+    })),
+    skipDuplicates: true,
+  });
+}
+
 async function main(): Promise<void> {
   await seedPermissions();
   await seedRoles();
   await seedRolePermissions();
   await seedOptionalSuperAdmin();
-  console.log("MyNSUT Phase 3 seed completed successfully.");
+  await seedPrivacyDefaults();
+  console.log("MyNSUT Phase 4 seed completed successfully.");
 }
 
 main()
