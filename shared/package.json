@@ -54,6 +54,26 @@
     "./types/audit": {
       "types": "./dist/types/audit.d.ts",
       "import": "./dist/types/audit.js"
+    },
+    "./constants/profileVisibility": {
+      "types": "./dist/constants/profileVisibility.d.ts",
+      "import": "./dist/constants/profileVisibility.js"
+    },
+    "./constants/academic": {
+      "types": "./dist/constants/academic.d.ts",
+      "import": "./dist/constants/academic.js"
+    },
+    "./types/privacy": {
+      "types": "./dist/types/privacy.d.ts",
+      "import": "./dist/types/privacy.js"
+    },
+    "./types/academic": {
+      "types": "./dist/types/academic.d.ts",
+      "import": "./dist/types/academic.js"
+    },
+    "./types/profile": {
+      "types": "./dist/types/profile.d.ts",
+      "import": "./dist/types/profile.js"
     }
   },
   "files": [
