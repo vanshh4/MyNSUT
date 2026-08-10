@@ -103,6 +103,10 @@ model Student {
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   academicClass   AcademicClass @relation(fields: [classId], references: [id], onDelete: Restrict)
 
+  profile         StudentProfile?
+  privacySettings StudentPrivacySettings?
+  academicSummary StudentAcademicSummary?
+
   @@index([classId])
   @@index([branchCode, admissionYear])
   @@map("students")
@@ -220,4 +224,137 @@ model AuditLog {
   @@index([action])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+
+enum ProfileVisibility {
+  PUBLIC
+  PLATFORM_ONLY
+  PRIVATE
+}
+
+enum AcademicSemester {
+  SEM_1
+  SEM_2
+  SEM_3
+  SEM_4
+  SEM_5
+  SEM_6
+  SEM_7
+  SEM_8
+}
+
+enum Grade {
+  O
+  A_PLUS
+  A
+  B_PLUS
+  B
+  C
+  P
+  F
+}
+
+enum ResultStatus {
+  PASS
+  FAIL
+  WITHHELD
+}
+
+enum RankType {
+  CLASS
+  UNIVERSITY
+}
+
+model StudentProfile {
+  id          String   @id @default(uuid()) @db.Uuid
+  studentId   String   @unique @map("student_id") @db.Uuid
+  bio         String?  @db.Text
+  githubUrl   String?  @map("github_url") @db.VarChar(255)
+  linkedinUrl String?  @map("linkedin_url") @db.VarChar(255)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("student_profiles")
+}
+
+model StudentPrivacySettings {
+  id                        String            @id @default(uuid()) @db.Uuid
+  studentId                 String            @unique @map("student_id") @db.Uuid
+  bioVisibility             ProfileVisibility @default(PLATFORM_ONLY) @map("bio_visibility")
+  socialLinksVisibility     ProfileVisibility @default(PLATFORM_ONLY) @map("social_links_visibility")
+  academicSummaryVisibility ProfileVisibility @default(PLATFORM_ONLY) @map("academic_summary_visibility")
+  semesterResultsVisibility ProfileVisibility @default(PLATFORM_ONLY) @map("semester_results_visibility")
+  updatedAt                 DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  student                   Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("student_privacy_settings")
+}
+
+model StudentAcademicSummary {
+  id                 String           @id @default(uuid()) @db.Uuid
+  studentId          String           @unique @map("student_id") @db.Uuid
+  currentCgpa        Float?           @map("current_cgpa")
+  totalCreditsEarned Float            @default(0) @map("total_credits_earned")
+  updatedAt          DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  student            Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  results            SemesterResult[]
+  ranks              StudentRank[]
+
+  @@map("student_academic_summaries")
+}
+
+model SemesterResult {
+  id                       String                 @id @default(uuid()) @db.Uuid
+  studentAcademicSummaryId String                 @map("student_academic_summary_id") @db.Uuid
+  semester                 AcademicSemester
+  sgpa                     Float?
+  cgpa                     Float?
+  creditsEarned            Float                  @map("credits_earned")
+  totalCredits             Float                  @map("total_credits")
+  status                   ResultStatus
+  createdAt                DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
+  academicSummary          StudentAcademicSummary @relation(fields: [studentAcademicSummaryId], references: [id], onDelete: Cascade)
+  grades                   SubjectGrade[]
+
+  @@unique([studentAcademicSummaryId, semester])
+  @@map("semester_results")
+}
+
+model Subject {
+  id          String         @id @default(uuid()) @db.Uuid
+  code        String         @unique @db.VarChar(20)
+  name        String         @db.VarChar(120)
+  credits     Float
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  grades      SubjectGrade[]
+
+  @@map("subjects")
+}
+
+model SubjectGrade {
+  id               String         @id @default(uuid()) @db.Uuid
+  semesterResultId String         @map("semester_result_id") @db.Uuid
+  subjectId        String         @map("subject_id") @db.Uuid
+  grade            Grade
+  semesterResult   SemesterResult @relation(fields: [semesterResultId], references: [id], onDelete: Cascade)
+  subject          Subject        @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+
+  @@unique([semesterResultId, subjectId])
+  @@map("subject_grades")
+}
+
+model StudentRank {
+  id                       String                 @id @default(uuid()) @db.Uuid
+  studentAcademicSummaryId String                 @map("student_academic_summary_id") @db.Uuid
+  rankType                 RankType               @map("rank_type")
+  rank                     Int
+  batchSize                Int                    @map("batch_size")
+  updatedAt                DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
+  academicSummary          StudentAcademicSummary @relation(fields: [studentAcademicSummaryId], references: [id], onDelete: Cascade)
+
+  @@unique([studentAcademicSummaryId, rankType])
+  @@map("student_ranks")
 }
