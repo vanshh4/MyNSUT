@@ -8,9 +8,9 @@ export async function searchUsers(params: Record<string, any>) {
       query.append(key, String(value));
     }
   }
-  return apiClient.get(`${apiEndpoints.admin.users.search}?${query.toString()}`);
+  return apiClient(`${apiEndpoints.admin.users.search}?${query.toString()}`, { method: "GET" }) as Promise<any>;
 }
 
 export async function getUserDetail(userId: string) {
-  return apiClient.get(apiEndpoints.admin.users.detail(userId));
+  return apiClient(apiEndpoints.admin.users.detail(userId), { method: "GET" }) as Promise<any>;
 }

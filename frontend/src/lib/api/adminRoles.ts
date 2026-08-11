@@ -4,17 +4,17 @@ import type { RoleAssignmentPayload, RoleRevocationPayload } from "@mynsut/share
 
 export async function listRoles(scopeFilter?: string) {
   const query = scopeFilter ? `?scope=${scopeFilter}` : "";
-  return apiClient.get(`${apiEndpoints.admin.roles.list}${query}`);
+  return apiClient(`${apiEndpoints.admin.roles.list}${query}`, { method: "GET" }) as Promise<any>;
 }
 
 export async function getUserAssignments(userId: string) {
-  return apiClient.get(apiEndpoints.admin.roles.userAssignments(userId));
+  return apiClient(apiEndpoints.admin.roles.userAssignments(userId), { method: "GET" }) as Promise<any>;
 }
 
 export async function assignRole(payload: RoleAssignmentPayload) {
-  return apiClient.post(apiEndpoints.admin.roles.assign, payload);
+  return apiClient(apiEndpoints.admin.roles.assign, { method: "POST", body: JSON.stringify(payload) }) as Promise<any>;
 }
 
 export async function revokeRole(assignmentId: string, payload: RoleRevocationPayload) {
-  return apiClient.post(apiEndpoints.admin.roles.revoke(assignmentId), payload);
+  return apiClient(apiEndpoints.admin.roles.revoke(assignmentId), { method: "POST", body: JSON.stringify(payload) }) as Promise<any>;
 }
