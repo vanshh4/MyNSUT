@@ -8,9 +8,9 @@ export async function listAuditLogs(filters: Record<string, any>) {
       query.append(key, String(value));
     }
   }
-  return apiClient.get(`${apiEndpoints.admin.auditLogs.list}?${query.toString()}`);
+  return apiClient(`${apiEndpoints.admin.auditLogs.list}?${query.toString()}`, { method: "GET" }) as Promise<any>;
 }
 
 export async function getAuditLog(id: string) {
-  return apiClient.get(apiEndpoints.admin.auditLogs.detail(id));
+  return apiClient(apiEndpoints.admin.auditLogs.detail(id), { method: "GET" }) as Promise<any>;
 }
