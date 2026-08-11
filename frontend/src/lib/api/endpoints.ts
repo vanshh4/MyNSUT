@@ -23,4 +23,18 @@ export const apiEndpoints = {
     },
     auditLogs: { list: "/audit-logs", detail: (id: string) => `/audit-logs/${id}` },
   },
+  profiles: {
+    me: "/profiles/me",
+    peer: (rollNumber: string) => `/profiles/${rollNumber}`,
+  },
+  privacy: {
+    me: "/privacy",
+  },
+  academics: {
+    summary: (rollNumber: string) => `/academics/summary/${rollNumber}`,
+    semester: (rollNumber: string, semester: number) => `/academics/semester/${rollNumber}/${semester}`,
+  },
+  search: {
+    students: "/search/students",
+  }
 } as const;
