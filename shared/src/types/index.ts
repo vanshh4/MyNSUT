@@ -37,3 +37,8 @@ export type { AcademicSemester, Grade, ResultStatus, RankType } from "../constan
 export type { StudentPrivacySettings, UpdatePrivacyPayload } from "./privacy.js";
 export type { Subject, SubjectGrade, SemesterResult, StudentRank, StudentAcademicSummary } from "./academic.js";
 export type { ExtendedStudentProfile, UpdateProfilePayload, OwnProfileProjection, PublicProfileProjection } from "./profile.js";
+
+export { CLASS_TASK_TYPE, isClassTaskType } from "../constants/class.js";
+export type { ClassTaskType } from "../constants/class.js";
+
+export type { UrlAttachment, ClassAnnouncementPayload, ClassAnnouncementResponse, ClassTaskPayload, ClassTaskResponse, ClassTaskCompletionSummary } from "./class.js";

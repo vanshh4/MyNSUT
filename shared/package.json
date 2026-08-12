@@ -74,6 +74,14 @@
     "./types/profile": {
       "types": "./dist/types/profile.d.ts",
       "import": "./dist/types/profile.js"
+    },
+    "./constants/class": {
+      "types": "./dist/constants/class.d.ts",
+      "import": "./dist/constants/class.js"
+    },
+    "./types/class": {
+      "types": "./dist/types/class.d.ts",
+      "import": "./dist/types/class.js"
     }
   },
   "files": [
