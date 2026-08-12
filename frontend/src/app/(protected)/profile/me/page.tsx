@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Award, BookOpen, Building2, GraduationCap, UsersRound, Loader2, Globe, Link as LinkIcon, FileText, PencilLine } from "lucide-react";
+import { Award, BookOpen, Building2, GraduationCap, UsersRound, Loader2, Globe, Link as LinkIcon, FileText, Pencil } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@/components/common/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -75,7 +75,7 @@ export default function MyProfilePage() {
               className="rounded-full font-label flex items-center gap-2"
               onClick={() => setIsEditing(!isEditing)}
             >
-              <PencilLine className="w-4 h-4" />
+              <Pencil className="w-4 h-4" />
               {isEditing ? "Cancel Edit" : "Edit Profile"}
             </GlassButton>
           </div>
