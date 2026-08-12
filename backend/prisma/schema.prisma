@@ -25,29 +25,31 @@ enum AcademicClassStatus {
 }
 
 model User {
-  id                  String           @id @default(uuid()) @db.Uuid
-  email               String           @unique @db.VarChar(320)
-  emailVerified       Boolean          @default(false) @map("email_verified")
-  googleSubject       String?          @unique @map("google_subject") @db.VarChar(255)
-  fullName            String           @map("full_name") @db.VarChar(150)
-  profileImageUrl     String?          @map("profile_image_url") @db.Text
-  status              UserStatus       @default(ACTIVE)
-  onboardingCompleted Boolean          @default(false) @map("onboarding_completed")
-  createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
-  student             Student?
-  sessions            Session[]
-  globalRoles          UserGlobalRole[] @relation("UserRoles")
-  rolesAssigned        UserGlobalRole[] @relation("RoleAssigner")
-  globalRolesRevoked   UserGlobalRole[] @relation("GlobalRoleRevoker")
-  classRoles           ClassRole[]      @relation("UserClassRoles")
-  classRolesAssigned   ClassRole[]      @relation("ClassRoleAssigner")
-  classRolesRevoked    ClassRole[]      @relation("ClassRoleRevoker")
-  societyRoles         SocietyRole[]    @relation("UserSocietyRoles")
-  societyRolesAssigned SocietyRole[]    @relation("SocietyRoleAssigner")
-  societyRolesRevoked  SocietyRole[]    @relation("SocietyRoleRevoker")
-  auditLogsPerformed   AuditLog[]       @relation("AuditActor")
-  auditLogsReceived    AuditLog[]       @relation("AuditTarget")
+  id                    String              @id @default(uuid()) @db.Uuid
+  email                 String              @unique @db.VarChar(320)
+  emailVerified         Boolean             @default(false) @map("email_verified")
+  googleSubject         String?             @unique @map("google_subject") @db.VarChar(255)
+  fullName              String              @map("full_name") @db.VarChar(150)
+  profileImageUrl       String?             @map("profile_image_url") @db.Text
+  status                UserStatus          @default(ACTIVE)
+  onboardingCompleted   Boolean             @default(false) @map("onboarding_completed")
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  student               Student?
+  sessions              Session[]
+  globalRoles           UserGlobalRole[]    @relation("UserRoles")
+  rolesAssigned         UserGlobalRole[]    @relation("RoleAssigner")
+  globalRolesRevoked    UserGlobalRole[]    @relation("GlobalRoleRevoker")
+  classRoles            ClassRole[]         @relation("UserClassRoles")
+  classRolesAssigned    ClassRole[]         @relation("ClassRoleAssigner")
+  classRolesRevoked     ClassRole[]         @relation("ClassRoleRevoker")
+  societyRoles          SocietyRole[]       @relation("UserSocietyRoles")
+  societyRolesAssigned  SocietyRole[]       @relation("SocietyRoleAssigner")
+  societyRolesRevoked   SocietyRole[]       @relation("SocietyRoleRevoker")
+  auditLogsPerformed    AuditLog[]          @relation("AuditActor")
+  auditLogsReceived     AuditLog[]          @relation("AuditTarget")
+  authoredAnnouncements ClassAnnouncement[] @relation("AnnouncementAuthor")
+  authoredTasks         ClassTask[]         @relation("TaskAuthor")
 
   @@index([status])
   @@map("users")
@@ -81,6 +83,8 @@ model AcademicClass {
   updatedAt     DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
   students      Student[]
   classRoles    ClassRole[]
+  announcements ClassAnnouncement[]
+  tasks         ClassTask[]
 
   @@unique([admissionYear, branchCode, section])
   @@index([status])
@@ -106,6 +110,7 @@ model Student {
   profile         StudentProfile?
   privacySettings StudentPrivacySettings?
   academicSummary StudentAcademicSummary?
+  taskCompletions ClassTaskCompletion[]
 
   @@index([classId])
   @@index([branchCode, admissionYear])
@@ -113,15 +118,15 @@ model Student {
 }
 
 model Role {
-  id          String           @id @default(uuid()) @db.Uuid
-  code        String           @unique @db.VarChar(80)
-  name        String           @db.VarChar(120)
-  description String?          @db.Text
-  scope       RoleScope
-  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  permissions RolePermission[]
-  users       UserGlobalRole[]
-  classRoles  ClassRole[]
+  id           String           @id @default(uuid()) @db.Uuid
+  code         String           @unique @db.VarChar(80)
+  name         String           @db.VarChar(120)
+  description  String?          @db.Text
+  scope        RoleScope
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  permissions  RolePermission[]
+  users        UserGlobalRole[]
+  classRoles   ClassRole[]
   societyRoles SocietyRole[]
 
   @@map("roles")
@@ -148,8 +153,8 @@ model RolePermission {
 }
 
 model UserGlobalRole {
-  userId     String   @map("user_id") @db.Uuid
-  roleId     String   @map("role_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  roleId     String    @map("role_id") @db.Uuid
   assignedBy String?   @map("assigned_by") @db.Uuid
   assignedAt DateTime  @default(now()) @map("assigned_at") @db.Timestamptz(6)
   revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(6)
@@ -225,7 +230,6 @@ model AuditLog {
   @@index([createdAt])
   @@map("audit_logs")
 }
-
 
 enum ProfileVisibility {
   PUBLIC
@@ -323,13 +327,13 @@ model SemesterResult {
 }
 
 model Subject {
-  id          String         @id @default(uuid()) @db.Uuid
-  code        String         @unique @db.VarChar(20)
-  name        String         @db.VarChar(120)
-  credits     Float
-  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
-  grades      SubjectGrade[]
+  id        String         @id @default(uuid()) @db.Uuid
+  code      String         @unique @db.VarChar(20)
+  name      String         @db.VarChar(120)
+  credits   Float
+  createdAt DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  grades    SubjectGrade[]
 
   @@map("subjects")
 }
@@ -357,4 +361,64 @@ model StudentRank {
 
   @@unique([studentAcademicSummaryId, rankType])
   @@map("student_ranks")
+}
+
+enum ClassTaskType {
+  FILL_FORM
+  READ_DOCUMENT
+  SUBMIT_ASSIGNMENT
+  OTHER
+}
+
+model ClassAnnouncement {
+  id          String   @id @default(uuid()) @db.Uuid
+  classId     String   @map("class_id") @db.Uuid
+  authorId    String   @map("author_id") @db.Uuid
+  title       String   @db.VarChar(255)
+  content     String   @db.Text
+  attachments Json?    @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  academicClass AcademicClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  author        User          @relation("AnnouncementAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([classId])
+  @@index([createdAt])
+  @@map("class_announcements")
+}
+
+model ClassTask {
+  id          String        @id @default(uuid()) @db.Uuid
+  classId     String        @map("class_id") @db.Uuid
+  authorId    String        @map("author_id") @db.Uuid
+  title       String        @db.VarChar(255)
+  description String?       @db.Text
+  taskType    ClassTaskType @map("task_type")
+  url         String?       @db.Text
+  dueDate     DateTime?     @map("due_date") @db.Timestamptz(6)
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  academicClass AcademicClass         @relation(fields: [classId], references: [id], onDelete: Cascade)
+  author        User                  @relation("TaskAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  completions   ClassTaskCompletion[]
+
+  @@index([classId])
+  @@index([dueDate])
+  @@map("class_tasks")
+}
+
+model ClassTaskCompletion {
+  id          String   @id @default(uuid()) @db.Uuid
+  taskId      String   @map("task_id") @db.Uuid
+  studentId   String   @map("student_id") @db.Uuid
+  completedAt DateTime @default(now()) @map("completed_at") @db.Timestamptz(6)
+
+  task    ClassTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  student Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, studentId])
+  @@index([studentId])
+  @@map("class_task_completions")
 }
