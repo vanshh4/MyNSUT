@@ -13,7 +13,6 @@ export function findClassByIdentity(client: ClassDatabaseClient, identity: Class
         section: identity.section,
       },
     },
-    },
   });
 }
 
