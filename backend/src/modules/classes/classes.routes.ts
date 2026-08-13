@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import * as classesController from "./classes.controller.js";
-import { authenticate } from "../../middlewares/authenticate.middleware.js";
+import { authenticateMiddleware } from "../../middlewares/authenticate.middleware.js";
 import { requireRole } from "../../middlewares/requireRole.middleware.js";
 import { ROLES } from "@mynsut/shared/constants/roles";
 import { validateBody, validateParams } from "../../middlewares/validation.middleware.js";
@@ -9,7 +9,7 @@ import { assignCrSchema, revokeCrSchema } from "./classes.validation.js";
 
 export const classesRoutes = Router();
 
-classesRoutes.use(authenticate);
+classesRoutes.use(authenticateMiddleware);
 
 // Get class details
 classesRoutes.get(

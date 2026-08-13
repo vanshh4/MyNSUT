@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import { zParse } from "../../validations/zod.js";
 import * as announcementsService from "./classAnnouncements.service.js";
 import { createAnnouncementSchema, updateAnnouncementSchema } from "./classAnnouncements.validation.js";
 import { apiResponse } from "../../utils/apiResponse.js";
@@ -12,7 +11,7 @@ export async function getAnnouncements(req: Request, res: Response) {
 
 export async function createAnnouncement(req: Request, res: Response) {
   const { classId } = req.params;
-  const payload = await zParse(createAnnouncementSchema, req.body);
+  const payload = createAnnouncementSchema.parse(req.body);
   const actorId = req.user!.id;
   const actorIp = req.ip;
 
@@ -22,7 +21,7 @@ export async function createAnnouncement(req: Request, res: Response) {
 
 export async function updateAnnouncement(req: Request, res: Response) {
   const { announcementId } = req.params;
-  const payload = await zParse(updateAnnouncementSchema, req.body);
+  const payload = updateAnnouncementSchema.parse(req.body);
   const actorId = req.user!.id;
   const actorIp = req.ip;
 

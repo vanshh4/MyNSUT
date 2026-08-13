@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import * as tasksController from "./classTasks.controller.js";
-import { authenticate } from "../../middlewares/authenticate.middleware.js";
+import { authenticateMiddleware } from "../../middlewares/authenticate.middleware.js";
 import { requireScopedPermission } from "../../middlewares/requireScopedPermission.middleware.js";
 import { SCOPES } from "@mynsut/shared/constants/scopes";
 import { validateBody } from "../../middlewares/validation.middleware.js";
@@ -9,7 +9,7 @@ import { createTaskSchema, updateTaskSchema } from "./classTasks.validation.js";
 
 export const classTasksRoutes = Router({ mergeParams: true });
 
-classTasksRoutes.use(authenticate);
+classTasksRoutes.use(authenticateMiddleware);
 
 // Get all tasks for a class
 classTasksRoutes.get(

@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import { zParse } from "../../validations/zod.js";
 import * as tasksService from "./classTasks.service.js";
 import { createTaskSchema, updateTaskSchema } from "./classTasks.validation.js";
 import { apiResponse } from "../../utils/apiResponse.js";
@@ -12,7 +11,7 @@ export async function getTasks(req: Request, res: Response) {
 
 export async function createTask(req: Request, res: Response) {
   const { classId } = req.params;
-  const payload = await zParse(createTaskSchema, req.body);
+  const payload = createTaskSchema.parse(req.body);
   const actorId = req.user!.id;
   const actorIp = req.ip;
 
@@ -22,7 +21,7 @@ export async function createTask(req: Request, res: Response) {
 
 export async function updateTask(req: Request, res: Response) {
   const { taskId } = req.params;
-  const payload = await zParse(updateTaskSchema, req.body);
+  const payload = updateTaskSchema.parse(req.body);
   const actorId = req.user!.id;
   const actorIp = req.ip;
 

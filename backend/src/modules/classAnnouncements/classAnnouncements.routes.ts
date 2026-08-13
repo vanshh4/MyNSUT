@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import * as announcementsController from "./classAnnouncements.controller.js";
-import { authenticate } from "../../middlewares/authenticate.middleware.js";
+import { authenticateMiddleware } from "../../middlewares/authenticate.middleware.js";
 import { requireScopedPermission } from "../../middlewares/requireScopedPermission.middleware.js";
 import { SCOPES } from "@mynsut/shared/constants/scopes";
 import { validateBody } from "../../middlewares/validation.middleware.js";
@@ -9,7 +9,7 @@ import { createAnnouncementSchema, updateAnnouncementSchema } from "./classAnnou
 
 export const classAnnouncementsRoutes = Router({ mergeParams: true });
 
-classAnnouncementsRoutes.use(authenticate);
+classAnnouncementsRoutes.use(authenticateMiddleware);
 
 // Get all announcements for a class
 classAnnouncementsRoutes.get(
