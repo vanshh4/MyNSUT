@@ -36,5 +36,25 @@ export const apiEndpoints = {
   },
   search: {
     students: "/search/students",
+  },
+  classes: {
+    detail: (classId: string) => `/classes/${classId}`,
+    members: (classId: string) => `/classes/${classId}/members`,
+    assignCr: (classId: string) => `/classes/${classId}/cr`,
+    revokeCr: (classId: string, studentId: string) => `/classes/${classId}/cr/${studentId}`,
+  },
+  classAnnouncements: {
+    list: (classId: string) => `/classes/${classId}/announcements`,
+    create: (classId: string) => `/classes/${classId}/announcements`,
+    update: (classId: string, announcementId: string) => `/classes/${classId}/announcements/${announcementId}`,
+    delete: (classId: string, announcementId: string) => `/classes/${classId}/announcements/${announcementId}`,
+  },
+  classTasks: {
+    list: (classId: string) => `/classes/${classId}/tasks`,
+    create: (classId: string) => `/classes/${classId}/tasks`,
+    update: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}`,
+    delete: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}`,
+    completions: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}/completions`,
+    complete: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}/complete`,
   }
 } as const;
