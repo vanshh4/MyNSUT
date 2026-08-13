@@ -1,17 +1,18 @@
 import type {
-  AssignedClass,
   ClassMember,
   ClassAnnouncementResponse,
   ClassAnnouncementPayload,
   ClassTaskResponse,
   ClassTaskPayload,
-  ClassTaskCompletionResponse
+  ClassTaskCompletionResponse,
+  ClassDetailsResponse
 } from "@mynsut/shared/types/class";
+import type { AcademicClassSummary } from "@mynsut/shared/types/student";
 import { apiClient } from "@/lib/api/client";
 import { apiEndpoints } from "@/lib/api/endpoints";
 
-export async function getClassDetails(classId: string): Promise<AssignedClass> {
-  const response = await apiClient<AssignedClass>(apiEndpoints.classes.detail(classId), { method: "GET" });
+export async function getClassDetails(classId: string): Promise<ClassDetailsResponse> {
+  const response = await apiClient<ClassDetailsResponse>(apiEndpoints.classes.detail(classId), { method: "GET" });
   if (!response.success) throw new Error(response.message);
   return response.data;
 }
