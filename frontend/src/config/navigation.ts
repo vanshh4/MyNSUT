@@ -12,6 +12,7 @@ import {
   Users,
   UserPlus,
   ScrollText,
+  School,
 } from "lucide-react";
 
 import type { AppRoute } from "@/config/routes";
@@ -40,6 +41,12 @@ export const navigation: readonly NavigationItem[] = [
     href: "/profile/me",
     icon: CircleUserRound,
     permissions: [PERMISSIONS.PROFILE_VIEW_SELF],
+  },
+  {
+    label: "Class Workspace",
+    href: "/class",
+    icon: School,
+    permissions: [PERMISSIONS.CLASS_VIEW_OWN],
   },
   {
     label: "Admin",
