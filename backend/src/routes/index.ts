@@ -8,6 +8,9 @@ import { profilesRouter } from "../modules/profiles/profiles.routes.js";
 import { privacyRouter } from "../modules/privacy/privacy.routes.js";
 import { academicsRouter } from "../modules/academics/academics.routes.js";
 import { searchRouter } from "../modules/search/search.routes.js";
+import { classesRoutes } from "../modules/classes/classes.routes.js";
+import { classAnnouncementsRoutes } from "../modules/classAnnouncements/classAnnouncements.routes.js";
+import { classTasksRoutes } from "../modules/classTasks/classTasks.routes.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { healthRouter } from "./health.routes.js";
 
@@ -27,6 +30,7 @@ apiRouter.get("/", (_request, response) => {
         privacy: "/privacy",
         academics: "/academics",
         search: "/search",
+        classes: "/classes",
       },
       "Welcome to the MyNSUT API"
     )
@@ -42,3 +46,6 @@ apiRouter.use("/profiles", profilesRouter);
 apiRouter.use("/privacy", privacyRouter);
 apiRouter.use("/academics", academicsRouter);
 apiRouter.use("/search", searchRouter);
+apiRouter.use("/classes", classesRoutes);
+apiRouter.use("/classes/:classId/announcements", classAnnouncementsRoutes);
+apiRouter.use("/classes/:classId/tasks", classTasksRoutes);
