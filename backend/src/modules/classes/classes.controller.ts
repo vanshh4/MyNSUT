@@ -5,7 +5,7 @@ import { apiResponse } from "../../utils/apiResponse.js";
 
 export async function getClassDetails(req: Request, res: Response) {
   const { classId } = req.params;
-  const data = await classesService.getClassDetails(classId);
+  const data = await classesService.getClassDetails(classId, req.user?.id);
   res.status(200).json(apiResponse(data));
 }
 

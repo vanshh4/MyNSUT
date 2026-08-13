@@ -4,10 +4,17 @@ import * as classesRepository from "./classes.repository.js";
 import { logAction } from "../audit/audit.service.js";
 import { AUDIT_ACTIONS } from "../../constants/audit.js";
 
-export async function getClassDetails(classId: string) {
+export async function getClassDetails(classId: string, userId?: string) {
   const academicClass = await classesRepository.findClassById(prisma, classId);
   if (!academicClass) throw classErrors.classNotFound();
-  return academicClass;
+
+  let isCr = false;
+  if (userId) {
+    const existingRole = await classesRepository.findActiveCrRoleForStudent(prisma, classId, userId);
+    if (existingRole) isCr = true;
+  }
+
+  return { ...academicClass, isCr };
 }
 
 export async function getClassMembers(classId: string) {
