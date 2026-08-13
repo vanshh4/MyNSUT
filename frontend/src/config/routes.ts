@@ -15,6 +15,7 @@ export const routes = {
   adminUserDetail: "/admin/users/[userId]",
   adminRoles: "/admin/roles",
   adminAuditLogs: "/admin/audit-logs",
+  class: "/class",
 } as const;
 
 export type AppRoute = (typeof routes)[keyof typeof routes];
