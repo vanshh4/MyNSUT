@@ -1,6 +1,7 @@
 import type { ClassTaskType } from "../constants/class.js";
 import type { IsoDateString, EntityId } from "./index.js";
 import type { PublicProfileProjection } from "./profile.js";
+import type { AcademicClassSummary } from "./student.js";
 
 export interface UrlAttachment {
   title: string;
@@ -53,3 +54,25 @@ export interface ClassTaskCompletionSummary {
   studentId: EntityId;
   completedAt: IsoDateString;
 }
+
+export interface ClassMember {
+  id: EntityId;
+  userId: EntityId;
+  fullName: string;
+  email: string;
+  profileImageUrl: string | null;
+  rollNumber: string;
+  umsRollNumber: string;
+}
+
+export interface ClassTaskCompletionResponse {
+  id: EntityId;
+  taskId: EntityId;
+  studentId: EntityId;
+  completedAt: IsoDateString;
+}
+
+export interface ClassDetailsResponse extends AcademicClassSummary {
+  isCr: boolean;
+}
+
