@@ -47,7 +47,7 @@ export default function SearchPage() {
         <form onSubmit={handleSearch} className="flex gap-4">
           <div className="flex-1">
             <GlassInput
-              placeholder="Search (e.g. '2023UIT', 'Vansh', 'CSE')..."
+              placeholder="Search (e.g. '2023UIN3324', 'Vansh', 'ITNS')..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="h-14 text-lg"

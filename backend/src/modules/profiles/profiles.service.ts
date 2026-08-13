@@ -40,7 +40,7 @@ export async function getStudentPeerProfile(requesterUserId: string, targetRollN
   await getStudentIdByUserId(requesterUserId);
   
   const targetStudent = await prisma.student.findUnique({
-    where: { rollNumber: targetRollNumber },
+    where: { umsRollNumber: targetRollNumber },
     include: {
       profile: true,
       privacySettings: true,
