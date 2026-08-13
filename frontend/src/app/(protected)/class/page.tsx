@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, Megaphone, CheckSquare, Users } from "lucide-react";
+import { Loader2, Megaphone, CheckSquare, Users, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/common/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
+import { CreateAnnouncementDialog } from "@/components/class/CreateAnnouncementDialog";
+import { CreateTaskDialog } from "@/components/class/CreateTaskDialog";
 import { getClassDetails, getClassAnnouncements, getClassTasks, getClassMembers } from "@/lib/api/classes";
-import type { AssignedClass, ClassAnnouncementResponse, ClassTaskResponse, ClassMember } from "@mynsut/shared/types/class";
+import type { ClassDetailsResponse, ClassAnnouncementResponse, ClassTaskResponse, ClassMember } from "@mynsut/shared/types/class";
 
 type Tab = "announcements" | "tasks" | "members";
 
@@ -15,7 +17,10 @@ export default function ClassWorkspacePage() {
   const { user, isLoading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>("announcements");
   
-  const [classDetails, setClassDetails] = useState<AssignedClass | null>(null);
+  const [isAnnouncementDialogOpen, setIsAnnouncementDialogOpen] = useState(false);
+  const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
+  
+  const [classDetails, setClassDetails] = useState<ClassDetailsResponse | null>(null);
   const [announcements, setAnnouncements] = useState<ClassAnnouncementResponse[]>([]);
   const [tasks, setTasks] = useState<ClassTaskResponse[]>([]);
   const [members, setMembers] = useState<ClassMember[]>([]);
@@ -81,28 +86,50 @@ export default function ClassWorkspacePage() {
         description={`${classDetails.branchCode} - Section ${classDetails.section} · Class of ${classDetails.admissionYear + 4}`}
       />
 
-      <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-        <GlassButton
-          variant={activeTab === "announcements" ? "primary" : "secondary"}
-          onClick={() => setActiveTab("announcements")}
-          className="rounded-full flex items-center gap-2"
-        >
-          <Megaphone className="w-4 h-4" /> Announcements
-        </GlassButton>
-        <GlassButton
-          variant={activeTab === "tasks" ? "primary" : "secondary"}
-          onClick={() => setActiveTab("tasks")}
-          className="rounded-full flex items-center gap-2"
-        >
-          <CheckSquare className="w-4 h-4" /> Tasks
-        </GlassButton>
-        <GlassButton
-          variant={activeTab === "members" ? "primary" : "secondary"}
-          onClick={() => setActiveTab("members")}
-          className="rounded-full flex items-center gap-2"
-        >
-          <Users className="w-4 h-4" /> Members
-        </GlassButton>
+      <div className="flex items-center justify-between mb-8 overflow-x-auto pb-2 gap-4">
+        <div className="flex gap-4">
+          <GlassButton
+            variant={activeTab === "announcements" ? "primary" : "secondary"}
+            onClick={() => setActiveTab("announcements")}
+            className="rounded-full flex items-center gap-2 whitespace-nowrap"
+          >
+            <Megaphone className="w-4 h-4" /> Announcements
+          </GlassButton>
+          <GlassButton
+            variant={activeTab === "tasks" ? "primary" : "secondary"}
+            onClick={() => setActiveTab("tasks")}
+            className="rounded-full flex items-center gap-2 whitespace-nowrap"
+          >
+            <CheckSquare className="w-4 h-4" /> Tasks
+          </GlassButton>
+          <GlassButton
+            variant={activeTab === "members" ? "primary" : "secondary"}
+            onClick={() => setActiveTab("members")}
+            className="rounded-full flex items-center gap-2 whitespace-nowrap"
+          >
+            <Users className="w-4 h-4" /> Members
+          </GlassButton>
+        </div>
+        
+        {classDetails.isCr && activeTab === "announcements" && (
+          <GlassButton 
+            variant="primary" 
+            className="rounded-full flex items-center gap-2 whitespace-nowrap"
+            onClick={() => setIsAnnouncementDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4" /> Create Announcement
+          </GlassButton>
+        )}
+        
+        {classDetails.isCr && activeTab === "tasks" && (
+          <GlassButton 
+            variant="primary" 
+            className="rounded-full flex items-center gap-2 whitespace-nowrap"
+            onClick={() => setIsTaskDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4" /> Create Task
+          </GlassButton>
+        )}
       </div>
 
       <div className="space-y-6">
@@ -205,6 +232,27 @@ export default function ClassWorkspacePage() {
           </GlassCard>
         )}
       </div>
+
+      {classDetails.isCr && classId && (
+        <>
+          <CreateAnnouncementDialog
+            isOpen={isAnnouncementDialogOpen}
+            onClose={() => setIsAnnouncementDialogOpen(false)}
+            classId={classId as string}
+            onSuccess={() => {
+              getClassAnnouncements(classId as string).then(setAnnouncements);
+            }}
+          />
+          <CreateTaskDialog
+            isOpen={isTaskDialogOpen}
+            onClose={() => setIsTaskDialogOpen(false)}
+            classId={classId as string}
+            onSuccess={() => {
+              getClassTasks(classId as string).then(setTasks);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
