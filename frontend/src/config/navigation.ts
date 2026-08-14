@@ -13,6 +13,7 @@ import {
   UserPlus,
   ScrollText,
   School,
+  Search,
 } from "lucide-react";
 
 import type { AppRoute } from "@/config/routes";
@@ -28,6 +29,7 @@ export interface NavigationItem {
 
 export const navigation: readonly NavigationItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Search", href: "/search", icon: Search },
   { label: "Notices", href: "/notices", icon: Megaphone, permissions: [PERMISSIONS.NOTICE_VIEW] },
   {
     label: "Societies",

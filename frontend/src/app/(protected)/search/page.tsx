@@ -51,12 +51,14 @@ export default function SearchPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="h-14 text-lg"
+              autoFocus
             />
           </div>
-          <MotionButton type="submit" disabled={isLoading} className="h-14 px-8 text-lg flex items-center gap-2">
+          {/* Search button to the right of search bar is commented for better UI */}
+          {/* <MotionButton type="submit" disabled={isLoading} className="h-14 px-8 text-lg flex items-center gap-2">
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <SearchIcon className="w-5 h-5" />}
             Search
-          </MotionButton>
+          </MotionButton> */}
         </form>
         {error && <p className="text-red-500 mt-3 text-sm">{error}</p>}
       </div>

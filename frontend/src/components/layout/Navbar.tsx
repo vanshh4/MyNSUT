@@ -28,7 +28,6 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   const router = useRouter();
   const { logout } = useAuth();
   const dark = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getServerThemeSnapshot);
-  const [query, setQuery] = useState("");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   function toggleTheme() {
@@ -38,11 +37,6 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
     window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   }
 
-  function handleSearch(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const trimmedQuery = query.trim();
-    if (trimmedQuery) router.push(`${routes.search}?q=${encodeURIComponent(trimmedQuery)}`);
-  }
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -55,7 +49,7 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   }
 
   return (
-    <header className="bg-glass-surface dark:bg-primary-container/30 rounded-full h-16 backdrop-blur-xl border border-glass-border flex items-center justify-between px-4 md:px-6 w-full max-w-[1280px] mx-auto mb-12 shadow-sm sticky top-4 z-30">
+    <header className="bg-glass-surface dark:bg-primary-container/30 rounded-full h-16 backdrop-blur-xl border border-glass-border flex items-center justify-between px-4 md:px-6 w-full md:w-max md:ml-auto mb-12 shadow-sm sticky top-4 z-30">
       <button
         type="button"
         onClick={onMenuClick}
@@ -65,19 +59,15 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
         <Menu className="size-5" />
       </button>
 
-      <form className="flex-1 flex items-center relative focus-within:ring-2 focus-within:ring-primary/20 transition-all rounded-full h-full group" role="search" onSubmit={handleSearch}>
-        <Search className="size-5 text-text-muted absolute left-4 group-focus-within:text-primary transition-colors" />
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          className="w-full bg-transparent border-none focus:ring-0 pl-12 pr-4 font-body text-sm md:text-base text-text-main placeholder:text-text-muted outline-none [&::-webkit-search-cancel-button]:hidden"
-          placeholder="Search events, societies or students"
-          aria-label="Search events, societies or students"
-        />
-      </form>
-
-      <div className="flex items-center gap-1 md:gap-2 pl-4 border-l border-glass-border ml-2 md:ml-4">
+      <div className="flex items-center gap-1 md:gap-2 ml-auto">
+        <button
+          type="button"
+          onClick={() => router.push(routes.search)}
+          className="w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          aria-label="Search"
+        >
+          <Search className="size-5" />
+        </button>
         <button
           type="button"
           onClick={toggleTheme}
