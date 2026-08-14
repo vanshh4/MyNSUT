@@ -37,16 +37,16 @@ export const navigation: readonly NavigationItem[] = [
   },
   { label: "Events", href: "/events", icon: CalendarDays, permissions: [PERMISSIONS.EVENT_VIEW] },
   {
-    label: "Profile",
-    href: "/profile/me",
-    icon: CircleUserRound,
-    permissions: [PERMISSIONS.PROFILE_VIEW_SELF],
-  },
-  {
     label: "Class Workspace",
     href: "/class",
     icon: School,
     permissions: [PERMISSIONS.CLASS_VIEW_OWN],
+  },
+  {
+    label: "Profile",
+    href: "/profile/me",
+    icon: CircleUserRound,
+    permissions: [PERMISSIONS.PROFILE_VIEW_SELF],
   },
   {
     label: "Admin",

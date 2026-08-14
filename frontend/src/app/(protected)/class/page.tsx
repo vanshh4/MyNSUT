@@ -86,7 +86,7 @@ export default function ClassWorkspacePage() {
         description={`${classDetails.branchCode} - Section ${classDetails.section} · Class of ${classDetails.admissionYear + 4}`}
       />
 
-      <div className="flex items-center justify-between mb-8 overflow-x-auto pb-2 gap-4">
+      <div className="flex items-center justify-between mb-8 overflow-x-auto p-2 -mx-2 gap-4">
         <div className="flex gap-4">
           <GlassButton
             variant={activeTab === "announcements" ? "primary" : "secondary"}
@@ -202,7 +202,7 @@ export default function ClassWorkspacePage() {
 
         {activeTab === "members" && (
           <GlassCard className="p-6 overflow-hidden">
-            <h3 className="text-xl font-bold font-headline mb-4">Class Members ({members.length})</h3>
+            <h3 className="text-xl font-bold font-headline mb-4">Class Strength :  {members.length}</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left font-body">
                 <thead>
@@ -216,11 +216,7 @@ export default function ClassWorkspacePage() {
                   {members.map((m) => (
                     <tr key={m.id} className="border-b border-glass-border/50 last:border-0 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                       <td className="py-3 px-4">{m.rollNumber}</td>
-                      <td className="py-3 px-4 font-medium flex items-center gap-2">
-                        {m.profileImageUrl && (
-                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={m.profileImageUrl} alt="Profile" className="w-6 h-6 rounded-full object-cover" />
-                        )}
+                      <td className="py-3 px-4 font-medium">
                         {m.fullName}
                       </td>
                       <td className="py-3 px-4 text-text-muted">{m.email}</td>
