@@ -50,6 +50,7 @@ model User {
   auditLogsReceived     AuditLog[]          @relation("AuditTarget")
   authoredAnnouncements ClassAnnouncement[] @relation("AnnouncementAuthor")
   authoredTasks         ClassTask[]         @relation("TaskAuthor")
+  authoredNotices       Notice[]            @relation("NoticeCreator")
 
   @@index([status])
   @@map("users")
@@ -421,4 +422,41 @@ model ClassTaskCompletion {
   @@unique([taskId, studentId])
   @@index([studentId])
   @@map("class_task_completions")
+}
+
+enum NoticeCategory {
+  ACADEMIC
+  EXAMINATION
+  ADMINISTRATIVE
+  FEES
+  EVENTS
+  GENERAL
+}
+
+enum NoticeStatus {
+  ACTIVE
+  EXPIRED
+  ARCHIVED
+}
+
+model Notice {
+  id              String         @id @default(uuid()) @db.Uuid
+  creatorId       String         @map("creator_id") @db.Uuid
+  title           String         @db.VarChar(255)
+  category        NoticeCategory
+  sourceAuthority String         @map("source_authority") @db.VarChar(255)
+  officialUrl     String         @map("official_url") @db.Text
+  publishedAt     DateTime       @map("published_at") @db.Timestamptz(6)
+  expiresAt       DateTime?      @map("expires_at") @db.Timestamptz(6)
+  status          NoticeStatus   @default(ACTIVE)
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  creator         User           @relation("NoticeCreator", fields: [creatorId], references: [id], onDelete: Restrict)
+
+  @@index([status])
+  @@index([category])
+  @@index([publishedAt])
+  @@index([expiresAt])
+  @@map("notices")
 }
