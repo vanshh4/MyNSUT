@@ -82,6 +82,14 @@
     "./types/class": {
       "types": "./dist/types/class.d.ts",
       "import": "./dist/types/class.js"
+    },
+    "./constants/notices": {
+      "types": "./dist/constants/notices.d.ts",
+      "import": "./dist/constants/notices.js"
+    },
+    "./types/notice": {
+      "types": "./dist/types/notice.d.ts",
+      "import": "./dist/types/notice.js"
     }
   },
   "files": [
