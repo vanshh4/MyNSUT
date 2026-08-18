@@ -11,6 +11,7 @@ import { searchRouter } from "../modules/search/search.routes.js";
 import { classesRoutes } from "../modules/classes/classes.routes.js";
 import { classAnnouncementsRoutes } from "../modules/classAnnouncements/classAnnouncements.routes.js";
 import { classTasksRoutes } from "../modules/classTasks/classTasks.routes.js";
+import { noticesRoutes } from "../modules/notices/notices.routes.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { healthRouter } from "./health.routes.js";
 
@@ -31,6 +32,7 @@ apiRouter.get("/", (_request, response) => {
         academics: "/academics",
         search: "/search",
         classes: "/classes",
+        notices: "/notices",
       },
       "Welcome to the MyNSUT API"
     )
@@ -49,3 +51,4 @@ apiRouter.use("/search", searchRouter);
 apiRouter.use("/classes", classesRoutes);
 apiRouter.use("/classes/:classId/announcements", classAnnouncementsRoutes);
 apiRouter.use("/classes/:classId/tasks", classTasksRoutes);
+apiRouter.use("/notices", noticesRoutes);
