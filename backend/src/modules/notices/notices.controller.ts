@@ -36,7 +36,7 @@ export const noticesController = {
     try {
       const data = createNoticeSchema.parse(req.body);
       const notice = await noticesService.createNotice(
-        req.user!.id,
+        req.auth!.userId,
         data,
         req.ip
       );
@@ -57,7 +57,7 @@ export const noticesController = {
       const data = updateNoticeSchema.parse(req.body);
       const notice = await noticesService.updateNotice(
         req.params.noticeId,
-        req.user!.id,
+        req.auth!.userId,
         data,
         req.ip
       );
@@ -77,7 +77,7 @@ export const noticesController = {
 
   async deleteNotice(req: Request, res: Response) {
     try {
-      await noticesService.deleteNotice(req.params.noticeId, req.user!.id, req.ip);
+      await noticesService.deleteNotice(req.params.noticeId, req.auth!.userId, req.ip);
       res.status(200).json(apiResponse(null, "Notice deleted successfully"));
     } catch (error) {
       if (error instanceof NoticeNotFoundError) {

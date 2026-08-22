@@ -44,14 +44,14 @@ export function NoticeFilters() {
         </div>
         <input
           type="text"
-          className="block w-full rounded-md border-0 py-1.5 pl-10 pr-3 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 bg-transparent py-1.5 pl-10 pr-3 text-slate-900 dark:text-slate-100 ring-1 ring-inset ring-slate-300 dark:ring-slate-700 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
           placeholder="Search notices..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <select
-        className="block rounded-md border-0 py-1.5 pl-3 pr-10 text-slate-900 ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
+        className="block rounded-md border-0 bg-transparent [&>option]:text-slate-900 py-1.5 pl-3 pr-10 text-slate-900 dark:text-slate-100 ring-1 ring-inset ring-slate-300 dark:ring-slate-700 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
         value={searchParams.get("category") || ""}
         onChange={(e) => router.push(`?${createQueryString("category", e.target.value)}`)}
       >
@@ -63,7 +63,7 @@ export function NoticeFilters() {
         ))}
       </select>
       <select
-        className="block rounded-md border-0 py-1.5 pl-3 pr-10 text-slate-900 ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
+        className="block rounded-md border-0 bg-transparent [&>option]:text-slate-900 py-1.5 pl-3 pr-10 text-slate-900 dark:text-slate-100 ring-1 ring-inset ring-slate-300 dark:ring-slate-700 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
         value={searchParams.get("status") || ""}
         onChange={(e) => router.push(`?${createQueryString("status", e.target.value)}`)}
       >

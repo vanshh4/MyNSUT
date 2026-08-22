@@ -1,7 +1,8 @@
 import { noticesRepository } from "./notices.repository.js";
 import { CreateNoticeRequest, UpdateNoticeRequest, NoticeFilterQuery } from "./notices.validation.js";
 import { NoticeNotFoundError, UntrustedUrlError, NoticeArchivedError } from "./notices.errors.js";
-import { auditService } from "../audit/audit.service.js";
+import * as auditService from "../audit/audit.service.js";
+import { prisma } from "../../db/prisma.js";
 import { AUDIT_ACTIONS, AUDIT_TARGET_TYPES } from "../../constants/audit.js";
 
 const TRUSTED_DOMAINS = process.env.TRUSTED_NOTICE_DOMAINS?.split(",") || ["nsut.ac.in", ".nsut.ac.in"];
@@ -46,14 +47,16 @@ export const noticesService = {
       status: data.status || "ACTIVE",
     });
 
-    await auditService.log({
-      actorId: creatorId,
-      action: AUDIT_ACTIONS.NOTICE_CREATED,
-      targetType: AUDIT_TARGET_TYPES.NOTICE,
-      targetId: notice.id,
-      ipAddress,
-      metadata: { title: notice.title },
-    });
+    await auditService.logAction(
+      prisma,
+      creatorId,
+      AUDIT_ACTIONS.NOTICE_CREATED,
+      AUDIT_TARGET_TYPES.NOTICE,
+      notice.id,
+      undefined,
+      { title: notice.title },
+      ipAddress
+    );
 
     return notice;
   },
@@ -76,14 +79,16 @@ export const noticesService = {
 
     const action = data.status === "ARCHIVED" ? AUDIT_ACTIONS.NOTICE_ARCHIVED : AUDIT_ACTIONS.NOTICE_UPDATED;
 
-    await auditService.log({
-      actorId: editorId,
+    await auditService.logAction(
+      prisma,
+      editorId,
       action,
-      targetType: AUDIT_TARGET_TYPES.NOTICE,
-      targetId: notice.id,
-      ipAddress,
-      metadata: { changes: Object.keys(data) },
-    });
+      AUDIT_TARGET_TYPES.NOTICE,
+      notice.id,
+      undefined,
+      { changes: Object.keys(data) },
+      ipAddress
+    );
 
     return notice;
   },
@@ -96,13 +101,15 @@ export const noticesService = {
 
     await noticesRepository.delete(id);
 
-    await auditService.log({
-      actorId: editorId,
-      action: AUDIT_ACTIONS.NOTICE_DELETED,
-      targetType: AUDIT_TARGET_TYPES.NOTICE,
-      targetId: existing.id,
-      ipAddress,
-      metadata: { title: existing.title },
-    });
+    await auditService.logAction(
+      prisma,
+      editorId,
+      AUDIT_ACTIONS.NOTICE_DELETED,
+      AUDIT_TARGET_TYPES.NOTICE,
+      existing.id,
+      undefined,
+      { title: existing.title },
+      ipAddress
+    );
   },
 };

@@ -1,27 +1,27 @@
-import { db } from "../../db/client.js";
+import { prisma } from "../../db/prisma.js";
 import { Prisma } from "@prisma/client";
 import { NoticeFilterQuery } from "./notices.validation.js";
 
 export const noticesRepository = {
   async create(data: Prisma.NoticeUncheckedCreateInput) {
-    return db.notice.create({ data });
+    return prisma.notice.create({ data });
   },
 
   async update(id: string, data: Prisma.NoticeUpdateInput) {
-    return db.notice.update({
+    return prisma.notice.update({
       where: { id },
       data,
     });
   },
 
   async findById(id: string) {
-    return db.notice.findUnique({
+    return prisma.notice.findUnique({
       where: { id },
     });
   },
 
   async delete(id: string) {
-    return db.notice.delete({
+    return prisma.notice.delete({
       where: { id },
     });
   },
@@ -46,13 +46,13 @@ export const noticesRepository = {
     }
 
     const [notices, totalCount] = await Promise.all([
-      db.notice.findMany({
+      prisma.notice.findMany({
         where,
         orderBy: { publishedAt: "desc" },
         skip,
         take: limit,
       }),
-      db.notice.count({ where }),
+      prisma.notice.count({ where }),
     ]);
 
     return {

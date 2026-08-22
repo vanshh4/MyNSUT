@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { noticesController } from "./notices.controller.js";
-import { requireAuth } from "../../middlewares/auth.js";
-import { requirePermission } from "../../middlewares/rbac.js";
+import { authenticateMiddleware as requireAuth } from "../../middlewares/authenticate.middleware.js";
+import { requirePermission } from "../../middlewares/requirePermission.middleware.js";
 import { PERMISSIONS } from "@mynsut/shared";
 
 export const noticesRoutes = Router();

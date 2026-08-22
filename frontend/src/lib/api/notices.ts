@@ -1,5 +1,5 @@
-import { apiClient } from './client.js';
-import { apiEndpoints } from './endpoints.js';
+import { apiClient } from './client';
+import { apiEndpoints } from './endpoints';
 import type { 
   Notice, 
   CreateNoticePayload, 
@@ -9,23 +9,45 @@ import type {
 } from '@mynsut/shared';
 
 export const noticesApi = {
-  getNotices: async (filters?: NoticeFilters): Promise<PaginatedNoticeResponse> => {
-    return apiClient.get<PaginatedNoticeResponse>(apiEndpoints.notices.list, { params: filters });
+  getNotices: async (filters?: NoticeFilters & { page?: number }): Promise<PaginatedNoticeResponse> => {
+    const params = new URLSearchParams();
+    if (filters?.category) params.set('category', filters.category);
+    if (filters?.status) params.set('status', filters.status);
+    if (filters?.search) params.set('search', filters.search);
+    if (filters?.page) params.set('page', filters.page.toString());
+    
+    const queryString = params.toString();
+    const url = queryString ? `${apiEndpoints.notices.list}?${queryString}` : apiEndpoints.notices.list;
+
+    const response = await apiClient<Notice[]>(url, { method: "GET" });
+    return {
+      data: response.data || [],
+      meta: response.meta as any,
+    };
   },
 
   getNoticeById: async (id: string): Promise<Notice> => {
-    return apiClient.get<Notice>(apiEndpoints.notices.detail(id));
+    const response = await apiClient<Notice>(apiEndpoints.notices.detail(id), { method: "GET" });
+    return response.data as Notice;
   },
 
   createNotice: async (data: CreateNoticePayload): Promise<Notice> => {
-    return apiClient.post<Notice>(apiEndpoints.notices.create, data);
+    const response = await apiClient<Notice>(apiEndpoints.notices.create, { 
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    return response.data as Notice;
   },
 
   updateNotice: async (id: string, data: UpdateNoticePayload): Promise<Notice> => {
-    return apiClient.patch<Notice>(apiEndpoints.notices.update(id), data);
+    const response = await apiClient<Notice>(apiEndpoints.notices.update(id), { 
+      method: "PATCH",
+      body: JSON.stringify(data)
+    });
+    return response.data as Notice;
   },
 
   deleteNotice: async (id: string): Promise<void> => {
-    return apiClient.delete(apiEndpoints.notices.delete(id));
+    await apiClient<null>(apiEndpoints.notices.delete(id), { method: "DELETE" });
   },
 };
