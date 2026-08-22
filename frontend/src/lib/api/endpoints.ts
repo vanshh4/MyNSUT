@@ -10,7 +10,13 @@ export const apiEndpoints = {
   onboarding: "/students/onboarding",
   dashboard: "/dashboard",
   profile: { me: "/students/me" },
-  notices: "/notices",
+  notices: {
+    list: "/notices",
+    detail: (id: string) => `/notices/${id}`,
+    create: "/notices",
+    update: (id: string) => `/notices/${id}`,
+    delete: (id: string) => `/notices/${id}`,
+  },
   societies: "/societies",
   events: "/events",
   admin: {
