@@ -19,6 +19,17 @@ enum RoleScope {
   SOCIETY
 }
 
+enum SocietyCategory {
+  TECH
+  CULTURAL
+  LITERARY
+  SPORTS
+  MANAGEMENT
+  SOCIAL
+  ACADEMIC
+  OTHER
+}
+
 enum AcademicClassStatus {
   ACTIVE
   ARCHIVED
@@ -51,6 +62,8 @@ model User {
   authoredAnnouncements ClassAnnouncement[] @relation("AnnouncementAuthor")
   authoredTasks         ClassTask[]         @relation("TaskAuthor")
   authoredNotices       Notice[]            @relation("NoticeCreator")
+  societyMemberships    SocietyMembership[]
+  authoredSocietyAnnouncements SocietyAnnouncement[] @relation("SocietyAnnouncementAuthor")
 
   @@index([status])
   @@map("users")
@@ -203,6 +216,7 @@ model SocietyRole {
   revokedBy  String?   @map("revoked_by") @db.Uuid
   user       User      @relation("UserSocietyRoles", fields: [userId], references: [id], onDelete: Cascade)
   role       Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  society    Society   @relation(fields: [societyId], references: [id], onDelete: Cascade)
   assigner   User?     @relation("SocietyRoleAssigner", fields: [assignedBy], references: [id], onDelete: SetNull)
   revoker    User?     @relation("SocietyRoleRevoker", fields: [revokedBy], references: [id], onDelete: SetNull)
 
@@ -459,4 +473,89 @@ model Notice {
   @@index([publishedAt])
   @@index([expiresAt])
   @@map("notices")
+}
+
+model Society {
+  id             String                @id @default(uuid()) @db.Uuid
+  name           String                @db.VarChar(120)
+  description    String?               @db.Text
+  category       SocietyCategory
+  logoUrl        String?               @map("logo_url") @db.Text
+  coverImageUrl  String?               @map("cover_image_url") @db.Text
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  memberships    SocietyMembership[]
+  positions      SocietyPosition[]
+  announcements  SocietyAnnouncement[]
+  societyRoles   SocietyRole[]
+
+  @@map("societies")
+}
+
+model SocietyMembership {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  societyId  String   @map("society_id") @db.Uuid
+  joinedAt   DateTime @default(now()) @map("joined_at") @db.Timestamptz(6)
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  society    Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  positions  SocietyPositionAssignment[]
+
+  @@unique([userId, societyId])
+  @@index([societyId])
+  @@map("society_memberships")
+}
+
+model SocietyPosition {
+  id                   String   @id @default(uuid()) @db.Uuid
+  societyId            String   @map("society_id") @db.Uuid
+  title                String   @db.VarChar(120)
+  parentPositionId     String?  @map("parent_position_id") @db.Uuid
+  canAssignPOR         Boolean  @default(false) @map("can_assign_por")
+  canManageMembers     Boolean  @default(false) @map("can_manage_members")
+  canPostAnnouncements Boolean  @default(false) @map("can_post_announcements")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  society              Society           @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  parentPosition       SocietyPosition?  @relation("PositionHierarchy", fields: [parentPositionId], references: [id], onDelete: SetNull)
+  childPositions       SocietyPosition[] @relation("PositionHierarchy")
+  assignments          SocietyPositionAssignment[]
+
+  @@index([societyId])
+  @@map("society_positions")
+}
+
+model SocietyPositionAssignment {
+  id              String   @id @default(uuid()) @db.Uuid
+  membershipId    String   @map("membership_id") @db.Uuid
+  positionId      String   @map("position_id") @db.Uuid
+  assignedAt      DateTime @default(now()) @map("assigned_at") @db.Timestamptz(6)
+
+  membership      SocietyMembership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  position        SocietyPosition   @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@unique([membershipId, positionId])
+  @@index([positionId])
+  @@map("society_position_assignments")
+}
+
+model SocietyAnnouncement {
+  id            String   @id @default(uuid()) @db.Uuid
+  societyId     String   @map("society_id") @db.Uuid
+  authorId      String   @map("author_id") @db.Uuid
+  content       String   @db.Text
+  attachmentUrl String?  @map("attachment_url") @db.Text
+  isPublic      Boolean  @default(false) @map("is_public")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  society       Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  author        User     @relation("SocietyAnnouncementAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([societyId])
+  @@index([createdAt])
+  @@map("society_announcements")
 }
