@@ -17,6 +17,8 @@ export { SCOPES, SCOPE_CODES, isScopeCode } from "../constants/scopes.js";
 export type { ScopeCode } from "../constants/scopes.js";
 export { ROLES, ROLE_DEFINITIONS, ROLE_CODES, isRoleCode } from "../constants/roles.js";
 export type { RoleCode } from "../constants/roles.js";
+export { EVENT_STATUS, REGISTRATION_STATUS } from "../constants/events.js";
+export type { EventStatus, RegistrationStatus } from "../constants/events.js";
 
 export type { ApiErrorDetails, ApiErrorResponse, ApiResponse, ApiSuccessResponse,
   HealthData, JsonObject, JsonPrimitive, JsonValue, PaginatedResponse,
@@ -37,6 +39,8 @@ export type { AcademicSemester, Grade, ResultStatus, RankType } from "../constan
 export type { StudentPrivacySettings, UpdatePrivacyPayload } from "./privacy.js";
 export type { Subject, SubjectGrade, SemesterResult, StudentRank, StudentAcademicSummary } from "./academic.js";
 export type { ExtendedStudentProfile, UpdateProfilePayload, OwnProfileProjection, PublicProfileProjection } from "./profile.js";
+
+export type { EventResponse, EventRegistrationState } from "./event.js";
 
 export { CLASS_TASK_TYPE, isClassTaskType } from "../constants/class.js";
 export type { ClassTaskType } from "../constants/class.js";
