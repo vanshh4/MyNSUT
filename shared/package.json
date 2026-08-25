@@ -90,6 +90,14 @@
     "./types/notice": {
       "types": "./dist/types/notice.d.ts",
       "import": "./dist/types/notice.js"
+    },
+    "./constants/events": {
+      "types": "./dist/constants/events.d.ts",
+      "import": "./dist/constants/events.js"
+    },
+    "./types/event": {
+      "types": "./dist/types/event.d.ts",
+      "import": "./dist/types/event.js"
     }
   },
   "files": [
