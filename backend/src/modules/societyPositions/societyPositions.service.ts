@@ -42,7 +42,12 @@ export const societyPositionsService = {
     // If it's not a UUID, treat it as a roll number
     if (!finalUserId.includes("-")) {
       const student = await prisma.student.findFirst({
-        where: { rollNumber: finalUserId }
+        where: {
+          OR: [
+            { rollNumber: finalUserId },
+            { umsRollNumber: finalUserId }
+          ]
+        }
       });
       if (!student) throw new Error("Could not find student with that Roll Number");
       finalUserId = student.userId;

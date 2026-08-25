@@ -12,3 +12,11 @@ export function apiResponse<T>(
 ): ApiSuccessResponse<T> {
   return meta ? { success: true, message, data, meta } : { success: true, message, data };
 }
+
+export function apiErrorResponse(
+  message: string,
+  code: string = "INTERNAL_SERVER_ERROR",
+  details?: unknown
+) {
+  return { success: false, message, error: { code, details } };
+}

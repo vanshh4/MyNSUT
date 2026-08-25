@@ -35,6 +35,7 @@ export function CreateSocietyForm({ onSuccess }: { onSuccess: () => void }) {
       // 2. Create Top-Level POR (President)
       const posRes = await societiesApi.createPosition(societyId, {
         title: "President",
+        parentPositionId: null,
         canAssignPOR: true,
         canManageMembers: true,
         canPostAnnouncements: true,
