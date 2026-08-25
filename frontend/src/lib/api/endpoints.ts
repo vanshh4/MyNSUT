@@ -29,7 +29,17 @@ export const apiEndpoints = {
     revokePosition: (societyId: string, userId: string, positionId: string) => `/societies/${societyId}/positions/revoke/${userId}/${positionId}`,
     announcements: (id: string) => `/societies/${id}/announcements`,
   },
-  events: "/events",
+  events: {
+    list: "/events",
+    detail: (id: string) => `/events/${id}`,
+    create: "/events",
+    update: (id: string) => `/events/${id}`,
+    registrations: {
+      state: (eventId: string) => `/events/${eventId}/registrations/state`,
+      action: (eventId: string) => `/events/${eventId}/registrations/action`,
+      export: (eventId: string) => `/events/${eventId}/registrations/export`,
+    }
+  },
   admin: {
     users: { search: "/admin/users", detail: (id: string) => `/admin/users/${id}` },
     roles: {
