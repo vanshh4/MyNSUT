@@ -10,7 +10,7 @@ const modules = [
   { i: Users, t: "Users", x: "Search users and manage scoped role assignments.", href: "/admin/users" },
   { i: UserCog, t: "Roles", x: "View all platform roles, scopes, and active counts.", href: "/admin/roles" },
   { i: ScrollText, t: "Audit Logs", x: "Search immutable audit logs for administrative actions.", href: "/admin/audit-logs", disabled: true },
-  { i: Building2, t: "Classes & societies", x: "Manage academic groups and campus communities. \n(Coming Soon)", href: "#", disabled: true },
+  { i: Building2, t: "Societies", x: "Create and manage societies and their leadership.", href: "/admin/societies" },
 ];
 
 export default function Page() {
