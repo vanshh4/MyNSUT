@@ -65,28 +65,28 @@ export function MemberDirectory({ societyId, canManage }: MemberDirectoryProps) 
       </div>
 
       {canManage && (
-        <form onSubmit={handleAddMember} className="flex items-center gap-4 rounded-xl border border-border-main bg-white p-4 shadow-sm">
+        <form onSubmit={handleAddMember} className="flex flex-col gap-3 rounded-xl border border-glass-border bg-glass-surface p-4 shadow-sm">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Student Email Address"
-            className="flex-1 rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+            className="flex-1 rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
             required
           />
           <button
             type="submit"
-            className="rounded-lg bg-primary-main px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-sm hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             Add Member
           </button>
         </form>
       )}
 
-      <div className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-border-main">
+      <div className="overflow-hidden rounded-xl bg-glass-surface shadow-sm ring-1 ring-glass-border">
         <ul className="divide-y divide-border-main">
           {members.map((membership) => (
-            <li key={membership.id} className="flex items-center justify-between p-4 hover:bg-surface-hover">
+            <li key={membership.id} className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between p-4 hover:bg-surface-hover transition-colors">
               <div className="flex items-center gap-4">
                 {membership.user.profileImageUrl ? (
                   <img src={membership.user.profileImageUrl} alt={membership.user.fullName} className="h-10 w-10 rounded-full object-cover" />

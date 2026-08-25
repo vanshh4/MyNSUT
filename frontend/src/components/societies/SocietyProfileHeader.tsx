@@ -10,7 +10,7 @@ interface SocietyProfileHeaderProps {
 
 export function SocietyProfileHeader({ society, isMember, canManage }: SocietyProfileHeaderProps) {
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-border-main">
+    <div className="overflow-hidden rounded-2xl bg-glass-surface border border-glass-border shadow-sm">
       <div className="relative h-48 w-full bg-surface-sunken">
         {society.coverImageUrl ? (
           <img src={society.coverImageUrl} alt={`${society.name} cover`} className="h-full w-full object-cover" />
@@ -20,11 +20,11 @@ export function SocietyProfileHeader({ society, isMember, canManage }: SocietyPr
       </div>
       
       <div className="relative px-8 pb-8 pt-16">
-        <div className="absolute -top-16 left-8 h-32 w-32 overflow-hidden rounded-xl border-4 border-white bg-white shadow-sm">
+        <div className="absolute -top-16 left-8 h-32 w-32 overflow-hidden rounded-xl border-4 border-background bg-surface shadow-sm">
           {society.logoUrl ? (
             <img src={society.logoUrl} alt={society.name} className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-primary-100 text-4xl font-bold text-primary-main">
+            <div className="flex h-full w-full items-center justify-center bg-primary/10 text-4xl font-bold text-primary">
               {society.name.charAt(0)}
             </div>
           )}
@@ -45,7 +45,7 @@ export function SocietyProfileHeader({ society, isMember, canManage }: SocietyPr
             {isMember ? (
               <Link 
                 href={`/societies/${society.id}/space`}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary-main px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-sm hover:opacity-90"
               >
                 <Lock className="h-4 w-4" />
                 Member Space

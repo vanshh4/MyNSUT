@@ -111,7 +111,7 @@ export default function SocietyProfilePage() {
         </div>
         
         <div className="space-y-6">
-          <div className="rounded-xl border border-border-main bg-white p-6 shadow-sm">
+          <div className="rounded-xl border border-glass-border bg-glass-surface p-6 shadow-sm">
             <h3 className="font-headline text-lg font-semibold text-text-main mb-4">About</h3>
             <p className="text-text-muted text-sm whitespace-pre-wrap">
               {society.description || "No description provided for this society."}

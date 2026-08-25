@@ -59,7 +59,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
   return (
     <div className="space-y-6">
       {canPost && (
-        <div className="rounded-xl border border-border-main bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-glass-border bg-glass-surface p-6 shadow-sm">
           <h3 className="font-headline text-lg font-semibold text-text-main mb-4">Post Announcement</h3>
           <form onSubmit={handlePost} className="space-y-4">
             <div>
@@ -68,7 +68,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write your announcement..."
                 rows={3}
-                className="w-full rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+                className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
                 required
               />
             </div>
@@ -78,7 +78,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
                 value={attachmentUrl}
                 onChange={(e) => setAttachmentUrl(e.target.value)}
                 placeholder="Optional Attachment URL (e.g., Google Drive link)"
-                className="w-full rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+                className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
               />
             </div>
             <div className="flex items-center justify-between">
@@ -87,7 +87,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
                   type="checkbox"
                   checked={isPublic}
                   onChange={(e) => setIsPublic(e.target.checked)}
-                  className="rounded border-border-main text-primary-main focus:ring-primary-main"
+                  className="rounded border-glass-border text-primary focus:ring-primary"
                 />
                 <span className="text-sm font-medium text-text-main">
                   Make Public (Visible on Society Profile to non-members)
@@ -96,7 +96,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-lg bg-primary-main px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark disabled:opacity-50"
+                className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-on-primary shadow-sm hover:opacity-90 disabled:opacity-50"
               >
                 Post
               </button>
@@ -107,8 +107,8 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
 
       <div className="space-y-4">
         {announcements.map((a) => (
-          <div key={a.id} className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-border-main">
-            <div className="border-b border-border-main px-6 py-4">
+          <div key={a.id} className="overflow-hidden rounded-xl bg-glass-surface shadow-sm ring-1 ring-glass-border">
+            <div className="border-b border-glass-border px-6 py-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-headline text-lg font-bold text-text-main">Announcement</h4>
                 <div className="flex items-center gap-2">
@@ -132,7 +132,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
                     href={a.attachmentUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-sm font-semibold text-primary-main hover:text-primary-dark"
+                    className="inline-flex items-center text-sm font-semibold text-primary hover:opacity-80"
                   >
                     View Attachment &rarr;
                   </a>
@@ -142,7 +142,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
           </div>
         ))}
         {announcements.length === 0 && (
-          <div className="rounded-xl border border-dashed border-border-main p-8 text-center text-text-muted">
+          <div className="rounded-xl border border-dashed border-glass-border p-8 text-center text-text-muted">
             No announcements found.
           </div>
         )}

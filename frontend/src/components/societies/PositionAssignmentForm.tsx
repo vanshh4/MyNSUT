@@ -81,7 +81,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
   return (
     <div className="space-y-8">
       {/* Assign POR */}
-      <div className="rounded-xl border border-border-main bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-glass-border bg-glass-surface p-6 shadow-sm">
         <h3 className="font-headline text-lg font-semibold text-text-main mb-4">Assign Position</h3>
         <form onSubmit={handleAssignPosition} className="flex flex-col gap-4 sm:flex-row sm:items-end">
           <div className="flex-1">
@@ -89,7 +89,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
             <select
               value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value)}
-              className="w-full rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+              className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
               required
             >
               <option value="">Select a member...</option>
@@ -103,7 +103,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
             <select
               value={selectedPositionId}
               onChange={(e) => setSelectedPositionId(e.target.value)}
-              className="w-full rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+              className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
               required
             >
               <option value="">Select a position...</option>
@@ -114,7 +114,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
           </div>
           <button
             type="submit"
-            className="rounded-lg bg-primary-main px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-sm hover:opacity-90"
           >
             Assign
           </button>
@@ -122,7 +122,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
       </div>
 
       {/* Create POR */}
-      <div className="rounded-xl border border-border-main bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-glass-border bg-glass-surface p-6 shadow-sm">
         <h3 className="font-headline text-lg font-semibold text-text-main mb-4">Create New Position</h3>
         <form onSubmit={handleCreatePosition} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -133,7 +133,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Executive Member"
-                className="w-full rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+                className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
                 required
               />
             </div>
@@ -142,7 +142,7 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
               <select
                 value={parentPositionId}
                 onChange={(e) => setParentPositionId(e.target.value)}
-                className="w-full rounded-md border-border-main focus:border-primary-main focus:ring-primary-main sm:text-sm"
+                className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
               >
                 <option value="">None (Top Level)</option>
                 {positions.map(p => (
@@ -156,15 +156,15 @@ export function PositionAssignmentForm({ societyId }: PositionAssignmentFormProp
             <label className="block text-sm font-medium text-text-main">Permissions</label>
             <div className="flex flex-col gap-2 sm:flex-row sm:gap-6">
               <label className="flex items-center gap-2">
-                <input type="checkbox" checked={canAssignPOR} onChange={(e) => setCanAssignPOR(e.target.checked)} className="rounded border-border-main text-primary-main focus:ring-primary-main" />
+                <input type="checkbox" checked={canAssignPOR} onChange={(e) => setCanAssignPOR(e.target.checked)} className="rounded border-glass-border text-primary focus:ring-primary" />
                 <span className="text-sm text-text-main">Can Assign PORs</span>
               </label>
               <label className="flex items-center gap-2">
-                <input type="checkbox" checked={canManageMembers} onChange={(e) => setCanManageMembers(e.target.checked)} className="rounded border-border-main text-primary-main focus:ring-primary-main" />
+                <input type="checkbox" checked={canManageMembers} onChange={(e) => setCanManageMembers(e.target.checked)} className="rounded border-glass-border text-primary focus:ring-primary" />
                 <span className="text-sm text-text-main">Can Manage Members</span>
               </label>
               <label className="flex items-center gap-2">
-                <input type="checkbox" checked={canPostAnnouncements} onChange={(e) => setCanPostAnnouncements(e.target.checked)} className="rounded border-border-main text-primary-main focus:ring-primary-main" />
+                <input type="checkbox" checked={canPostAnnouncements} onChange={(e) => setCanPostAnnouncements(e.target.checked)} className="rounded border-glass-border text-primary focus:ring-primary" />
                 <span className="text-sm text-text-main">Can Post Announcements</span>
               </label>
             </div>
