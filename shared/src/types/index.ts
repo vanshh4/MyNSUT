@@ -46,3 +46,18 @@ export type { UrlAttachment, ClassAnnouncementPayload, ClassAnnouncementResponse
 export { NOTICE_CATEGORY, NOTICE_STATUS, isNoticeCategory, isNoticeStatus } from "../constants/notices.js";
 export type { NoticeCategory, NoticeStatus } from "../constants/notices.js";
 export type { Notice, CreateNoticePayload, UpdateNoticePayload, NoticeFilters, PaginatedNoticeResponse } from "./notice.js";
+
+export { SOCIETY_CATEGORIES } from "../constants/societies.js";
+export type { SocietyCategoryType } from "../constants/societies.js";
+
+export type {
+  Society,
+  SocietyMembership,
+  SocietyPosition,
+  SocietyAnnouncement,
+  CreateSocietyPayload,
+  UpdateSocietyPayload,
+  AssignPositionPayload,
+  AddMemberPayload,
+  CreateAnnouncementPayload
+} from "./society.js";
