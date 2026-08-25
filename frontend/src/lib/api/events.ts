@@ -1,7 +1,7 @@
 import { apiClient } from "./client";
 import { apiEndpoints } from "./endpoints";
 import type { 
-  Event, 
+  EventResponse as Event, 
   EventFilterParams, 
   EventRegistrationState,
   EVENT_STATUS,

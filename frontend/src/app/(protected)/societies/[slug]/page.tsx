@@ -9,11 +9,17 @@ import { SocietyProfileHeader } from "@/components/societies/SocietyProfileHeade
 import { SocietyAnnouncementFeed } from "@/components/societies/SocietyAnnouncementFeed";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useAuth } from "@/hooks/useAuth";
+import { EventCard } from "@/components/events/EventCard";
+import { eventsApi } from "@/lib/api/events";
+import { GlassButton } from "@/components/ui/GlassButton";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 
 export default function SocietyProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const { user } = useAuth();
   const [society, setSociety] = useState<Society | null>(null);
+  const [events, setEvents] = useState<any[]>([]);
   const [isMember, setIsMember] = useState(false);
   const [canManage, setCanManage] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,6 +35,10 @@ export default function SocietyProfilePage() {
       const societyId = slug;
       const res = await societiesApi.getSocietyById(societyId);
       setSociety((res as any).data);
+
+      const eventsRes = await eventsApi.getEvents({ societyId });
+      setEvents((eventsRes as any).data || []);
+
 
       if (user) {
         // check if member by fetching members and finding user
@@ -70,6 +80,33 @@ export default function SocietyProfilePage() {
               canPost={false} 
               publicOnly={true} 
             />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-headline text-2xl font-bold text-text-main">Events</h2>
+              {canManage && (
+                <Link href={`/societies/${society.id}/events/new`}>
+                  <GlassButton variant="primary" className="rounded-full gap-2">
+                    <Plus className="w-4 h-4" /> Create Event
+                  </GlassButton>
+                </Link>
+              )}
+            </div>
+            
+            {events.length > 0 ? (
+              <div className="grid gap-6 md:grid-cols-2">
+                {events.map((event) => (
+                  <div key={event.id} className="h-full">
+                    <EventCard event={event} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-glass-border bg-glass-surface p-8 text-center text-text-muted">
+                No events have been created yet.
+              </div>
+            )}
           </div>
         </div>
         

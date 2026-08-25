@@ -30,7 +30,7 @@ export function EventForm({ societyId, onSuccess, onCancel }: EventFormProps) {
   const [loading, setLoading] = useState(false);
   
   const { register, handleSubmit, formState: { errors } } = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
+    resolver: zodResolver(eventSchema) as any,
     defaultValues: {
       title: "",
       description: "",
@@ -138,7 +138,7 @@ export function EventForm({ societyId, onSuccess, onCancel }: EventFormProps) {
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t border-glass-border">
-        <GlassButton variant="ghost" type="button" onClick={onCancel} disabled={loading}>
+        <GlassButton variant="secondary" type="button" onClick={onCancel} disabled={loading}>
           Cancel
         </GlassButton>
         <GlassButton variant="primary" type="submit" className="rounded-full" disabled={loading}>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Event, EVENT_STATUS } from "@mynsut/shared";
+import { EventResponse as Event, EVENT_STATUS } from "@mynsut/shared";
 import { Calendar, MapPin, Users, ExternalLink } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";

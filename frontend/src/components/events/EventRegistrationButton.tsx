@@ -79,7 +79,7 @@ export function EventRegistrationButton({ eventId, isUpcoming, onStateChange }: 
         <GlassButton variant="secondary" className="w-full sm:w-auto bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 cursor-default hover:bg-emerald-100/50">
           <Check className="w-4 h-4 mr-2" /> Registered
         </GlassButton>
-        <GlassButton variant="ghost" className="w-full sm:w-auto text-rose-500 hover:bg-rose-500/10 hover:text-rose-600" onClick={() => handleAction("CANCEL")} disabled={actionLoading}>
+        <GlassButton variant="secondary" className="w-full sm:w-auto text-rose-500 hover:bg-rose-500/10 hover:text-rose-600" onClick={() => handleAction("CANCEL")} disabled={actionLoading}>
           {actionLoading ? "Cancelling..." : "Cancel Registration"}
         </GlassButton>
       </div>
@@ -92,7 +92,7 @@ export function EventRegistrationButton({ eventId, isUpcoming, onStateChange }: 
         <GlassButton variant="secondary" className="w-full sm:w-auto bg-amber-100/50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 cursor-default hover:bg-amber-100/50">
           <Clock className="w-4 h-4 mr-2" /> Waitlisted (Pos: {state.waitlistPosition})
         </GlassButton>
-        <GlassButton variant="ghost" className="w-full sm:w-auto text-rose-500 hover:bg-rose-500/10 hover:text-rose-600" onClick={() => handleAction("CANCEL")} disabled={actionLoading}>
+        <GlassButton variant="secondary" className="w-full sm:w-auto text-rose-500 hover:bg-rose-500/10 hover:text-rose-600" onClick={() => handleAction("CANCEL")} disabled={actionLoading}>
           {actionLoading ? "Cancelling..." : "Leave Waitlist"}
         </GlassButton>
       </div>
@@ -110,7 +110,7 @@ export function EventRegistrationButton({ eventId, isUpcoming, onStateChange }: 
           <Bookmark className="w-4 h-4 mr-2" /> Interested
         </GlassButton>
       ) : (
-        <GlassButton variant="ghost" className="w-full sm:w-auto" onClick={() => handleAction("CANCEL")} disabled={actionLoading}>
+        <GlassButton variant="secondary" className="w-full sm:w-auto" onClick={() => handleAction("CANCEL")} disabled={actionLoading}>
           <X className="w-4 h-4 mr-2" /> Remove Interest
         </GlassButton>
       )}

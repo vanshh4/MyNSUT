@@ -32,3 +32,12 @@ export interface EventRegistrationState {
   isInterested: boolean;
   waitlistPosition?: number;
 }
+
+export interface EventFilterParams {
+  status?: EventStatus;
+  societyId?: string;
+  startDateAfter?: string;
+  startDateBefore?: string;
+  page?: number;
+  limit?: number;
+}

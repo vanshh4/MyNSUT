@@ -40,7 +40,7 @@ export type { StudentPrivacySettings, UpdatePrivacyPayload } from "./privacy.js"
 export type { Subject, SubjectGrade, SemesterResult, StudentRank, StudentAcademicSummary } from "./academic.js";
 export type { ExtendedStudentProfile, UpdateProfilePayload, OwnProfileProjection, PublicProfileProjection } from "./profile.js";
 
-export type { EventResponse, EventRegistrationState } from "./event.js";
+export type { EventResponse, EventRegistrationState, EventFilterParams } from "./event.js";
 
 export { CLASS_TASK_TYPE, isClassTaskType } from "../constants/class.js";
 export type { ClassTaskType } from "../constants/class.js";
