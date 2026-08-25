@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { eventsController } from "./events.controller.js";
-import { requireAuth } from "../../middleware/auth.middleware.js";
+import { authenticateMiddleware } from "../../middlewares/authenticate.middleware.js";
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get("/", eventsController.getEvents);
 router.get("/:eventId", eventsController.getEventById);
 
 // Protected routes for event management
-router.post("/", requireAuth, eventsController.createEvent);
-router.patch("/:eventId", requireAuth, eventsController.updateEvent);
+router.post("/", authenticateMiddleware, eventsController.createEvent);
+router.patch("/:eventId", authenticateMiddleware, eventsController.updateEvent);
 
 export default router;

@@ -7,7 +7,7 @@ import { EventNotFoundError, EventOwnershipError } from "./events.errors.js";
 export const eventsController = {
   async getEvents(req: Request, res: Response) {
     try {
-      const filters = eventFilterSchema.parse(req.query);
+      const filters = eventFilterSchema.parse(req.query) as any;
       const result = await eventsService.getEvents(filters);
       res.status(200).json(apiResponse(result.data, "Events retrieved successfully", result.meta));
     } catch (error) {
@@ -30,7 +30,7 @@ export const eventsController = {
 
   async createEvent(req: Request, res: Response) {
     try {
-      const data = createEventSchema.parse(req.body);
+      const data = createEventSchema.parse(req.body) as any;
       const event = await eventsService.createEvent(req.auth!.userId, data, req.ip);
       res.status(201).json(apiResponse(event, "Event created successfully"));
     } catch (error: any) {
@@ -46,7 +46,7 @@ export const eventsController = {
 
   async updateEvent(req: Request, res: Response) {
     try {
-      const data = updateEventSchema.parse(req.body);
+      const data = updateEventSchema.parse(req.body) as any;
       const event = await eventsService.updateEvent(req.params.eventId as string, req.auth!.userId, data, req.ip);
       res.status(200).json(apiResponse(event, "Event updated successfully"));
     } catch (error: any) {
