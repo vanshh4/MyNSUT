@@ -144,7 +144,7 @@ export default function ClassWorkspacePage() {
                 <GlassCard key={a.id} className="p-6">
                   <h3 className="text-xl font-bold font-headline mb-2">{a.title}</h3>
                   <p className="text-sm text-text-muted mb-4">
-                    By {a.author.fullName} on {new Date(a.createdAt).toLocaleDateString()}
+                    By {a.author.name} on {new Date(a.createdAt).toLocaleDateString()}
                   </p>
                   <p className="whitespace-pre-wrap font-body text-text-main">{a.content}</p>
                   {a.attachments && a.attachments.length > 0 && (
@@ -183,7 +183,7 @@ export default function ClassWorkspacePage() {
                     </span>
                   </div>
                   <p className="text-sm text-text-muted mb-4">
-                    By {t.author.fullName} 
+                    By {t.author.name} 
                     {t.dueDate && ` · Due: ${new Date(t.dueDate).toLocaleDateString()}`}
                   </p>
                   {t.description && (

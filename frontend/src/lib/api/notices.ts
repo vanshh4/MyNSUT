@@ -21,14 +21,16 @@ export const noticesApi = {
 
     const response = await apiClient<Notice[]>(url, { method: "GET" });
     return {
-      data: response.data || [],
-      meta: response.meta as any,
-    };
+      success: true,
+      message: "Success",
+      data: (response as any).data || [],
+      meta: (response as any).meta || undefined,
+    } as any;
   },
 
   getNoticeById: async (id: string): Promise<Notice> => {
     const response = await apiClient<Notice>(apiEndpoints.notices.detail(id), { method: "GET" });
-    return response.data as Notice;
+    return (response as any).data as Notice;
   },
 
   createNotice: async (data: CreateNoticePayload): Promise<Notice> => {
@@ -36,7 +38,7 @@ export const noticesApi = {
       method: "POST",
       body: JSON.stringify(data)
     });
-    return response.data as Notice;
+    return (response as any).data as Notice;
   },
 
   updateNotice: async (id: string, data: UpdateNoticePayload): Promise<Notice> => {
@@ -44,7 +46,7 @@ export const noticesApi = {
       method: "PATCH",
       body: JSON.stringify(data)
     });
-    return response.data as Notice;
+    return (response as any).data as Notice;
   },
 
   deleteNotice: async (id: string): Promise<void> => {

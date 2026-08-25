@@ -10,12 +10,12 @@ import { useRouter } from "next/navigation";
 
 const noticeFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(255),
-  category: z.nativeEnum(NOTICE_CATEGORY, { required_error: "Category is required" }),
+  category: z.nativeEnum(NOTICE_CATEGORY, { error: "Category is required" }),
   sourceAuthority: z.string().min(2, "Source Authority must be at least 2 characters").max(255),
   officialUrl: z.string().url("Must be a valid URL"),
   publishedAt: z.string().datetime("Must be a valid ISO datetime"),
   expiresAt: z.string().datetime("Must be a valid ISO datetime").optional().or(z.literal("")),
-  status: z.nativeEnum(NOTICE_STATUS).default(NOTICE_STATUS.ACTIVE),
+  status: z.nativeEnum(NOTICE_STATUS),
 });
 
 type NoticeFormValues = z.infer<typeof noticeFormSchema>;
