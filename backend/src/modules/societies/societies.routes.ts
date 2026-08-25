@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { societiesController } from "./societies.controller.js";
 import { authenticateMiddleware as requireAuth } from "../../middlewares/authenticate.middleware.js";
-import { requirePermission } from "../../middlewares/requirePermission.middleware.js";\nimport { PERMISSIONS } from "@mynsut/shared";
+import { requirePermission } from "../../middlewares/requirePermission.middleware.js";
+import { PERMISSIONS } from "@mynsut/shared";
 
 export const societiesRouter = Router();
 
