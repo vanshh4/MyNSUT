@@ -61,3 +61,15 @@ export type {
   AddMemberPayload,
   CreateAnnouncementPayload
 } from "./society.js";
+
+export {
+  SocietySchema,
+  SocietyMembershipSchema,
+  SocietyPositionSchema,
+  SocietyAnnouncementSchema,
+  CreateSocietyPayloadSchema,
+  UpdateSocietyPayloadSchema,
+  AssignPositionPayloadSchema,
+  AddMemberPayloadSchema,
+  CreateAnnouncementPayloadSchema
+} from "./society.js";

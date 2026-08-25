@@ -12,6 +12,10 @@ import { classesRoutes } from "../modules/classes/classes.routes.js";
 import { classAnnouncementsRoutes } from "../modules/classAnnouncements/classAnnouncements.routes.js";
 import { classTasksRoutes } from "../modules/classTasks/classTasks.routes.js";
 import { noticesRoutes } from "../modules/notices/notices.routes.js";
+import { societiesRouter } from "../modules/societies/societies.routes.js";
+import { societyMembershipsRouter } from "../modules/societyMemberships/societyMemberships.routes.js";
+import { societyPositionsRouter } from "../modules/societyPositions/societyPositions.routes.js";
+import { societyAnnouncementsRouter } from "../modules/societyAnnouncements/societyAnnouncements.routes.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { healthRouter } from "./health.routes.js";
 
@@ -33,6 +37,7 @@ apiRouter.get("/", (_request, response) => {
         search: "/search",
         classes: "/classes",
         notices: "/notices",
+        societies: "/societies",
       },
       "Welcome to the MyNSUT API"
     )
@@ -52,3 +57,7 @@ apiRouter.use("/classes", classesRoutes);
 apiRouter.use("/classes/:classId/announcements", classAnnouncementsRoutes);
 apiRouter.use("/classes/:classId/tasks", classTasksRoutes);
 apiRouter.use("/notices", noticesRoutes);
+apiRouter.use("/societies", societiesRouter);
+apiRouter.use("/societies/:societyId/members", societyMembershipsRouter);
+apiRouter.use("/societies/:societyId/positions", societyPositionsRouter);
+apiRouter.use("/societies/:societyId/announcements", societyAnnouncementsRouter);
