@@ -3,6 +3,7 @@ import { Source_Serif_4, Comfortaa, Inter } from "next/font/google";
 
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${sourceSerif.variable} ${comfortaa.variable} ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AuthProvider>{children}</AuthProvider>
+          <Toaster position="top-right" />
         </ThemeProvider>
       </body>
     </html>

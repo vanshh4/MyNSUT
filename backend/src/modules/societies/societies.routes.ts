@@ -11,3 +11,4 @@ societiesRouter.get("/:societyId", requireAuth, societiesController.getSocietyBy
 
 societiesRouter.post("/", requireAuth, requirePermission("SOCIETY_CREATE"), societiesController.createSociety);
 societiesRouter.patch("/:societyId", requireAuth, requirePermission("SOCIETY_UPDATE_PROFILE"), societiesController.updateSociety);
+societiesRouter.delete("/:societyId", requireAuth, requirePermission("SOCIETY_CREATE"), societiesController.deleteSociety);

@@ -4,7 +4,7 @@ import { prisma } from "../../db/prisma.js";
 import { PROFILE_VISIBILITY } from "@mynsut/shared/constants/profileVisibility";
 
 export async function getStudentAcademicSummary(requesterUserId: string, targetRollNumber: string): Promise<StudentAcademicSummary> {
-  const targetStudent = await prisma.student.findUnique({
+  const targetStudent = await prisma.student.findFirst({
     where: { rollNumber: targetRollNumber },
     include: {
       privacySettings: true,
@@ -29,7 +29,7 @@ export async function getStudentAcademicSummary(requesterUserId: string, targetR
 }
 
 export async function getStudentSemesterResult(requesterUserId: string, targetRollNumber: string, semester: number): Promise<SemesterResult> {
-  const targetStudent = await prisma.student.findUnique({
+  const targetStudent = await prisma.student.findFirst({
     where: { rollNumber: targetRollNumber },
     include: {
       privacySettings: true,

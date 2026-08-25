@@ -22,6 +22,7 @@ export const apiEndpoints = {
     detail: (id: string) => `/societies/${id}`,
     create: "/societies",
     update: (id: string) => `/societies/${id}`,
+    delete: (id: string) => `/societies/${id}`,
     members: (id: string) => `/societies/${id}/members`,
     removeMember: (societyId: string, userId: string) => `/societies/${societyId}/members/${userId}`,
     positions: (id: string) => `/societies/${id}/positions`,

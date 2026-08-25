@@ -1,4 +1,4 @@
-import type { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import type { AuditFilters } from "@mynsut/shared/types/audit";
 
 export type DatabaseClient = PrismaClient | Prisma.TransactionClient;

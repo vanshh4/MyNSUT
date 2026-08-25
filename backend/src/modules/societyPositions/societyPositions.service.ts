@@ -8,18 +8,20 @@ export const societyPositionsService = {
     return societyPositionsRepository.getPositions(societyId);
   },
 
-  async createPosition(societyId: string, actorId: string, data: any, ipAddress?: string) {
-    const actorPosition = await societyPositionsRepository.hasAssignPORPermission(societyId, actorId);
-    if (!actorPosition) throw new UnauthorizedAssignPORError();
+  async createPosition(societyId: string, actorId: string, data: any, ipAddress?: string, isAdmin: boolean = false) {
+    if (!isAdmin) {
+      const actorPosition = await societyPositionsRepository.hasAssignPORPermission(societyId, actorId);
+      if (!actorPosition) throw new UnauthorizedAssignPORError();
 
-    if (data.parentPositionId) {
-      if (data.parentPositionId !== actorPosition.id) {
-        const isDescendant = await societyPositionsRepository.isDescendant(actorPosition.id, data.parentPositionId);
-        if (!isDescendant) throw new InvalidHierarchyError();
+      if (data.parentPositionId) {
+        if (data.parentPositionId !== actorPosition.id) {
+          const isDescendant = await societyPositionsRepository.isDescendant(actorPosition.id, data.parentPositionId);
+          if (!isDescendant) throw new InvalidHierarchyError();
+        }
+      } else {
+        // Must have a parent in hierarchy if created by a member
+        throw new InvalidHierarchyError("Created positions must fall under your hierarchy");
       }
-    } else {
-      // Must have a parent in hierarchy if created by a member
-      throw new InvalidHierarchyError("Created positions must fall under your hierarchy");
     }
 
     const position = await societyPositionsRepository.createPosition(societyId, data);
@@ -27,15 +29,37 @@ export const societyPositionsService = {
     return position;
   },
 
-  async assignPosition(societyId: string, actorId: string, data: any, ipAddress?: string) {
-    const actorPosition = await societyPositionsRepository.hasAssignPORPermission(societyId, actorId);
-    if (!actorPosition) throw new UnauthorizedAssignPORError();
+  async assignPosition(societyId: string, actorId: string, data: any, ipAddress?: string, isAdmin: boolean = false) {
+    if (!isAdmin) {
+      const actorPosition = await societyPositionsRepository.hasAssignPORPermission(societyId, actorId);
+      if (!actorPosition) throw new UnauthorizedAssignPORError();
 
-    const isDescendant = await societyPositionsRepository.isDescendant(actorPosition.id, data.positionId);
-    if (!isDescendant) throw new InvalidHierarchyError();
+      const isDescendant = await societyPositionsRepository.isDescendant(actorPosition.id, data.positionId);
+      if (!isDescendant) throw new InvalidHierarchyError();
+    }
 
-    const assignment = await societyPositionsRepository.assignPosition(societyId, data.userId, data.positionId);
-    await logAction(prisma, actorId, "SOCIETY_POSITION_ASSIGNED", "SOCIETY_POSITION_ASSIGNMENT", assignment.id, data.userId, undefined, ipAddress);
+    let finalUserId = data.userId;
+    // If it's not a UUID, treat it as a roll number
+    if (!finalUserId.includes("-")) {
+      const student = await prisma.student.findFirst({
+        where: { rollNumber: finalUserId }
+      });
+      if (!student) throw new Error("Could not find student with that Roll Number");
+      finalUserId = student.userId;
+    }
+
+    // Ensure user is a member of the society before assigning. If not, create membership automatically (especially useful for initial president)
+    let membership = await prisma.societyMembership.findUnique({
+      where: { userId_societyId: { userId: finalUserId, societyId } }
+    });
+    if (!membership) {
+      membership = await prisma.societyMembership.create({
+        data: { userId: finalUserId, societyId }
+      });
+    }
+
+    const assignment = await societyPositionsRepository.assignPosition(societyId, finalUserId, data.positionId);
+    await logAction(prisma, actorId, "SOCIETY_POSITION_ASSIGNED", "SOCIETY_POSITION_ASSIGNMENT", assignment.id, finalUserId, undefined, ipAddress);
     return assignment;
   },
 

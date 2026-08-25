@@ -17,7 +17,8 @@ export const societyPositionsController = {
   async createPosition(req: Request, res: Response) {
     try {
       const data = createPositionSchema.parse(req.body);
-      const position = await societyPositionsService.createPosition(req.params.societyId as string, req.auth!.userId, data, req.ip);
+      const isAdmin = req.auth!.permissions.includes("SOCIETY_CREATE") || req.auth!.permissions.includes("ROLE_ASSIGN_SOCIETY");
+      const position = await societyPositionsService.createPosition(req.params.societyId as string, req.auth!.userId, data, req.ip, isAdmin);
       res.status(201).json(apiResponse(position, "Position created successfully"));
     } catch (error: any) {
       if (error instanceof UnauthorizedAssignPORError || error instanceof InvalidHierarchyError) {
@@ -33,7 +34,8 @@ export const societyPositionsController = {
   async assignPosition(req: Request, res: Response) {
     try {
       const data = assignPositionSchema.parse(req.body);
-      const assignment = await societyPositionsService.assignPosition(req.params.societyId as string, req.auth!.userId, data, req.ip);
+      const isAdmin = req.auth!.permissions.includes("SOCIETY_CREATE") || req.auth!.permissions.includes("ROLE_ASSIGN_SOCIETY");
+      const assignment = await societyPositionsService.assignPosition(req.params.societyId as string, req.auth!.userId, data, req.ip, isAdmin);
       res.status(201).json(apiResponse(assignment, "Position assigned successfully"));
     } catch (error: any) {
       if (error instanceof UnauthorizedAssignPORError || error instanceof InvalidHierarchyError) {

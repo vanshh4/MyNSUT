@@ -35,6 +35,20 @@ export default function AdminSocietiesPage() {
     fetchSocieties();
   };
 
+  const handleDelete = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete the society "${name}"? This action cannot be undone.`)) {
+      return;
+    }
+    
+    try {
+      await societiesApi.deleteSociety(id);
+      fetchSocieties();
+    } catch (error) {
+      console.error("Failed to delete society", error);
+      alert("Failed to delete society. Please try again.");
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -71,6 +85,7 @@ export default function AdminSocietiesPage() {
                   <th className="px-6 py-4 font-medium">Category</th>
                   <th className="px-6 py-4 font-medium">Description</th>
                   <th className="px-6 py-4 font-medium">Created At</th>
+                  <th className="px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-glass-border text-text-main">
@@ -88,11 +103,19 @@ export default function AdminSocietiesPage() {
                     <td className="px-6 py-4 text-text-muted">
                       {new Date(society.createdAt).toLocaleDateString()}
                     </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => handleDelete(society.id, society.name)}
+                        className="text-xs text-rose-500 hover:text-rose-400 font-medium px-3 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 {societies.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-6 py-8 text-center text-text-muted">
+                    <td colSpan={5} className="px-6 py-8 text-center text-text-muted">
                       No societies found. Create one above!
                     </td>
                   </tr>

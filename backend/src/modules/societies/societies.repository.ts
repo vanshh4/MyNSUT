@@ -37,5 +37,11 @@ export const societiesRepository = {
       where: { id },
       ...Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined))
     });
+  },
+
+  async deleteSociety(id: string) {
+    return prisma.society.delete({
+      where: { id }
+    });
   }
 };

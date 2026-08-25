@@ -56,7 +56,7 @@ export const CreateSocietyPayloadSchema = SocietySchema.omit({
 export const UpdateSocietyPayloadSchema = CreateSocietyPayloadSchema.partial();
 
 export const AssignPositionPayloadSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.string().min(1, "User ID or Roll Number is required"),
   positionId: z.string().uuid(),
 });
 

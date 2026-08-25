@@ -46,5 +46,15 @@ export const societiesService = {
     const society = await societiesRepository.updateSociety(id, data);
     await logAction(prisma, actorId, "SOCIETY_UPDATE", "SOCIETY", society.id, undefined, undefined, ipAddress);
     return society;
+  },
+
+  async deleteSociety(id: string, actorId: string, ipAddress?: string) {
+    const existing = await societiesRepository.getSocietyById(id);
+    if (!existing) {
+      throw new SocietyNotFoundError();
+    }
+    const society = await societiesRepository.deleteSociety(id);
+    await logAction(prisma, actorId, "SOCIETY_DELETE", "SOCIETY", society.id, undefined, undefined, ipAddress);
+    return society;
   }
 };

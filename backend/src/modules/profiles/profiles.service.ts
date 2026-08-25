@@ -39,9 +39,10 @@ export async function getStudentPeerProfile(requesterUserId: string, targetRollN
   // Ensure requester exists
   await getStudentIdByUserId(requesterUserId);
   
-  const targetStudent = await prisma.student.findUnique({
-    where: { umsRollNumber: targetRollNumber },
+  const targetStudent = await prisma.student.findFirst({
+    where: { rollNumber: targetRollNumber },
     include: {
+      user: true,
       profile: true,
       privacySettings: true,
       academicSummary: {

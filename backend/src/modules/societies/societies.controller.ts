@@ -56,5 +56,18 @@ export const societiesController = {
         res.status(500).json(apiResponse(null, "Internal server error"));
       }
     }
+  },
+
+  async deleteSociety(req: Request, res: Response) {
+    try {
+      await societiesService.deleteSociety(req.params.societyId as string, req.auth!.userId, req.ip);
+      res.status(200).json(apiResponse(null, "Society deleted successfully"));
+    } catch (error: any) {
+      if (error instanceof SocietyNotFoundError) {
+        res.status(404).json(apiResponse(null, error.message));
+      } else {
+        res.status(500).json(apiResponse(null, "Internal server error"));
+      }
+    }
   }
 };

@@ -121,13 +121,13 @@ export function CreateSocietyForm({ onSuccess }: { onSuccess: () => void }) {
         <p className="text-sm text-text-muted mb-4">Assign the top-level "President" role to a student. They will have full permissions to manage the society and assign further roles.</p>
         
         <div>
-          <label className="block text-sm font-medium mb-1 text-text-main">President User ID</label>
+          <label className="block text-sm font-medium mb-1 text-text-main">President Roll Number</label>
           <input
             required
             value={formData.presidentUserId}
             onChange={e => setFormData({ ...formData, presidentUserId: e.target.value })}
             className="w-full rounded-md border border-glass-border bg-glass-surface px-4 py-2 text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50"
-            placeholder="e.g. b8f8f2b0-..."
+            placeholder="e.g. 2023UIN3324"
           />
         </div>
       </div>

@@ -35,6 +35,10 @@ export const societiesApi = {
     return apiClient<Society>(apiEndpoints.societies.update(id), { method: "PATCH", body: JSON.stringify(payload) });
   },
 
+  deleteSociety: (id: string) => {
+    return apiClient<null>(apiEndpoints.societies.delete(id), { method: "DELETE" });
+  },
+
   // Positions
   getPositions: (societyId: string) => {
     return apiClient<SocietyPosition[]>(apiEndpoints.societies.positions(societyId), { method: "GET" });
