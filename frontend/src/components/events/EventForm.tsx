@@ -48,6 +48,8 @@ export function EventForm({ societyId, onSuccess, onCancel }: EventFormProps) {
       const res = await eventsApi.createEvent({
         ...data,
         societyId,
+        startDate: new Date(data.startDate).toISOString(),
+        endDate: new Date(data.endDate).toISOString(),
         coverImageUrl: data.coverImageUrl || undefined,
         description: data.description || undefined,
         location: data.location || undefined,

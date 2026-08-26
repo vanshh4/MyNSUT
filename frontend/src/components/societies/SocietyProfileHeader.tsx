@@ -29,23 +29,22 @@ export function SocietyProfileHeader({ society, isMember, canManage }: SocietyPr
             </div>
           )}
         </div>
-
+        <br/>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-3">
-              <h1 className="font-headline text-3xl font-bold text-text-main">{society.name}</h1>
-              <span className="inline-flex items-center rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary-700">
-                {society.category}
-              </span>
+              <h1 className="font-headline text-4xl font-bold text-text-main">{society.name}</h1>
             </div>
-            <p className="text-text-muted max-w-2xl">{society.description || "No description provided."}</p>
+            <span className="inline-flex items-center rounded-full bg-primary-50 text-base font-medium text-primary-700">
+              {society.category}
+            </span>
           </div>
           
           <div className="mt-6 flex flex-wrap gap-3 md:mt-0">
             {isMember ? (
               <Link 
                 href={`/societies/${society.id}/space`}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-sm hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-on-primary shadow-sm hover:opacity-90"
               >
                 <Lock className="h-4 w-4" />
                 Member Space
@@ -55,7 +54,7 @@ export function SocietyProfileHeader({ society, isMember, canManage }: SocietyPr
             {canManage && (
               <Link 
                 href={`/societies/${society.id}/manage`}
-                className="inline-flex items-center gap-2 rounded-lg bg-surface-sunken px-4 py-2 text-sm font-semibold text-text-main shadow-sm ring-1 ring-inset ring-border-main hover:bg-surface-hover"
+                className="inline-flex items-center gap-2 rounded-lg bg-surface-sunken px-4 py-3 text-sm font-semibold text-text-main shadow-sm ring-1 ring-inset ring-border-main hover:bg-surface-hover"
               >
                 <Settings className="h-4 w-4" />
                 Manage

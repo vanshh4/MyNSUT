@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { societyMembershipsApi } from "../../lib/api/societyMemberships";
 import { toast } from "react-hot-toast";
-import { UserCircle, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 interface MemberDirectoryProps {
   societyId: string;
@@ -88,11 +88,6 @@ export function MemberDirectory({ societyId, canManage }: MemberDirectoryProps) 
           {members.map((membership) => (
             <li key={membership.id} className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between p-4 hover:bg-surface-hover transition-colors">
               <div className="flex items-center gap-4">
-                {membership.user.profileImageUrl ? (
-                  <img src={membership.user.profileImageUrl} alt={membership.user.fullName} className="h-10 w-10 rounded-full object-cover" />
-                ) : (
-                  <UserCircle className="h-10 w-10 text-text-muted" />
-                )}
                 <div>
                   <p className="font-medium text-text-main">{membership.user.fullName}</p>
                   <p className="text-sm text-text-muted">{membership.user.email}</p>
