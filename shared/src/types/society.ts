@@ -39,6 +39,7 @@ export const SocietyAnnouncementSchema = z.object({
   id: z.string().uuid(),
   societyId: z.string().uuid(),
   authorId: z.string().uuid(),
+  title: z.string().min(1, "Title is required").max(255),
   content: z.string().min(1, "Content is required"),
   attachmentUrl: z.string().url().nullable(),
   isPublic: z.boolean(),

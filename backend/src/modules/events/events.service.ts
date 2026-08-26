@@ -78,6 +78,7 @@ export const eventsService = {
       throw new Error("End date must be after start date");
     }
 
+    data.status = "PUBLISHED";
     const event = await eventsRepository.createEvent(data);
     await logAction(prisma, actorId, "EVENT_CREATE", "EVENT", event.id, undefined, undefined, ipAddress);
     return event;

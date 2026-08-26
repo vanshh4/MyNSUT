@@ -550,6 +550,7 @@ model SocietyAnnouncement {
   id            String   @id @default(uuid()) @db.Uuid
   societyId     String   @map("society_id") @db.Uuid
   authorId      String   @map("author_id") @db.Uuid
+  title         String   @default("Untitled") @db.VarChar(255)
   content       String   @db.Text
   attachmentUrl String?  @map("attachment_url") @db.Text
   isPublic      Boolean  @default(false) @map("is_public")
