@@ -12,6 +12,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [isPublic, setIsPublic] = useState(false);
@@ -38,11 +39,13 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
     setIsSubmitting(true);
     try {
       await societiesApi.createAnnouncement(societyId, {
+        title,
         content,
         attachmentUrl: attachmentUrl || null,
         isPublic
       });
       toast.success("Announcement posted successfully");
+      setTitle("");
       setContent("");
       setAttachmentUrl("");
       setIsPublic(false);
@@ -62,6 +65,16 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
         <div className="rounded-xl border border-glass-border bg-glass-surface p-6 shadow-sm">
           <h3 className="font-headline text-lg font-semibold text-text-main mb-4">Post Announcement</h3>
           <form onSubmit={handlePost} className="space-y-4">
+            <div>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Announcement Title"
+                className="w-full rounded-md border-glass-border bg-surface-sunken text-text-main focus:border-primary focus:ring-primary sm:text-sm"
+                required
+              />
+            </div>
             <div>
               <textarea
                 value={content}
@@ -110,7 +123,7 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
           <div key={a.id} className="overflow-hidden rounded-xl bg-glass-surface shadow-sm ring-1 ring-glass-border">
             <div className="border-b border-glass-border px-6 py-4">
               <div className="flex items-center justify-between">
-                <h4 className="font-headline text-lg font-bold text-text-main">Announcement</h4>
+                <h4 className="font-headline text-lg font-bold text-text-main">{a.title}</h4>
                 <div className="flex items-center gap-2">
                   {a.isPublic && (
                     <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
