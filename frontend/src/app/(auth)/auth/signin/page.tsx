@@ -39,9 +39,6 @@ function SignInContent() {
 
         {/* Sign In Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
           className="w-full max-w-xl"
         >
           <GlassCard className="w-full p-8 md:p-10 flex flex-col items-center shadow-sm" hoverEffect={false}>
