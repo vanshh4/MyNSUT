@@ -14,12 +14,20 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   const { status, user, error, refreshAuth } = useAuth();
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     if (status === "unauthenticated") {
       const next = pathname ? `?next=${encodeURIComponent(pathname)}` : "";
-      router.replace(`${routes.signIn}${next}`);
+      timeoutId = setTimeout(() => {
+        router.replace(`${routes.signIn}${next}`);
+      }, 50);
     } else if (status === "authenticated" && user && !user.onboardingCompleted) {
-      router.replace(routes.onboarding);
+      timeoutId = setTimeout(() => {
+        router.replace(routes.onboarding);
+      }, 50);
     }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [status, user, pathname, router]);
 
   if (status === "loading") {

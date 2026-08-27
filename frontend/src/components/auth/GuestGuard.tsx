@@ -14,7 +14,10 @@ export function GuestGuard({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (status === "authenticated" && user) {
-      router.replace(user.onboardingCompleted ? routes.dashboard : routes.onboarding);
+      const timeoutId = setTimeout(() => {
+        router.replace(user.onboardingCompleted ? routes.dashboard : routes.onboarding);
+      }, 50);
+      return () => clearTimeout(timeoutId);
     }
   }, [status, user, router]);
 
