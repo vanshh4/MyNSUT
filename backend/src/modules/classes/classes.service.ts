@@ -80,3 +80,8 @@ export async function revokeClassCr(classId: string, studentId: string, actorId:
     return revoked;
   });
 }
+
+export async function listClasses() {
+  return classesRepository.listClasses(prisma);
+}
+

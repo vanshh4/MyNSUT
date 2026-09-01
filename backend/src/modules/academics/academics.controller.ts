@@ -4,12 +4,12 @@ import { getStudentAcademicSummary, getStudentSemesterResult } from "./academics
 
 export async function getAcademicSummary(request: Request, response: Response): Promise<void> {
   const { rollNumber } = request.params;
-  const summary = await getStudentAcademicSummary(request.auth!.userId, rollNumber);
+  const summary = await getStudentAcademicSummary(request.auth!.userId, rollNumber as string);
   response.status(200).json(apiResponse(summary, "Academic summary retrieved successfully."));
 }
 
 export async function getSemesterResult(request: Request, response: Response): Promise<void> {
   const { rollNumber, semester } = request.params;
-  const result = await getStudentSemesterResult(request.auth!.userId, rollNumber, Number(semester));
+  const result = await getStudentSemesterResult(request.auth!.userId, rollNumber as string, Number(semester));
   response.status(200).json(apiResponse(result, "Semester result retrieved successfully."));
 }

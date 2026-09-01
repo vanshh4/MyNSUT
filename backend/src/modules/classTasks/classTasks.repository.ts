@@ -47,9 +47,9 @@ export function createTask(
       classId,
       authorId,
       title: data.title,
-      description: data.description,
+      description: data.description ?? null,
       taskType: data.taskType,
-      url: data.url,
+      url: data.url ?? null,
       dueDate: data.dueDate ? new Date(data.dueDate) : null,
     },
     include: {
@@ -70,13 +70,11 @@ export function updateTask(
   id: string,
   data: Partial<ClassTaskPayload>
 ) {
+  const cleanData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined)) as any;
   return client.classTask.update({
     where: { id },
     data: {
-      title: data.title,
-      description: data.description,
-      taskType: data.taskType,
-      url: data.url,
+      ...cleanData,
       dueDate: data.dueDate !== undefined ? (data.dueDate ? new Date(data.dueDate) : null) : undefined,
     },
     include: {

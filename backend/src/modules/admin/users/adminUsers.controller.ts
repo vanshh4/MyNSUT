@@ -25,7 +25,7 @@ export const getUserDetail: RequestHandler[] = [
   async (req, res, next) => {
     try {
       const { userId } = req.params;
-      const user = await adminUsersService.getUserDetail(userId);
+      const user = await adminUsersService.getUserDetail(req.params.userId as string);
       res.json({ data: user });
     } catch (error) {
       next(error);

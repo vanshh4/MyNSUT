@@ -38,3 +38,9 @@ classesRoutes.delete(
   validateParams(revokeCrSchema),
   asyncHandler(classesController.revokeClassCr)
 );
+
+// List classes
+classesRoutes.get(
+  "/",
+  asyncHandler(classesController.listClasses)
+);

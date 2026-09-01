@@ -25,8 +25,7 @@ export const getAuditLog: RequestHandler[] = [
   validateParams(auditLogIdParamsSchema),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const log = await auditService.getAuditLogById(id);
+      const log = await auditService.getAuditLogById(req.params.id as string);
       if (!log) {
         throw new ApiError(404, "Audit log not found");
       }

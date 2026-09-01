@@ -29,32 +29,41 @@ export async function listUserAssignments(userId: string): Promise<UserRolesSumm
   const { global, classRoles, societyRoles } = await adminRolesRepository.findUserAssignments(prisma, userId);
   
   return {
-    global: global.map(g => ({
-      id: `${g.userId}_${g.roleId}`,
-      userId: g.userId,
-      roleCode: g.role.code as any,
-      scope: SCOPES.GLOBAL,
-      assignedAt: g.assignedAt.toISOString(),
-      assignedBy: g.assignedBy || undefined,
-    })),
-    class: classRoles.map(c => ({
-      id: c.id,
-      userId: c.userId,
-      roleCode: c.role.code as any,
-      scope: SCOPES.CLASS,
-      scopeId: c.classId,
-      assignedAt: c.assignedAt.toISOString(),
-      assignedBy: c.assignedBy || undefined,
-    })),
-    society: societyRoles.map(s => ({
-      id: s.id,
-      userId: s.userId,
-      roleCode: s.role.code as any,
-      scope: SCOPES.SOCIETY,
-      scopeId: s.societyId,
-      assignedAt: s.assignedAt.toISOString(),
-      assignedBy: s.assignedBy || undefined,
-    }))
+    global: global.map(g => {
+      const obj: any = {
+        id: `${g.userId}_${g.roleId}`,
+        userId: g.userId,
+        roleCode: g.role.code,
+        scope: SCOPES.GLOBAL,
+        assignedAt: g.assignedAt.toISOString(),
+      };
+      if (g.assignedBy) obj.assignedBy = g.assignedBy;
+      return obj;
+    }),
+    class: classRoles.map(c => {
+      const obj: any = {
+        id: c.id,
+        userId: c.userId,
+        roleCode: c.role.code,
+        scope: SCOPES.CLASS,
+        scopeId: c.classId,
+        assignedAt: c.assignedAt.toISOString(),
+      };
+      if (c.assignedBy) obj.assignedBy = c.assignedBy;
+      return obj;
+    }),
+    society: societyRoles.map(s => {
+      const obj: any = {
+        id: s.id,
+        userId: s.userId,
+        roleCode: s.role.code,
+        scope: SCOPES.SOCIETY,
+        scopeId: s.societyId,
+        assignedAt: s.assignedAt.toISOString(),
+      };
+      if (s.assignedBy) obj.assignedBy = s.assignedBy;
+      return obj;
+    })
   };
 }
 

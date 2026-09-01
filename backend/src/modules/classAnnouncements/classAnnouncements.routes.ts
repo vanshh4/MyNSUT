@@ -24,7 +24,7 @@ classAnnouncementsRoutes.get(
 // I will check if MANAGE_CLASS_ANNOUNCEMENTS permission exists. For now, I'll use a placeholder or check scoped role.
 classAnnouncementsRoutes.post(
   "/",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_ANNOUNCEMENT_CREATE"),
+  requireScopedPermission("CLASS_ANNOUNCEMENT_CREATE"),
   validateBody(createAnnouncementSchema),
   asyncHandler(announcementsController.createAnnouncement)
 );
@@ -32,7 +32,7 @@ classAnnouncementsRoutes.post(
 // Update an announcement
 classAnnouncementsRoutes.patch(
   "/:announcementId",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_ANNOUNCEMENT_UPDATE"),
+  requireScopedPermission("CLASS_ANNOUNCEMENT_UPDATE"),
   validateBody(updateAnnouncementSchema),
   asyncHandler(announcementsController.updateAnnouncement)
 );
@@ -40,6 +40,6 @@ classAnnouncementsRoutes.patch(
 // Delete an announcement
 classAnnouncementsRoutes.delete(
   "/:announcementId",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_ANNOUNCEMENT_DELETE"),
+  requireScopedPermission("CLASS_ANNOUNCEMENT_DELETE"),
   asyncHandler(announcementsController.deleteAnnouncement)
 );

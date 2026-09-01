@@ -41,11 +41,15 @@ export const noticesService = {
       throw new UntrustedUrlError();
     }
 
-    const notice = await noticesRepository.create({
-      ...data,
-      creatorId,
-      status: data.status || "ACTIVE",
-    });
+    const cleanData = Object.fromEntries(
+      Object.entries({
+        ...data,
+        creatorId,
+        status: data.status || "ACTIVE",
+      }).filter(([_, v]) => v !== undefined)
+    ) as any;
+
+    const notice = await noticesRepository.create(cleanData);
 
     await auditService.logAction(
       prisma,
@@ -75,7 +79,8 @@ export const noticesService = {
       throw new UntrustedUrlError();
     }
 
-    const notice = await noticesRepository.update(id, data);
+    const cleanData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined)) as any;
+    const notice = await noticesRepository.update(id, cleanData);
 
     const action = data.status === "ARCHIVED" ? AUDIT_ACTIONS.NOTICE_ARCHIVED : AUDIT_ACTIONS.NOTICE_UPDATED;
 

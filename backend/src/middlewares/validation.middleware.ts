@@ -5,11 +5,11 @@ import { ApiError } from "../utils/apiError.js";
 export function validateQuery(schema: ZodSchema): RequestHandler {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
-      req.query = schema.parse(req.query);
+      req.query = schema.parse(req.query) as any;
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        next(new ApiError(400, "Validation failed", { details: error.errors }));
+        next(new ApiError(400, "Validation failed", { details: (error as any).errors }));
       } else {
         next(error);
       }
@@ -20,11 +20,11 @@ export function validateQuery(schema: ZodSchema): RequestHandler {
 export function validateBody(schema: ZodSchema): RequestHandler {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
-      req.body = schema.parse(req.body);
+      req.body = schema.parse(req.body) as any;
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        next(new ApiError(400, "Validation failed", { details: error.errors }));
+        next(new ApiError(400, "Validation failed", { details: (error as any).errors }));
       } else {
         next(error);
       }
@@ -35,11 +35,11 @@ export function validateBody(schema: ZodSchema): RequestHandler {
 export function validateParams(schema: ZodSchema): RequestHandler {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
-      req.params = schema.parse(req.params);
+      req.params = schema.parse(req.params) as any;
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        next(new ApiError(400, "Validation failed", { details: error.errors }));
+        next(new ApiError(400, "Validation failed", { details: (error as any).errors }));
       } else {
         next(error);
       }

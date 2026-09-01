@@ -51,14 +51,13 @@ export function findActiveCrRoleForStudent(client: ClassDatabaseClient, classId:
 }
 
 export function assignCrRole(client: ClassDatabaseClient, classId: string, userId: string, assignedBy: string) {
-  return client.classRole.create({
-    data: {
-      classId,
-      userId,
-      assignedBy,
-      role: { connect: { code: "CLASS_CR" } },
-    },
-  });
+  const data = {
+    classId,
+    userId,
+    role: { connect: { code: "CLASS_CR" } },
+  } as any;
+  if (assignedBy) data.assignedBy = assignedBy;
+  return client.classRole.create({ data });
 }
 
 export function revokeCrRole(client: ClassDatabaseClient, classRoleId: string, revokedBy: string) {
@@ -70,3 +69,14 @@ export function revokeCrRole(client: ClassDatabaseClient, classRoleId: string, r
     },
   });
 }
+
+export function listClasses(client: ClassDatabaseClient) {
+  return client.academicClass.findMany({
+    orderBy: [
+      { admissionYear: "desc" },
+      { branchCode: "asc" },
+      { section: "asc" },
+    ],
+  });
+}
+

@@ -20,8 +20,7 @@ export const listUserAssignments: RequestHandler[] = [
   validateParams(userAssignmentsParamsSchema),
   async (req, res, next) => {
     try {
-      const { userId } = req.params;
-      const assignments = await adminRolesService.listUserAssignments(userId);
+      const assignments = await adminRolesService.listUserAssignments(req.params.userId as string);
       res.json({ data: assignments });
     } catch (error) {
       next(error);
@@ -49,7 +48,7 @@ export const revokeRole: RequestHandler[] = [
   validateBody(revokeRoleBodySchema),
   async (req, res, next) => {
     try {
-      const { assignmentId } = req.params;
+      const assignmentId = req.params.assignmentId as string;
       const { scope } = req.body;
       const actorId = req.auth!.user.id;
       const ipAddress = req.ip;

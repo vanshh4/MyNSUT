@@ -21,7 +21,7 @@ export const noticesController = {
 
   async getNoticeById(req: Request, res: Response) {
     try {
-      const notice = await noticesService.getNoticeById(req.params.noticeId);
+      const notice = await noticesService.getNoticeById(req.params.noticeId as string);
       res.status(200).json(apiResponse(notice, "Notice retrieved successfully"));
     } catch (error) {
       if (error instanceof NoticeNotFoundError) {
@@ -56,7 +56,7 @@ export const noticesController = {
     try {
       const data = updateNoticeSchema.parse(req.body);
       const notice = await noticesService.updateNotice(
-        req.params.noticeId,
+        req.params.noticeId as string,
         req.auth!.userId,
         data,
         req.ip
@@ -77,7 +77,7 @@ export const noticesController = {
 
   async deleteNotice(req: Request, res: Response) {
     try {
-      await noticesService.deleteNotice(req.params.noticeId, req.auth!.userId, req.ip);
+      await noticesService.deleteNotice(req.params.noticeId as string, req.auth!.userId, req.ip);
       res.status(200).json(apiResponse(null, "Notice deleted successfully"));
     } catch (error) {
       if (error instanceof NoticeNotFoundError) {

@@ -68,13 +68,17 @@ export function updateAnnouncement(
   id: string,
   data: Partial<ClassAnnouncementPayload>
 ) {
-  return client.classAnnouncement.update({
-    where: { id },
-    data: {
+  const cleanData = Object.fromEntries(
+    Object.entries({
       title: data.title,
       content: data.content,
       attachments: data.attachments !== undefined ? (data.attachments as unknown as Prisma.InputJsonValue) : undefined,
-    },
+    }).filter(([_, v]) => v !== undefined)
+  ) as any;
+  
+  return client.classAnnouncement.update({
+    where: { id },
+    data: cleanData,
     include: {
       author: {
         select: {

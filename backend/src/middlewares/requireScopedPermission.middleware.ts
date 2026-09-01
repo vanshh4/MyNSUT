@@ -24,10 +24,10 @@ export function requireScopedPermission(permission: PermissionCode): RequestHand
 
       if (req.params.classId) {
         scopeStr = SCOPES.CLASS;
-        scopeId = req.params.classId;
+        scopeId = req.params.classId as string;
       } else if (req.params.societyId) {
         scopeStr = SCOPES.SOCIETY;
-        scopeId = req.params.societyId;
+        scopeId = req.params.societyId as string;
       } else {
         // No scoped params? Check if they have the permission globally.
         if (hasGlobalPermission(req.auth, permission)) {

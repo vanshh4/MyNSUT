@@ -34,19 +34,20 @@ function sanitizeMetadata(metadata?: Record<string, unknown>): Record<string, un
 }
 
 function mapToSafeEntry(record: any): SafeAuditEntry {
-  return {
+  const result: any = {
     id: record.id,
     actorId: record.actorId,
     actorName: record.actor?.fullName || "Unknown Actor",
     action: record.action,
     targetType: record.targetType,
     targetId: record.targetId,
-    targetUserId: record.targetUserId || undefined,
-    targetUserName: record.targetUser?.fullName || undefined,
-    metadata: record.metadata ? (record.metadata as Record<string, unknown>) : undefined,
-    ipAddress: record.ipAddress || undefined,
     createdAt: record.createdAt.toISOString(),
   };
+  if (record.targetUserId) result.targetUserId = record.targetUserId;
+  if (record.targetUser?.fullName) result.targetUserName = record.targetUser.fullName;
+  if (record.metadata) result.metadata = record.metadata;
+  if (record.ipAddress) result.ipAddress = record.ipAddress;
+  return result as SafeAuditEntry;
 }
 
 export async function logAction(
@@ -60,15 +61,17 @@ export async function logAction(
   ipAddress?: string
 ): Promise<void> {
   const sanitizedMetadata = sanitizeMetadata(metadata);
-  await auditRepository.createAuditLog(tx, {
+  const data: any = {
     actorId,
     action,
     targetType,
     targetId,
-    targetUserId,
-    metadata: sanitizedMetadata,
-    ipAddress,
-  });
+  };
+  if (targetUserId) data.targetUserId = targetUserId;
+  if (sanitizedMetadata) data.metadata = sanitizedMetadata;
+  if (ipAddress) data.ipAddress = ipAddress;
+
+  await auditRepository.createAuditLog(tx, data);
 }
 
 export async function getAuditLogs(filters: AuditFilters, pagination: { page: number; limit: number }): Promise<PaginatedAuditResponse> {

@@ -14,6 +14,7 @@ declare global {
         roles: readonly RoleCode[];
         permissions: readonly PermissionCode[];
       };
+      params: Record<string, string>;
     }
   }
 }

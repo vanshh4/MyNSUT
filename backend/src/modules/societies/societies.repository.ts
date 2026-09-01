@@ -33,9 +33,10 @@ export const societiesRepository = {
   },
 
   async updateSociety(id: string, data: UpdateSocietyPayload) {
+    const cleanData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined)) as any;
     return prisma.society.update({
       where: { id },
-      ...Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined))
+      data: cleanData
     });
   },
 

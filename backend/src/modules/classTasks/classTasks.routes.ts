@@ -20,7 +20,7 @@ classTasksRoutes.get(
 // Create a task
 classTasksRoutes.post(
   "/",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_TASK_CREATE"),
+  requireScopedPermission("CLASS_TASK_CREATE"),
   validateBody(createTaskSchema),
   asyncHandler(tasksController.createTask)
 );
@@ -28,7 +28,7 @@ classTasksRoutes.post(
 // Update a task
 classTasksRoutes.patch(
   "/:taskId",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_TASK_UPDATE"),
+  requireScopedPermission("CLASS_TASK_UPDATE"),
   validateBody(updateTaskSchema),
   asyncHandler(tasksController.updateTask)
 );
@@ -36,14 +36,14 @@ classTasksRoutes.patch(
 // Delete a task
 classTasksRoutes.delete(
   "/:taskId",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_TASK_DELETE"),
+  requireScopedPermission("CLASS_TASK_DELETE"),
   asyncHandler(tasksController.deleteTask)
 );
 
 // Get completions for a task
 classTasksRoutes.get(
   "/:taskId/completions",
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_TASK_VIEW_COMPLETION_SUMMARY"),
+  requireScopedPermission("CLASS_TASK_VIEW_COMPLETION_SUMMARY"),
   asyncHandler(tasksController.getTaskCompletions)
 );
 
@@ -52,6 +52,6 @@ classTasksRoutes.post(
   "/:taskId/complete",
   // Implicitly limited to the authenticated user via their own token
   // Students in the class can complete tasks
-  requireScopedPermission(SCOPES.CLASS, "classId", "CLASS_TASK_COMPLETE_SELF"),
+  requireScopedPermission("CLASS_TASK_COMPLETE_SELF"),
   asyncHandler(tasksController.markTaskCompleted)
 );
