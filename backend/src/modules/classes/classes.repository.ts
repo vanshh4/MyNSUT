@@ -52,11 +52,11 @@ export function findActiveCrRoleForStudent(client: ClassDatabaseClient, classId:
 
 export function assignCrRole(client: ClassDatabaseClient, classId: string, userId: string, assignedBy: string) {
   const data = {
-    classId,
-    userId,
+    class: { connect: { id: classId } },
+    user: { connect: { id: userId } },
     role: { connect: { code: "CLASS_CR" } },
   } as any;
-  if (assignedBy) data.assignedBy = assignedBy;
+  if (assignedBy) data.assigner = { connect: { id: assignedBy } };
   return client.classRole.create({ data });
 }
 

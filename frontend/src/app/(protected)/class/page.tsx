@@ -143,9 +143,6 @@ export default function ClassWorkspacePage() {
               announcements.map((a) => (
                 <GlassCard key={a.id} className="p-6">
                   <h3 className="text-xl font-bold font-headline mb-2">{a.title}</h3>
-                  <p className="text-sm text-text-muted mb-4">
-                    By {a.author.name} on {new Date(a.createdAt).toLocaleDateString()}
-                  </p>
                   <p className="whitespace-pre-wrap font-body text-text-main">{a.content}</p>
                   {a.attachments && a.attachments.length > 0 && (
                     <div className="mt-4 pt-4 border-t border-glass-border">
@@ -183,8 +180,7 @@ export default function ClassWorkspacePage() {
                     </span>
                   </div>
                   <p className="text-sm text-text-muted mb-4">
-                    By {t.author.name} 
-                    {t.dueDate && ` · Due: ${new Date(t.dueDate).toLocaleDateString()}`}
+                    {t.dueDate && ` Due: ${new Date(t.dueDate).toLocaleDateString()}`}
                   </p>
                   {t.description && (
                     <p className="whitespace-pre-wrap font-body text-text-main mb-4">{t.description}</p>
