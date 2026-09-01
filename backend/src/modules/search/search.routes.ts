@@ -21,7 +21,7 @@ const searchRateLimiter = rateLimit({
       return req.auth.userId;
     }
     // Fallback: Securely normalize and group IPv6/IPv4 addresses
-    return req.ip || "unknown";
+    return ipKeyGenerator(req, res);
   },
   handler: (req, res, next) => {
     next(

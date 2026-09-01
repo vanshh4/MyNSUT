@@ -2,6 +2,33 @@ import type { OwnProfileProjection, PublicProfileProjection, ExtendedStudentProf
 import type { StudentAcademicSummary } from "@mynsut/shared/types/academic";
 import { PROFILE_VISIBILITY } from "@mynsut/shared/constants/profileVisibility";
 
+function extractRoles(user: any) {
+  if (!user) return undefined;
+  
+  const isClassCR = user.classRoles && user.classRoles.length > 0;
+  const societyPORs: { societyName: string; positionName: string }[] = [];
+  
+  if (user.societyMemberships) {
+    for (const membership of user.societyMemberships) {
+      if (membership.positions) {
+        for (const posAssign of membership.positions) {
+          societyPORs.push({
+            societyName: membership.society.name,
+            positionName: posAssign.position.title,
+          });
+        }
+      }
+    }
+  }
+
+  if (!isClassCR && societyPORs.length === 0) return undefined;
+
+  return {
+    isClassCR,
+    societyPORs,
+  };
+}
+
 export function mapToOwnProfile(student: any): OwnProfileProjection {
   // Map Prisma models to the exact Shared type
   if (!student.profile) throw new Error("Profile missing");
@@ -13,8 +40,14 @@ export function mapToOwnProfile(student: any): OwnProfileProjection {
     githubUrl: student.profile.githubUrl,
     linkedinUrl: student.profile.linkedinUrl,
     privacySettings: student.privacySettings,
+    academicSummary: student.academicSummary,
     updatedAt: student.profile.updatedAt,
   };
+
+  const roles = extractRoles(student.user);
+  if (roles) {
+    extendedProfile.roles = roles;
+  }
 
   return extendedProfile;
 }
@@ -28,7 +61,7 @@ export function mapToPublicProfile(student: any): PublicProfileProjection {
   const isAcademicVisible = privacy?.academicSummaryVisibility === PROFILE_VISIBILITY.PUBLIC || privacy?.academicSummaryVisibility === PROFILE_VISIBILITY.PLATFORM_ONLY;
   // PLATFORM_ONLY is visible because this endpoint is authenticated.
 
-  return {
+  const publicProfile = {
     id: profile?.id || "unknown",
     studentId: student.id,
     name: student.user?.fullName || "Student",
@@ -39,5 +72,12 @@ export function mapToPublicProfile(student: any): PublicProfileProjection {
     githubUrl: isSocialVisible && profile ? profile.githubUrl : undefined,
     linkedinUrl: isSocialVisible && profile ? profile.linkedinUrl : undefined,
     academicSummary: (isAcademicVisible && student.academicSummary) ? student.academicSummary : undefined,
-  };
+  } as PublicProfileProjection;
+
+  const roles = extractRoles(student.user);
+  if (roles) {
+    publicProfile.roles = roles;
+  }
+
+  return publicProfile;
 }

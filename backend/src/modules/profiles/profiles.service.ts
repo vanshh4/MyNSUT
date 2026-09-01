@@ -12,12 +12,31 @@ async function getStudentIdByUserId(userId: string) {
   return student.id;
 }
 
+const userIncludeForRoles = {
+  include: {
+    classRoles: {
+      where: { role: { code: "CLASS_CR" }, revokedAt: null }
+    },
+    societyMemberships: {
+      include: {
+        society: true,
+        positions: {
+          include: {
+            position: true
+          }
+        }
+      }
+    }
+  }
+};
+
 export async function getStudentOwnProfile(userId: string): Promise<OwnProfileProjection> {
   const studentId = await getStudentIdByUserId(userId);
   
   const student = await prisma.student.findUnique({
     where: { id: studentId },
     include: {
+      user: userIncludeForRoles,
       profile: true,
       privacySettings: true,
       academicSummary: {
@@ -42,7 +61,7 @@ export async function getStudentPeerProfile(requesterUserId: string, targetRollN
   const targetStudent = await prisma.student.findFirst({
     where: { rollNumber: targetRollNumber },
     include: {
-      user: true,
+      user: userIncludeForRoles,
       profile: true,
       privacySettings: true,
       academicSummary: {
