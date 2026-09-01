@@ -11,6 +11,12 @@ import type { AcademicClassSummary } from "@mynsut/shared/types/student";
 import { apiClient } from "@/lib/api/client";
 import { apiEndpoints } from "@/lib/api/endpoints";
 
+export async function listClasses(): Promise<ClassDetailsResponse[]> {
+  const response = await apiClient<ClassDetailsResponse[]>(apiEndpoints.classes.list, { method: "GET" });
+  if (!response.success) throw new Error(response.message);
+  return response.data;
+}
+
 export async function getClassDetails(classId: string): Promise<ClassDetailsResponse> {
   const response = await apiClient<ClassDetailsResponse>(apiEndpoints.classes.detail(classId), { method: "GET" });
   if (!response.success) throw new Error(response.message);

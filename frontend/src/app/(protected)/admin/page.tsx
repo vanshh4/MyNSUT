@@ -11,6 +11,7 @@ const modules = [
   { i: UserCog, t: "Roles", x: "View all platform roles, scopes, and active counts.", href: "/admin/roles" },
   { i: ScrollText, t: "Audit Logs", x: "Search immutable audit logs for administrative actions.", href: "/admin/audit-logs", disabled: true },
   { i: Building2, t: "Societies", x: "Create and manage societies and their leadership.", href: "/admin/societies" },
+  { i: Users, t: "Classes", x: "Manage branches, sections, and assign Class Representatives.", href: "/admin/classes" },
 ];
 
 export default function Page() {

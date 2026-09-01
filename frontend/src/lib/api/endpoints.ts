@@ -66,6 +66,7 @@ export const apiEndpoints = {
     students: "/search/students",
   },
   classes: {
+    list: "/classes",
     detail: (classId: string) => `/classes/${classId}`,
     members: (classId: string) => `/classes/${classId}/members`,
     assignCr: (classId: string) => `/classes/${classId}/cr`,
