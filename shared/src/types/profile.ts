@@ -11,6 +11,10 @@ export interface ExtendedStudentProfile {
   linkedinUrl: string | null;
   privacySettings: StudentPrivacySettings;
   academicSummary?: StudentAcademicSummary;
+  roles?: {
+    isClassCR: boolean;
+    societyPORs: { societyName: string; positionName: string }[];
+  };
   updatedAt: Date;
 }
 
@@ -35,4 +39,8 @@ export interface PublicProfileProjection {
   githubUrl?: string | null;
   linkedinUrl?: string | null;
   academicSummary?: StudentAcademicSummary; // Only if visible
+  roles?: {
+    isClassCR: boolean;
+    societyPORs: { societyName: string; positionName: string }[];
+  };
 }
