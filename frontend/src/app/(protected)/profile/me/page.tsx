@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Award, BookOpen, Building2, GraduationCap, UsersRound, Loader2, Globe, Link as LinkIcon, FileText, Pencil } from "lucide-react";
+import { Award, ShieldCheck, BookOpen, Building2, GraduationCap, UsersRound, Loader2, Globe, Link as LinkIcon, FileText, Pencil } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@/components/common/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -93,6 +93,23 @@ export default function MyProfilePage() {
           <h2 className="font-headline text-3xl font-bold text-text-main">{userFullName}</h2>
           <p className="mt-2 font-body text-base text-text-muted">{profile.student.branchCode} · {profile.student.admissionYear + 4}</p>
           
+          {profile.roles && (
+            <div className="mt-4 flex flex-col gap-2 w-full px-2">
+              {profile.roles.isClassCR && (
+                <div className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-semibold tracking-wide">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Class Representative
+                </div>
+              )}
+              {profile.roles.societyPORs.map((por, idx) => (
+                <div key={idx} className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 text-xs font-semibold tracking-wide text-center">
+                  <Award className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>{por.positionName} @ {por.societyName}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="mt-8 grid grid-cols-2 gap-4 w-full text-left">
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} className="rounded-2xl bg-black/5 dark:bg-white/5 p-4 flex flex-col transition-colors hover:bg-black/10 dark:hover:bg-white/10">
               <Building2 className="w-5 h-5 text-primary dark:text-primary-container mb-3" />
