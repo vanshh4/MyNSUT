@@ -94,16 +94,16 @@ export default function MyProfilePage() {
           <p className="mt-2 font-body text-base text-text-muted">{profile.student.branchCode} · {profile.student.admissionYear + 4}</p>
           
           {profile.roles && (
-            <div className="mt-4 flex flex-col gap-2 w-full px-2">
+            <div className="mt-6 flex flex-col gap-2 w-full px-10">
               {profile.roles.isClassCR && (
-                <div className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-semibold tracking-wide">
-                  <ShieldCheck className="w-3.5 h-3.5" />
+                <div className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-semibold tracking-wide">
+                  <ShieldCheck className="w-10 h-5" />
                   Class Representative
                 </div>
               )}
               {profile.roles.societyPORs.map((por, idx) => (
-                <div key={idx} className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 text-xs font-semibold tracking-wide text-center">
-                  <Award className="w-3.5 h-3.5 flex-shrink-0" />
+                <div key={idx} className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 text-sm font-semibold tracking-wide text-center">
+                  <Award className="w-10 h-5 flex-shrink-0" />
                   <span>{por.positionName} @ {por.societyName}</span>
                 </div>
               ))}
