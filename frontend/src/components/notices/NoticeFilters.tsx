@@ -41,7 +41,7 @@ export function NoticeFilters() {
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
               isActive
                 ? "bg-blue-600 text-white shadow-sm hover:bg-blue-500"
-                : "bg-slate-100 text-slate-700 hover:bg-slate-200 ring-1 ring-inset ring-slate-200"
+                : "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 ring-1 ring-inset ring-slate-200 dark:ring-slate-700/50"
             }`}
           >
             {type.label}

@@ -60,10 +60,10 @@ function NoticesList() {
 
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 dark:text-blue-500" />
         </div>
       ) : error ? (
-        <div className="text-center py-12 text-red-600">
+        <div className="text-center py-12 text-red-600 dark:text-red-400">
           <p>{error}</p>
         </div>
       ) : items.length > 0 ? (
@@ -78,7 +78,7 @@ function NoticesList() {
               <button
                 onClick={loadMore}
                 disabled={isLoadingMore}
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:opacity-50"
+                className="rounded-md bg-white dark:bg-slate-800 px-3.5 py-2.5 text-sm font-semibold text-slate-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50"
               >
                 {isLoadingMore ? "Loading..." : "Load More"}
               </button>
@@ -86,9 +86,9 @@ function NoticesList() {
           )}
         </>
       ) : (
-        <div className="text-center py-12 rounded-2xl border-2 border-dashed border-slate-300 bg-white">
-          <h3 className="mt-2 text-sm font-semibold text-slate-900">No notices found</h3>
-          <p className="mt-1 text-sm text-slate-500">Try adjusting your filters.</p>
+        <div className="text-center py-12 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/50">
+          <h3 className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">No notices found</h3>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Try adjusting your filters.</p>
         </div>
       )}
     </>
