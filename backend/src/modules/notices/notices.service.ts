@@ -2,8 +2,10 @@ import { noticesRepository } from "./notices.repository.js";
 import { CreateNoticeRequest, UpdateNoticeRequest, NoticeFilterQuery } from "./notices.validation.js";
 import { NoticeNotFoundError, UntrustedUrlError, NoticeArchivedError } from "./notices.errors.js";
 import * as auditService from "../audit/audit.service.js";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../db/prisma.js";
 import { AUDIT_ACTIONS, AUDIT_TARGET_TYPES } from "../../constants/audit.js";
+import type { UnifiedFeedFilters, PaginatedUnifiedFeedResponse } from "@mynsut/shared";
 
 const TRUSTED_DOMAINS = process.env.TRUSTED_NOTICE_DOMAINS?.split(",") || ["nsut.ac.in", ".nsut.ac.in"];
 
@@ -24,6 +26,127 @@ const isUrlTrusted = (urlString: string) => {
 };
 
 export const noticesService = {
+  async getUnifiedFeed(userId: string, filters: UnifiedFeedFilters): Promise<PaginatedUnifiedFeedResponse> {
+    const student = await prisma.student.findUnique({ where: { userId } });
+    const classId = student?.classId || '00000000-0000-0000-0000-000000000000';
+
+    let cursorDate: Date | null = null;
+    let cursorId: string | null = null;
+
+    if (filters.cursor) {
+      const parts = filters.cursor.split('|');
+      if (parts.length === 2 && parts[0] && parts[1]) {
+        cursorDate = new Date(parseInt(parts[0], 10));
+        cursorId = parts[1];
+      }
+    }
+
+    const limit = Math.min(filters.limit || 20, 50);
+
+    const typeFilter = filters.type ? Prisma.sql`AND "type" = ${filters.type}` : Prisma.empty;
+    const cursorFilter = cursorDate && cursorId
+      ? Prisma.sql`AND ("publishedAt" < ${cursorDate}::timestamptz OR ("publishedAt" = ${cursorDate}::timestamptz AND id::uuid < ${cursorId}::uuid))`
+      : Prisma.empty;
+
+    const query = Prisma.sql`
+      WITH feed AS (
+        SELECT 
+          id, 
+          'OFFICIAL' as "type",
+          title, 
+          '' as excerpt,
+          published_at as "publishedAt",
+          source_authority as "sourceName",
+          id as "metaId"
+        FROM notices
+        WHERE status = 'ACTIVE'
+        
+        UNION ALL
+        
+        SELECT 
+          sa.id, 
+          'SOCIETY' as "type",
+          sa.title, 
+          SUBSTRING(sa.content, 1, 150) as excerpt,
+          sa.created_at as "publishedAt",
+          s.name as "sourceName",
+          sa.society_id as "metaId"
+        FROM society_announcements sa
+        JOIN societies s ON sa.society_id = s.id
+        WHERE sa.is_public = true
+        
+        UNION ALL
+        
+        SELECT 
+          ca.id,
+          'CLASS' as "type",
+          ca.title,
+          SUBSTRING(ca.content, 1, 150) as excerpt,
+          ca.created_at as "publishedAt",
+          ac.name as "sourceName",
+          ca.class_id as "metaId"
+        FROM class_announcements ca
+        JOIN academic_classes ac ON ca.class_id = ac.id
+        WHERE ca.class_id = ${classId}::uuid
+        
+        UNION ALL
+        
+        SELECT 
+          e.id,
+          'EVENT' as "type",
+          e.title,
+          SUBSTRING(COALESCE(e.description, ''), 1, 150) as excerpt,
+          e.created_at as "publishedAt",
+          s.name as "sourceName",
+          e.society_id as "metaId"
+        FROM events e
+        JOIN societies s ON e.society_id = s.id
+        WHERE e.status = 'PUBLISHED'
+      )
+      SELECT * FROM feed
+      WHERE 1=1
+      ${typeFilter}
+      ${cursorFilter}
+      ORDER BY "publishedAt" DESC, id DESC
+      LIMIT ${limit + 1};
+    `;
+
+    const results = await prisma.$queryRaw<any[]>(query);
+    
+    let hasMore = false;
+    let nextCursor: string | undefined = undefined;
+
+    if (results.length > limit) {
+      hasMore = true;
+      results.pop();
+    }
+
+    if (results.length > 0) {
+      const lastItem = results[results.length - 1];
+      const lastDate = new Date(lastItem.publishedAt).getTime();
+      nextCursor = `${lastDate}|${lastItem.id}`;
+    }
+
+    const response: PaginatedUnifiedFeedResponse = {
+      items: results.map(r => ({
+        id: r.id,
+        type: r.type,
+        title: r.title,
+        excerpt: r.excerpt,
+        publishedAt: new Date(r.publishedAt).toISOString(),
+        sourceName: r.sourceName,
+        metaId: r.metaId
+      })),
+      hasMore
+    };
+
+    if (nextCursor) {
+      response.nextCursor = nextCursor;
+    }
+
+    return response;
+  },
+
   async getNotices(filters: NoticeFilterQuery) {
     return noticesRepository.findAll(filters);
   },

@@ -29,6 +29,12 @@ export const noticeFilterSchema = z.object({
   limit: z.string().regex(/^\d+$/).transform(Number).optional(),
 });
 
+export const unifiedFeedFilterSchema = z.object({
+  type: z.enum(["OFFICIAL", "SOCIETY", "CLASS", "EVENT"]).optional(),
+  cursor: z.string().optional(),
+  limit: z.string().regex(/^\d+$/).transform(Number).optional(),
+});
+
 export type CreateNoticeRequest = z.infer<typeof createNoticeSchema>;
 export type UpdateNoticeRequest = z.infer<typeof updateNoticeSchema>;
 export type NoticeFilterQuery = z.infer<typeof noticeFilterSchema>;

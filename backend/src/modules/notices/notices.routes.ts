@@ -6,6 +6,7 @@ import { PERMISSIONS } from "@mynsut/shared";
 
 export const noticesRoutes = Router();
 
+noticesRoutes.get("/feed", requireAuth, noticesController.getUnifiedFeed);
 noticesRoutes.get("/", requireAuth, noticesController.getNotices);
 noticesRoutes.get("/:noticeId", requireAuth, noticesController.getNoticeById);
 

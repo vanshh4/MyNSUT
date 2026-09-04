@@ -4,11 +4,26 @@ import {
   createNoticeSchema,
   updateNoticeSchema,
   noticeFilterSchema,
+  unifiedFeedFilterSchema,
 } from "./notices.validation.js";
 import { apiResponse } from "../../utils/apiResponse.js";
 import { NoticeNotFoundError, UntrustedUrlError, NoticeArchivedError } from "./notices.errors.js";
+import type { UnifiedFeedFilters } from "@mynsut/shared";
 
 export const noticesController = {
+  async getUnifiedFeed(req: Request, res: Response) {
+    try {
+      const rawFilters = unifiedFeedFilterSchema.parse(req.query);
+      const filters = Object.fromEntries(
+        Object.entries(rawFilters).filter(([_, v]) => v !== undefined)
+      );
+      const result = await noticesService.getUnifiedFeed(req.auth!.userId, filters as UnifiedFeedFilters);
+      res.status(200).json(apiResponse(result, "Unified feed retrieved successfully"));
+    } catch (error) {
+      res.status(400).json(apiResponse(null, "Invalid query parameters"));
+    }
+  },
+
   async getNotices(req: Request, res: Response) {
     try {
       const filters = noticeFilterSchema.parse(req.query);
