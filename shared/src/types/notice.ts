@@ -42,3 +42,27 @@ export interface NoticeFilters {
 }
 
 export type PaginatedNoticeResponse = PaginatedResponse<Notice>;
+
+export type UnifiedFeedType = 'OFFICIAL' | 'SOCIETY' | 'CLASS' | 'EVENT';
+
+export interface UnifiedFeedItem {
+  id: string;
+  type: UnifiedFeedType;
+  title: string;
+  excerpt: string;
+  publishedAt: string;
+  sourceName: string;
+  metaId: string;
+}
+
+export interface UnifiedFeedFilters {
+  type?: UnifiedFeedType;
+  limit?: number;
+  cursor?: string;
+}
+
+export interface PaginatedUnifiedFeedResponse {
+  items: UnifiedFeedItem[];
+  nextCursor?: string;
+  hasMore: boolean;
+}
