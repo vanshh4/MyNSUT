@@ -44,7 +44,7 @@ export function UnifiedFeedCard({ item }: UnifiedFeedCardProps) {
   });
 
   return (
-    <div className="group flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 transition-all hover:shadow-md dark:hover:shadow-slate-900/50">
+    <div className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 transition-all hover:shadow-md dark:hover:shadow-slate-900/50">
       <div>
         <div className="flex items-center gap-x-3 text-sm">
           <time dateTime={item.publishedAt} className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
