@@ -59,7 +59,7 @@ export const noticesService = {
           source_authority as "sourceName",
           id as "metaId"
         FROM notices
-        WHERE status = 'ACTIVE'
+        WHERE status = 'ACTIVE' AND (expires_at IS NULL OR expires_at > NOW())
         
         UNION ALL
         
@@ -101,7 +101,7 @@ export const noticesService = {
           e.society_id as "metaId"
         FROM events e
         JOIN societies s ON e.society_id = s.id
-        WHERE e.status = 'PUBLISHED'
+        WHERE e.status = 'PUBLISHED' AND e.end_date > NOW()
       )
       SELECT * FROM feed
       WHERE 1=1
