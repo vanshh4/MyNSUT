@@ -5,10 +5,25 @@ import type {
   CreateNoticePayload, 
   UpdateNoticePayload, 
   NoticeFilters, 
-  PaginatedNoticeResponse 
+  PaginatedNoticeResponse,
+  UnifiedFeedFilters,
+  PaginatedUnifiedFeedResponse
 } from '@mynsut/shared';
 
 export const noticesApi = {
+  getUnifiedFeed: async (filters?: UnifiedFeedFilters): Promise<PaginatedUnifiedFeedResponse> => {
+    const params = new URLSearchParams();
+    if (filters?.type) params.set('type', filters.type);
+    if (filters?.limit) params.set('limit', filters.limit.toString());
+    if (filters?.cursor) params.set('cursor', filters.cursor);
+    
+    const queryString = params.toString();
+    const url = queryString ? `/notices/feed?${queryString}` : `/notices/feed`;
+
+    const response = await apiClient<any>(url, { method: "GET" });
+    return (response as any).data as PaginatedUnifiedFeedResponse;
+  },
+
   getNotices: async (filters?: NoticeFilters & { page?: number }): Promise<PaginatedNoticeResponse> => {
     const params = new URLSearchParams();
     if (filters?.category) params.set('category', filters.category);
