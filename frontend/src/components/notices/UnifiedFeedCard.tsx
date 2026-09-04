@@ -31,7 +31,7 @@ const getHref = (item: UnifiedFeedItem) => {
     case 'OFFICIAL': return `/notices/${item.metaId}`;
     case 'SOCIETY': return `/societies/${item.metaId}`;
     case 'CLASS': return `/class`; // the user's single class workspace
-    case 'EVENT': return `/events/${item.metaId}`;
+    case 'EVENT': return `/events/${item.id}`;
     default: return '#';
   }
 };
@@ -56,7 +56,7 @@ export function UnifiedFeedCard({ item }: UnifiedFeedCardProps) {
             {item.type}
           </span>
         </div>
-        <div className="group relative">
+        <div className="group mt-4">
           <h3 className="mt-3 text-lg font-semibold leading-6 text-slate-900 group-hover:text-blue-600">
             <Link href={getHref(item)}>
               <span className="absolute inset-0" />
