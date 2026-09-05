@@ -38,6 +38,7 @@ export interface EventFilterParams {
   societyId?: string;
   startDateAfter?: string;
   startDateBefore?: string;
+  upcoming?: boolean;
   page?: number;
   limit?: number;
 }

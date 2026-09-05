@@ -19,8 +19,8 @@ export default function EventsDiscoveryPage() {
 
   const fetchEvents = async () => {
     try {
-      // Fetch only published events for the global discovery
-      const res = await eventsApi.getEvents({ status: EVENT_STATUS.PUBLISHED });
+      // Fetch only published events that have not passed
+      const res = await eventsApi.getEvents({ status: EVENT_STATUS.PUBLISHED, upcoming: true });
       setEvents((res as any).data || []);
     } catch (error) {
       console.error("Failed to load events", error);

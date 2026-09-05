@@ -9,7 +9,7 @@ export const eventsRepository = {
     if (societyId) where.societyId = societyId;
     if (status) where.status = status as any;
     if (upcoming) {
-      where.startDate = { gte: new Date() };
+      where.endDate = { gte: new Date() };
     }
 
     const skip = (page - 1) * limit;
