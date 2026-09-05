@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { noticesApi } from "@/lib/api/notices";
 import type { UnifiedFeedItem } from "@mynsut/shared";
 import Link from "next/link";
+import { animations, springs } from "@/lib/utils/animations";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -60,11 +61,11 @@ export default function Dashboard() {
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={springs.default}
         className="mb-12"
       >
         <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">{currentDate}</p>
-        <h1 className="font-headline text-5xl text-primary dark:text-primary-container font-bold mb-3 tracking-tight">
+        <h1 className="font-headline text-5xl tracking-[-0.02em] leading-[1.05] text-primary dark:text-primary-container font-bold mb-3">
           Hey {firstName}
         </h1>
         <p className="font-body text-lg text-text-muted max-w-2xl">
@@ -76,20 +77,19 @@ export default function Dashboard() {
       <motion.section 
         initial="hidden"
         animate="show"
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
+        variants={animations.staggerChildren}
         className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
       >
         {stats.map(({ title, value, icon: Icon, bgColor, textColor, href }) => (
           <Link href={href} key={title} className="block cursor-pointer">
             <motion.div
-              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              variants={animations.fadeInUp}
               whileHover={{ scale: 1.02, y: -4 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={animations.tapScaleCard}
             >
               <GlassCard className="p-8 flex items-center justify-between rounded-[24px] group shadow-sm transition-shadow hover:shadow-md" hoverEffect={false}>
                 <div>
-                  <h2 className="font-headline text-5xl text-primary dark:text-primary-container font-bold mb-1">{value}</h2>
+                  <h2 className="font-headline text-5xl tracking-[-0.02em] leading-[1.05] text-primary dark:text-primary-container font-bold mb-1">{value}</h2>
                   <p className="font-body text-base text-text-muted font-medium">{title}</p>
                 </div>
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${bgColor} ${textColor}`}>
@@ -105,7 +105,7 @@ export default function Dashboard() {
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ ...springs.default, delay: 0.3 }}
       >
         <GlassCard className="p-8 rounded-[24px]" hoverEffect={false}>
           <div className="flex items-center justify-between mb-8">
@@ -125,8 +125,8 @@ export default function Dashboard() {
                 <Link href={`/class#${announcement.id}`} key={announcement.id} className="block">
                   <motion.div 
                     whileHover={{ x: 6 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    whileTap={animations.tapScaleCard}
+                    transition={springs.default}
                     className="py-6 flex items-start gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors -mx-4 px-4 rounded-xl cursor-pointer"
                   >
                     <div className="flex-1">

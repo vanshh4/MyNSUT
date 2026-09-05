@@ -8,6 +8,8 @@ import { UnifiedFeedCard } from "@/components/notices/UnifiedFeedCard";
 import { PageHeader } from "@/components/common/PageHeader";
 import { noticesApi } from "@/lib/api/notices";
 import type { PaginatedUnifiedFeedResponse, UnifiedFeedType, UnifiedFeedItem } from "@mynsut/shared";
+import { motion, AnimatePresence } from "framer-motion";
+import { animations } from "@/lib/utils/animations";
 
 function NoticesList() {
   const searchParams = useSearchParams();
@@ -68,11 +70,16 @@ function NoticesList() {
         </div>
       ) : items.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <UnifiedFeedCard key={item.id} item={item} />
-            ))}
-          </div>
+          <motion.div 
+            layout
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            <AnimatePresence mode="popLayout">
+              {items.map((item) => (
+                <UnifiedFeedCard key={item.id} item={item} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
           {data?.hasMore && (
             <div className="mt-8 flex justify-center">
               <button

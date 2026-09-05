@@ -2,6 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
+import { motion } from "framer-motion";
+import { animations } from "@/lib/utils/animations";
 
 const FEED_TYPES = [
   { value: "", label: "All" },
@@ -35,9 +37,11 @@ export function NoticeFilters() {
       {FEED_TYPES.map((type) => {
         const isActive = currentType === type.value;
         return (
-          <button
+          <motion.button
             key={type.value}
             onClick={() => router.push(`?${createQueryString("type", type.value)}`)}
+            whileTap={animations.tapScale}
+            transition={animations.tapScale.transition}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
               isActive
                 ? "bg-blue-600 text-white shadow-sm hover:bg-blue-500"
@@ -45,7 +49,7 @@ export function NoticeFilters() {
             }`}
           >
             {type.label}
-          </button>
+          </motion.button>
         );
       })}
     </div>

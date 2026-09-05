@@ -14,10 +14,12 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       <motion.div
         ref={ref}
         className={cn(
-          "academic-glass rounded-2xl p-6",
-          hoverEffect && "hover:shadow-lg hover:border-white/50 transition-all duration-300",
+          "academic-glass rounded-2xl p-6 transition-colors",
           className
         )}
+        whileHover={hoverEffect ? { y: -4, scale: 1.01 } : undefined}
+        whileTap={hoverEffect ? { scale: 0.98 } : undefined}
+        transition={{ type: "spring", damping: 1, stiffness: 200 }}
         {...props}
       >
         {children}

@@ -1,6 +1,8 @@
 import { UnifiedFeedItem } from "@mynsut/shared";
 import { Calendar, Megaphone, Users, Award, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { animations } from "@/lib/utils/animations";
 
 interface UnifiedFeedCardProps {
   item: UnifiedFeedItem;
@@ -44,7 +46,12 @@ export function UnifiedFeedCard({ item }: UnifiedFeedCardProps) {
   });
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 transition-all hover:shadow-md dark:hover:shadow-slate-900/50">
+    <motion.div 
+      layout
+      variants={animations.fadeInUp}
+      whileTap={animations.tapScaleCard}
+      className="group relative flex flex-col justify-between rounded-2xl p-6 academic-glass hover:shadow-md transition-shadow cursor-pointer"
+    >
       <div>
         <div className="flex items-center gap-x-3 text-sm">
           <time dateTime={item.publishedAt} className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
@@ -57,14 +64,14 @@ export function UnifiedFeedCard({ item }: UnifiedFeedCardProps) {
           </span>
         </div>
         <div className="group mt-4">
-          <h3 className="mt-3 text-lg font-semibold leading-6 text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+          <h3 className="mt-3 text-lg font-semibold leading-[1.05] tracking-[-0.02em] text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
             <Link href={getHref(item)}>
               <span className="absolute inset-0" />
               {item.title}
             </Link>
           </h3>
           {item.excerpt && (
-            <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+            <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
               {item.excerpt}
             </p>
           )}
@@ -73,6 +80,6 @@ export function UnifiedFeedCard({ item }: UnifiedFeedCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
