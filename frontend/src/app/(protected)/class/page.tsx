@@ -141,7 +141,7 @@ export default function ClassWorkspacePage() {
               </GlassCard>
             ) : (
               announcements.map((a) => (
-                <GlassCard key={a.id} className="p-6">
+                <GlassCard key={a.id} id={a.id} className="p-6">
                   <h3 className="text-xl font-bold font-headline mb-2">{a.title}</h3>
                   <p className="whitespace-pre-wrap font-body text-text-main">{a.content}</p>
                   {a.attachments && a.attachments.length > 0 && (
