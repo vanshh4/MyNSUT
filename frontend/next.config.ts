@@ -7,7 +7,7 @@ const backendOrigin = (process.env.BACKEND_INTERNAL_URL ?? "http://localhost:400
 
 const nextConfig: NextConfig = {
   devIndicators: false,
-  allowedDevOrigins: ["192.168.1.10", "192.168.1.11", "192.168.1.12", "localhost"],
+  allowedDevOrigins: ["192.168.1.10", "192.168.1.11", "192.168.1.12", "192.168.1.7", "localhost"],
   async rewrites() {
     return [
       {
