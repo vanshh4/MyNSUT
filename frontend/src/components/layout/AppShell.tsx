@@ -9,7 +9,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden bg-background text-text-main">
       <Sidebar open={open} onClose={() => setOpen(false)} />
-      <main className="flex-1 lg:ml-[352px] h-screen overflow-y-auto px-4 md:px-[64px] py-8 md:py-12 relative">
+      <main className="flex-1 lg:ml-[352px] h-screen overflow-y-auto px-6 md:px-8 lg:pl-8 lg:pr-24 py-8 md:py-12 relative">
         <Navbar onMenuClick={() => setOpen(true)} />
         <div className="mx-auto max-w-[1280px]">{children}</div>
       </main>
