@@ -7,7 +7,7 @@ export const springs = {
 
   // For very snappy layout transitions
   snappy: { type: "spring", bounce: 0, duration: 0.25 },
-};
+} as const;
 
 export const animations = {
   tapScale: {
