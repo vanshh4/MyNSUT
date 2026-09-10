@@ -45,6 +45,7 @@ export interface ClassTaskResponse {
   taskType: ClassTaskType;
   url: string | null;
   dueDate: IsoDateString | null;
+  completions?: ClassTaskCompletionSummary[];
   createdAt: IsoDateString;
   updatedAt: IsoDateString;
 }

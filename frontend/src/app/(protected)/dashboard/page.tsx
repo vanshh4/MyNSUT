@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CalendarDays, Megaphone, ArrowUpRight } from "lucide-react";
+import { CalendarDays, Megaphone, ArrowUpRight, ListTodo } from "lucide-react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { useAuth } from "@/hooks/useAuth";
 import { noticesApi } from "@/lib/api/notices";
-import type { UnifiedFeedItem } from "@mynsut/shared";
+import { classTasksApi } from "@/lib/api/classTasks";
+import type { UnifiedFeedItem, ClassTaskResponse } from "@mynsut/shared";
 import Link from "next/link";
 import { animations, springs } from "@/lib/utils/animations";
 
@@ -15,6 +16,7 @@ export default function Dashboard() {
   const [noticesCount, setNoticesCount] = useState(0);
   const [eventsCount, setEventsCount] = useState(0);
   const [classAnnouncements, setClassAnnouncements] = useState<UnifiedFeedItem[]>([]);
+  const [pendingTasks, setPendingTasks] = useState<ClassTaskResponse[]>([]);
 
   useEffect(() => {
     Promise.all([
@@ -28,7 +30,17 @@ export default function Dashboard() {
       setEventsCount(events.length);
       setClassAnnouncements(classRes.items);
     }).catch(console.error);
-  }, []);
+
+    const classId = user?.student?.classId;
+    if (classId) {
+      classTasksApi.list(classId).then((res) => {
+        if (res.success) {
+          const uncompleted = res.data.filter((t: ClassTaskResponse) => !t.completions?.length);
+          setPendingTasks(uncompleted);
+        }
+      }).catch(console.error);
+    }
+  }, [user?.student?.classId]);
 
   const firstName = user?.fullName?.split(' ')[0] || "Student";
   // e.g. "MONDAY · 13 JULY"
@@ -73,33 +85,84 @@ export default function Dashboard() {
         </p>
       </motion.section>
 
-      {/* Summary Cards */}
-      <motion.section 
-        initial="hidden"
-        animate="show"
-        variants={animations.staggerChildren}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
-      >
-        {stats.map(({ title, value, icon: Icon, bgColor, textColor, href }) => (
-          <Link href={href} key={title} className="block cursor-pointer">
-            <motion.div
-              variants={animations.fadeInUp}
-              whileHover={{ scale: 1.02, y: -4 }}
-              whileTap={animations.tapScaleCard}
-            >
-              <GlassCard className="p-8 flex items-center justify-between rounded-[24px] group shadow-sm transition-shadow hover:shadow-md" hoverEffect={false}>
-                <div>
-                  <h2 className="font-headline text-5xl tracking-[-0.02em] leading-[1.05] text-primary dark:text-primary-container font-bold mb-1">{value}</h2>
-                  <p className="font-body text-base text-text-muted font-medium">{title}</p>
-                </div>
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${bgColor} ${textColor}`}>
-                  <Icon className="w-8 h-8" />
-                </div>
-              </GlassCard>
-            </motion.div>
-          </Link>
-        ))}
-      </motion.section>
+      {/* Summary Cards and Impending Tasks */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+        {/* Left Column (Stats) */}
+        <motion.section 
+          initial="hidden"
+          animate="show"
+          variants={animations.staggerChildren}
+          className="flex flex-col gap-6 lg:col-span-1"
+        >
+          {stats.map(({ title, value, icon: Icon, bgColor, textColor, href }) => (
+            <Link href={href} key={title} className="block cursor-pointer flex-1">
+              <motion.div
+                variants={animations.fadeInUp}
+                whileHover={{ scale: 1.02, y: -4 }}
+                whileTap={animations.tapScaleCard}
+                className="h-full"
+              >
+                <GlassCard className="p-8 flex items-center justify-between rounded-[24px] group shadow-sm transition-shadow hover:shadow-md h-full" hoverEffect={false}>
+                  <div>
+                    <h2 className="font-headline text-5xl tracking-[-0.02em] leading-[1.05] text-primary dark:text-primary-container font-bold mb-1">{value}</h2>
+                    <p className="font-body text-base text-text-muted font-medium">{title}</p>
+                  </div>
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${bgColor} ${textColor}`}>
+                    <Icon className="w-8 h-8" />
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </Link>
+          ))}
+        </motion.section>
+
+        {/* Right Column (Impending Tasks) */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...springs.default, delay: 0.2 }}
+          className="lg:col-span-2 h-full"
+        >
+          <GlassCard className="p-8 rounded-[24px] h-full flex flex-col" hoverEffect={false}>
+            <div className="flex items-center justify-between mb-8 shrink-0">
+              <div>
+                <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">YOUR CLASS</p>
+                <h2 className="font-headline text-2xl text-primary dark:text-primary-container font-semibold">Impending tasks</h2>
+              </div>
+              <Link href="/class" className="flex items-center gap-2 px-6 py-3 bg-primary/5 hover:bg-primary/10 dark:bg-[#e3e2e2]/20 dark:hover:bg-[#e3e2e2]/40 text-primary dark:text-[#ffffff] rounded-full transition-colors font-label text-sm font-medium">
+                View all
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="space-y-0 divide-y divide-glass-border flex-1 overflow-y-auto pr-2 min-h-0" style={{ maxHeight: "300px" }}>
+              {pendingTasks.length > 0 ? (
+                pendingTasks.map((task) => (
+                  <Link href={`/class#task-${task.id}`} key={task.id} className="block">
+                    <motion.div 
+                      whileHover={{ x: 6 }}
+                      whileTap={animations.tapScaleCard}
+                      transition={springs.default}
+                      className="py-6 flex items-start gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors -mx-4 px-4 rounded-xl cursor-pointer"
+                    >
+                      <div className="w-10 h-10 rounded-full bg-orange-100/50 dark:bg-[#e2e2e2]/20 text-orange-600 dark:text-[#ffffff] flex items-center justify-center shrink-0 mt-1">
+                        <ListTodo className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-body text-lg text-text-main font-medium mb-1">{task.title}</h3>
+                        <p className="font-body text-sm text-text-muted">Due: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No due date'}</p>
+                      </div>
+                      <div className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0"></div>
+                    </motion.div>
+                  </Link>
+                ))
+              ) : (
+                <div className="py-6 text-text-muted font-body">No pending tasks. You're all caught up!</div>
+              )}
+            </div>
+          </GlassCard>
+        </motion.section>
+      </div>
 
       {/* Recent Announcements */}
       <motion.section 

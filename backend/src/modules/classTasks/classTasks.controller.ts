@@ -5,7 +5,8 @@ import { apiResponse } from "../../utils/apiResponse.js";
 
 export async function getTasks(req: Request, res: Response) {
   const { classId } = req.params;
-  const data = await tasksService.getClassTasks(classId as string);
+  const userId = req.auth!.userId;
+  const data = await tasksService.getClassTasks(classId as string, userId);
   res.status(200).json(apiResponse(data));
 }
 

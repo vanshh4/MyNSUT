@@ -3,7 +3,7 @@ import type { ClassTaskPayload } from "@mynsut/shared/types/class";
 
 export type TaskDbClient = PrismaClient | Prisma.TransactionClient;
 
-export function findTasksByClassId(client: TaskDbClient, classId: string) {
+export function findTasksByClassId(client: TaskDbClient, classId: string, studentId: string) {
   return client.classTask.findMany({
     where: { classId },
     include: {
@@ -14,6 +14,9 @@ export function findTasksByClassId(client: TaskDbClient, classId: string) {
           email: true,
           profileImageUrl: true,
         },
+      },
+      completions: {
+        where: { studentId },
       },
     },
     orderBy: { createdAt: "desc" },

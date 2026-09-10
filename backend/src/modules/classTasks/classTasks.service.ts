@@ -6,8 +6,11 @@ import { logAction } from "../audit/audit.service.js";
 import { AUDIT_ACTIONS } from "../../constants/audit.js";
 import type { ClassTaskPayload } from "@mynsut/shared/types/class";
 
-export async function getClassTasks(classId: string) {
-  return tasksRepository.findTasksByClassId(prisma, classId);
+export async function getClassTasks(classId: string, userId: string) {
+  const student = await findStudentByUserId(prisma, userId);
+  if (!student) throw classTaskErrors.studentNotFound();
+  
+  return tasksRepository.findTasksByClassId(prisma, classId, student.id);
 }
 
 export async function createTask(classId: string, authorId: string, data: ClassTaskPayload, actorIp?: string) {
