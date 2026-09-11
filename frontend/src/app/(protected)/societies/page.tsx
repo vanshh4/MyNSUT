@@ -40,8 +40,7 @@ export default function SocietiesDiscoveryPage() {
         eyebrow="Campus communities"
         title="Societies & clubs"
         description="Find the communities that make campus feel like yours."
-      />
-      
+      />      
       <div className="relative mb-10 max-w-xl group">
         <Search className="absolute top-1/2 left-4 w-5 h-5 -translate-y-1/2 text-text-muted group-focus-within:text-primary transition-colors" />
         <input 
