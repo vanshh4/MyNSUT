@@ -86,13 +86,13 @@ export default function Dashboard() {
       </motion.section>
 
       {/* Summary Cards and Impending Tasks */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Left Column (Stats) */}
         <motion.section 
           initial="hidden"
           animate="show"
           variants={animations.staggerChildren}
-          className="flex flex-col gap-6 lg:col-span-1"
+          className="flex flex-col gap-4 lg:col-span-1 h-full"
         >
           {stats.map(({ title, value, icon: Icon, bgColor, textColor, href }) => (
             <Link href={href} key={title} className="block cursor-pointer flex-1">
@@ -102,7 +102,7 @@ export default function Dashboard() {
                 whileTap={animations.tapScaleCard}
                 className="h-full"
               >
-                <GlassCard className="p-8 flex items-center justify-between rounded-[24px] group shadow-sm transition-shadow hover:shadow-md h-full" hoverEffect={false}>
+                <GlassCard className="p-6 flex items-center justify-between rounded-[24px] group shadow-sm transition-shadow hover:shadow-md h-full" hoverEffect={false}>
                   <div>
                     <h2 className="font-headline text-5xl tracking-[-0.02em] leading-[1.05] text-primary dark:text-primary-container font-bold mb-1">{value}</h2>
                     <p className="font-body text-base text-text-muted font-medium">{title}</p>
@@ -123,10 +123,9 @@ export default function Dashboard() {
           transition={{ ...springs.default, delay: 0.2 }}
           className="lg:col-span-2 h-full"
         >
-          <GlassCard className="p-8 rounded-[24px] h-full flex flex-col" hoverEffect={false}>
-            <div className="flex items-center justify-between mb-8 shrink-0">
+          <GlassCard className="p-6 rounded-[24px] h-full flex flex-col" hoverEffect={false}>
+            <div className="flex items-center justify-between mb-4 shrink-0">
               <div>
-                <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">YOUR CLASS</p>
                 <h2 className="font-headline text-2xl text-primary dark:text-primary-container font-semibold">Impending tasks</h2>
               </div>
               <Link href="/class" className="flex items-center gap-2 px-6 py-3 bg-primary/5 hover:bg-primary/10 dark:bg-[#e3e2e2]/20 dark:hover:bg-[#e3e2e2]/40 text-primary dark:text-[#ffffff] rounded-full transition-colors font-label text-sm font-medium">
@@ -135,7 +134,7 @@ export default function Dashboard() {
               </Link>
             </div>
 
-            <div className="space-y-0 divide-y divide-glass-border flex-1 overflow-y-auto pr-2 min-h-0" style={{ maxHeight: "300px" }}>
+            <div className="space-y-0 divide-y divide-glass-border flex-1 overflow-y-auto overflow-x-hidden pr-4 min-h-0">
               {pendingTasks.length > 0 ? (
                 pendingTasks.map((task) => (
                   <Link href={`/class#task-${task.id}`} key={task.id} className="block">
@@ -143,7 +142,7 @@ export default function Dashboard() {
                       whileHover={{ x: 6 }}
                       whileTap={animations.tapScaleCard}
                       transition={springs.default}
-                      className="py-6 flex items-start gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors -mx-4 px-4 rounded-xl cursor-pointer"
+                      className="py-4 flex items-start gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors -mx-4 px-4 rounded-xl cursor-pointer"
                     >
                       <div className="w-10 h-10 rounded-full bg-orange-100/50 dark:bg-[#e2e2e2]/20 text-orange-600 dark:text-[#ffffff] flex items-center justify-center shrink-0 mt-1">
                         <ListTodo className="w-5 h-5" />
@@ -173,7 +172,6 @@ export default function Dashboard() {
         <GlassCard className="p-8 rounded-[24px]" hoverEffect={false}>
           <div className="flex items-center justify-between mb-8">
             <div>
-              <p className="font-label text-xs text-primary uppercase tracking-wider mb-2 font-semibold">YOUR CLASS</p>
               <h2 className="font-headline text-2xl text-primary dark:text-primary-container font-semibold">Recent announcements</h2>
             </div>
             <Link href="/notices?type=CLASS" className="flex items-center gap-2 px-6 py-3 bg-primary/5 hover:bg-primary/10 dark:bg-[#e3e2e2]/20 dark:hover:bg-[#e3e2e2]/40 text-primary dark:text-[#ffffff] rounded-full transition-colors font-label text-sm font-medium">
