@@ -10,7 +10,7 @@ export function RollNumberPreview({ value }: { value: ParsedRollNumber | null })
   if (!value) {
     return (
       <div className="rounded-xl border border-dashed border-glass-border p-5 text-sm font-body text-text-muted bg-primary/5 dark:bg-white/5 shadow-inner">
-        Enter a supported UMS roll number to preview the derived student details.
+        Enter your NSUT roll number.
       </div>
     );
   }
