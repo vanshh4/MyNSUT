@@ -1,14 +1,14 @@
 import * as React from "react";
 import Link from "next/link";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { 
-  GraduationCap, 
-  Megaphone, 
-  CalendarDays, 
-  Users, 
-  User, 
-  BarChart2, 
-  ListTodo 
+import {
+  GraduationCap,
+  Megaphone,
+  CalendarDays,
+  Users,
+  User,
+  BarChart2,
+  ListTodo
 } from "lucide-react";
 
 const features = [
@@ -23,17 +23,17 @@ const features = [
 export default function Page() {
   return (
     <main className="flex min-h-screen w-full flex-col font-body antialiased selection:bg-primary-container selection:text-on-primary-container bg-background text-text-main transition-colors duration-300 relative overflow-hidden">
-      
+
       {/* Decorative background gradient similar to bg-gradient-base */}
       <div className="absolute inset-0 bg-gradient-to-br from-background to-surface-container-high dark:from-background dark:to-surface/10 pointer-events-none -z-10" />
 
       {/* Main Content Layout */}
-      <div className="flex-grow flex items-center justify-center p-4 md:p-[64px] w-full max-w-[1280px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 w-full items-center">
-          
+      <div className="flex-grow flex items-center justify-center p-4 md:p-[64px] xl:px-[80px] w-full max-w-[1280px] xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 w-full items-center">
+
           {/* Left Section: Branding & Hero */}
-          <div className="flex flex-col gap-12 relative z-10">
-            
+          <div className="flex flex-col gap-10 xl:gap-12 relative z-10">
+
             {/* Brand Header */}
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-surface flex items-center justify-center shadow-sm border border-glass-border">
@@ -47,15 +47,15 @@ export default function Page() {
 
             {/* Hero Copy */}
             <div className="space-y-4">
-              <h2 className="m-0 font-headline text-5xl font-semibold leading-[1.125] text-primary-container lg:text-[64px] lg:leading-[72px]">
+              <h2 className="m-0 font-headline text-5xl font-semibold leading-[1.125] text-primary-container lg:text-[56px] xl:text-[64px] xl:leading-[72px]">
                 Your Campus,<br />
                 <span className="text-text-muted">moving with you.</span>
               </h2>
               <br />
-              <p className="m-0 max-w-md font-body text-lg text-text-muted">
+              <p className="m-0 max-w-md xl:max-w-lg font-body text-lg text-text-muted">
                 MyNSUT is the official student platform for NSUTians to stay informed, connected and empowered. All in one place.
               </p>
-              <Link href="/auth/signin" className="mt-4 inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary rounded-xl font-label text-sm font-medium hover:opacity-90 transition-opacity shadow-sm w-fit">
+              <Link href="/auth/signin" className="mt-4 inline-flex items-center justify-center px-6 py-3 xl:px-8 xl:py-4 xl:text-base bg-primary text-on-primary rounded-xl font-label text-sm font-medium hover:opacity-90 transition-opacity shadow-sm w-fit">
                 Get Started
               </Link>
             </div>
@@ -63,8 +63,8 @@ export default function Page() {
           </div>
 
           {/* Right Section: Feature Grid */}
-          <div className="relative z-10 flex justify-center lg:justify-end">
-            <GlassCard className="grid w-full grid-cols-1 md:grid-cols-2 gap-6 p-10 rounded-xl" hoverEffect={false}>
+          <div className="relative z-10 flex justify-center lg:justify-end w-full">
+            <GlassCard className="grid w-full grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 xl:gap-8 p-6 lg:p-8 xl:p-10 rounded-xl" hoverEffect={false}>
               {features.map((feature, i) => {
                 const Icon = feature.icon;
                 return (
@@ -85,7 +85,7 @@ export default function Page() {
               })}
             </GlassCard>
           </div>
-          
+
         </div>
       </div>
 

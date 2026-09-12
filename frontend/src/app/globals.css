@@ -69,7 +69,19 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 80%; /* Scales all rem-based Tailwind utilities down by 20% globally */
+  font-size: 80%; /* Base scale */
+}
+
+@media (min-width: 1280px) {
+  html {
+    font-size: 100%; /* Scale up for 14-15 inch laptops to comfortably fill the screen */
+  }
+}
+
+@media (min-width: 1536px) {
+  html {
+    font-size: 110%; /* Scale up proportionally for larger screens */
+  }
 }
 
 body {

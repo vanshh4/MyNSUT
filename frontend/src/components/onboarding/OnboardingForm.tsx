@@ -116,7 +116,7 @@ export function OnboardingForm() {
 
       <button
         className="w-full bg-surface border border-glass-border rounded-xl py-3 px-6 flex items-center justify-center gap-3 hover:bg-glass-surface dark:hover:bg-white/10 transition-colors duration-300 active:scale-95 shadow-sm disabled:opacity-50 mt-4"
-        type="submit" 
+        type="submit"
         disabled={isSubmitting}
       >
         {isSubmitting ? <LoaderCircle className="w-5 h-5 text-primary animate-spin" /> : null}

@@ -38,7 +38,7 @@ export default function OnboardingPage() {
           <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mb-6 shadow-md mx-auto">
             <GraduationCap className="w-8 h-8 text-on-primary" />
           </div>
-          
+
           <h1 className="font-headline text-3xl md:text-4xl font-semibold text-primary text-center mb-2">Make MyNSUT yours.</h1>
           <p className="font-body text-sm text-text-muted text-center mb-8">
             Enter your UMS roll number and choose your section. Your admission year, branch and
