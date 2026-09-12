@@ -42,15 +42,22 @@ export default function SocietyProfilePage() {
 
       if (user) {
         // check if member by fetching members and finding user
-        const memRes = await societyMembershipsApi.getMembers(societyId);
-        const members = (memRes as any).data || [];
-        const memberRecord = members.find((m: any) => m.userId === user.id);
-        if (memberRecord) {
-          setIsMember(true);
-          const hasManage = memberRecord.positions?.some((p: any) => 
-            p.position.canManageMembers || p.position.canAssignPOR
-          );
-          setCanManage(hasManage);
+        try {
+          const memRes = await societyMembershipsApi.getMembers(societyId);
+          const members = (memRes as any).data || [];
+          const memberRecord = members.find((m: any) => m.userId === user.id);
+          if (memberRecord) {
+            setIsMember(true);
+            const hasManage = memberRecord.positions?.some((p: any) => 
+              p.position.canManageMembers || p.position.canAssignPOR
+            );
+            setCanManage(hasManage);
+          }
+        } catch (error) {
+          // The API returns 403 if the user is not a member. 
+          // We intentionally catch and swallow this error so it doesn't trigger the Next.js error overlay.
+          setIsMember(false);
+          setCanManage(false);
         }
       }
     } catch (error) {
