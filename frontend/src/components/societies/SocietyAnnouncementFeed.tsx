@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { societiesApi } from "../../lib/api/societies";
+import { noticesApi } from "../../lib/api/notices";
 import { toast } from "react-hot-toast";
+import { Trash2 } from "lucide-react";
 
 interface SocietyAnnouncementFeedProps {
   societyId: string;
@@ -54,6 +56,18 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
       toast.error(err.response?.data?.message || "Failed to post announcement");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this announcement?")) {
+      try {
+        await noticesApi.deleteNotice(id);
+        toast.success("Announcement deleted successfully");
+        setAnnouncements((prev) => prev.filter((a) => a.id !== id));
+      } catch (err: any) {
+        toast.error("Failed to delete announcement");
+      }
     }
   };
 
@@ -122,20 +136,33 @@ export function SocietyAnnouncementFeed({ societyId, canPost, publicOnly }: Soci
         {announcements.map((a) => (
           <div key={a.id} className="overflow-hidden rounded-xl bg-glass-surface shadow-sm ring-1 ring-glass-border">
             <div className="border-b border-glass-border px-6 py-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-headline text-lg font-bold text-text-main">{a.title}</h4>
-                <div className="flex items-center gap-2">
-                  {a.isPublic && (
-                    <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                      Public
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-headline text-lg font-bold text-text-main">{a.title}</h4>
+                  <div className="flex items-center gap-2 mt-1">
+                    {a.isPublic && (
+                      <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                        Public
+                      </span>
+                    )}
+                    <span className="text-sm text-text-muted">
+                      {new Date(a.createdAt).toLocaleDateString()}
                     </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  {canPost && (
+                    <button
+                      onClick={() => handleDelete(a.id)}
+                      className="text-red-500 hover:text-red-600 transition-colors p-2 -mr-2 -mt-2 rounded-lg hover:bg-red-500/10"
+                      title="Delete Announcement"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
                   )}
-                  <span className="text-sm text-text-muted">
-                    {new Date(a.createdAt).toLocaleDateString()}
-                  </span>
+                  <p className="text-sm text-text-muted">By {a.author?.fullName}</p>
                 </div>
               </div>
-              <p className="mt-1 text-sm text-text-muted">By {a.author?.fullName}</p>
             </div>
             <div className="px-6 py-4">
               <p className="whitespace-pre-wrap text-text-main">{a.content}</p>

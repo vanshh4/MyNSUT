@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, Megaphone, CheckSquare, Users, Plus } from "lucide-react";
+import { Loader2, Megaphone, CheckSquare, Users, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/common/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { CreateAnnouncementDialog } from "@/components/class/CreateAnnouncementDialog";
 import { CreateTaskDialog } from "@/components/class/CreateTaskDialog";
-import { getClassDetails, getClassAnnouncements, getClassTasks, getClassMembers } from "@/lib/api/classes";
+import { getClassDetails, getClassAnnouncements, getClassTasks, getClassMembers, deleteAnnouncement, deleteTask } from "@/lib/api/classes";
 import type { ClassDetailsResponse, ClassAnnouncementResponse, ClassTaskResponse, ClassMember } from "@mynsut/shared/types/class";
 
 type Tab = "announcements" | "tasks" | "members";
@@ -142,7 +142,27 @@ export default function ClassWorkspacePage() {
             ) : (
               announcements.map((a) => (
                 <GlassCard key={a.id} id={a.id} className="p-6">
-                  <h3 className="text-xl font-bold font-headline mb-2">{a.title}</h3>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold font-headline">{a.title}</h3>
+                    {classDetails.isCr && (
+                      <button
+                        onClick={async () => {
+                          if (window.confirm("Are you sure you want to delete this announcement?")) {
+                            try {
+                              await deleteAnnouncement(classId as string, a.id);
+                              setAnnouncements((prev) => prev.filter((item) => item.id !== a.id));
+                            } catch (err: any) {
+                              alert(err.message || "Failed to delete announcement");
+                            }
+                          }
+                        }}
+                        className="text-red-500 hover:text-red-600 transition-colors p-2 -mr-2 -mt-2 rounded-lg hover:bg-red-500/10"
+                        title="Delete Announcement"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
                   <p className="whitespace-pre-wrap font-body text-text-main">{a.content}</p>
                   {a.attachments && a.attachments.length > 0 && (
                     <div className="mt-4 pt-4 border-t border-glass-border">
@@ -174,10 +194,30 @@ export default function ClassWorkspacePage() {
               tasks.map((t) => (
                 <GlassCard key={t.id} className="p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold font-headline">{t.title}</h3>
-                    <span className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-wide">
-                      {t.taskType.replace("_", " ")}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-bold font-headline">{t.title}</h3>
+                      <span className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-wide">
+                        {t.taskType.replace("_", " ")}
+                      </span>
+                    </div>
+                    {classDetails.isCr && (
+                      <button
+                        onClick={async () => {
+                          if (window.confirm("Are you sure you want to delete this task?")) {
+                            try {
+                              await deleteTask(classId as string, t.id);
+                              setTasks((prev) => prev.filter((item) => item.id !== t.id));
+                            } catch (err: any) {
+                              alert(err.message || "Failed to delete task");
+                            }
+                          }
+                        }}
+                        className="text-red-500 hover:text-red-600 transition-colors p-2 -mr-2 -mt-2 rounded-lg hover:bg-red-500/10"
+                        title="Delete Task"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    )}
                   </div>
                   <p className="text-sm text-text-muted mb-4">
                     {t.dueDate && ` Due: ${new Date(t.dueDate).toLocaleDateString()}`}
