@@ -18,6 +18,7 @@ import { societyPositionsRouter } from "../modules/societyPositions/societyPosit
 import { societyAnnouncementsRouter } from "../modules/societyAnnouncements/societyAnnouncements.routes.js";
 import eventsRoutes from "../modules/events/events.routes.js";
 import registrationsRoutes from "../modules/eventRegistrations/registrations.routes.js";
+import { resourcesRoutes } from "../modules/resources/resources.routes.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { healthRouter } from "./health.routes.js";
 
@@ -41,6 +42,7 @@ apiRouter.get("/", (_request, response) => {
         notices: "/notices",
         societies: "/societies",
         events: "/events",
+        resources: "/resources",
       },
       "Welcome to the MyNSUT API"
     )
@@ -66,3 +68,4 @@ apiRouter.use("/societies/:societyId/positions", societyPositionsRouter);
 apiRouter.use("/societies/:societyId/announcements", societyAnnouncementsRouter);
 apiRouter.use("/events", eventsRoutes);
 apiRouter.use("/events/:eventId/registrations", registrationsRoutes);
+apiRouter.use("/resources", resourcesRoutes);

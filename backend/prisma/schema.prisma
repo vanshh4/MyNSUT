@@ -64,6 +64,7 @@ model User {
   authoredNotices       Notice[]            @relation("NoticeCreator")
   societyMemberships    SocietyMembership[]
   authoredSocietyAnnouncements SocietyAnnouncement[] @relation("SocietyAnnouncementAuthor")
+  authoredResources            Resource[]            @relation("ResourceCreator")
 
   @@index([status])
   @@map("users")
@@ -649,3 +650,44 @@ model EventInterest {
   @@map("event_interests")
 }
 
+enum ResourceType {
+  PYQ
+  NOTE
+  BOOK
+  REFERENCE
+  OTHER
+}
+
+enum ResourceStatus {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
+model Resource {
+  id            String         @id @default(uuid()) @db.Uuid
+  title         String         @db.VarChar(255)
+  description   String?        @db.Text
+  resourceType  ResourceType   @map("resource_type")
+  subjectCode   String         @map("subject_code") @db.VarChar(20)
+  subjectName   String         @map("subject_name") @db.VarChar(120)
+  department    String?        @db.VarChar(50)
+  semester      Int?
+  academicYear  Int?           @map("academic_year")
+  examSession   String?        @map("exam_session") @db.VarChar(50)
+  fileUrl       String         @map("file_url") @db.Text
+  source        String?        @db.VarChar(255)
+  status        ResourceStatus @default(DRAFT)
+  creatorId     String         @map("creator_id") @db.Uuid
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  creator       User           @relation("ResourceCreator", fields: [creatorId], references: [id], onDelete: Restrict)
+
+  @@index([subjectCode])
+  @@index([resourceType])
+  @@index([status])
+  @@index([semester])
+  @@index([academicYear])
+  @@map("resources")
+}

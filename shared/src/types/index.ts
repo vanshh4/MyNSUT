@@ -19,6 +19,8 @@ export { ROLES, ROLE_DEFINITIONS, ROLE_CODES, isRoleCode } from "../constants/ro
 export type { RoleCode } from "../constants/roles.js";
 export { EVENT_STATUS, REGISTRATION_STATUS } from "../constants/events.js";
 export type { EventStatus, RegistrationStatus } from "../constants/events.js";
+export { RESOURCE_TYPES, RESOURCE_STATUS, RESOURCE_TYPE_CODES, RESOURCE_STATUS_CODES, isResourceTypeCode, isResourceStatusCode } from "../constants/resources.js";
+export type { ResourceTypeCode, ResourceStatusCode } from "../constants/resources.js";
 
 export type { ApiErrorDetails, ApiErrorResponse, ApiResponse, ApiSuccessResponse,
   HealthData, JsonObject, JsonPrimitive, JsonValue, PaginatedResponse,
@@ -77,3 +79,20 @@ export {
   AddMemberPayloadSchema,
   CreateAnnouncementPayloadSchema
 } from "./society.js";
+
+export type {
+  Resource,
+  CreateResourcePayload,
+  UpdateResourcePayload,
+  ResourceFilters,
+  PaginatedResourceResponse
+} from "./resources.js";
+
+export {
+  ResourceTypeSchema,
+  ResourceStatusSchema,
+  ResourceSchema,
+  CreateResourcePayloadSchema,
+  UpdateResourcePayloadSchema,
+  ResourceFiltersSchema
+} from "./resources.js";
