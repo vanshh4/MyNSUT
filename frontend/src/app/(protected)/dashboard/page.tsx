@@ -125,10 +125,10 @@ export default function Dashboard() {
         >
           <GlassCard className="p-6 rounded-[24px] h-full flex flex-col" hoverEffect={false}>
             <div className="flex items-center justify-between mb-4 shrink-0">
-              <div>
+              <Link href="/class?tab=tasks" className="hover:opacity-80 transition-opacity">
                 <h2 className="font-headline text-2xl text-primary dark:text-primary-container font-semibold">Impending tasks</h2>
-              </div>
-              <Link href="/class" className="flex items-center gap-2 px-6 py-3 bg-primary/5 hover:bg-primary/10 dark:bg-[#e3e2e2]/20 dark:hover:bg-[#e3e2e2]/40 text-primary dark:text-[#ffffff] rounded-full transition-colors font-label text-sm font-medium">
+              </Link>
+              <Link href="/class?tab=tasks" className="flex items-center gap-2 px-6 py-3 bg-primary/5 hover:bg-primary/10 dark:bg-[#e3e2e2]/20 dark:hover:bg-[#e3e2e2]/40 text-primary dark:text-[#ffffff] rounded-full transition-colors font-label text-sm font-medium">
                 View all
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
@@ -137,7 +137,7 @@ export default function Dashboard() {
             <div className="space-y-0 divide-y divide-glass-border flex-1 overflow-y-auto overflow-x-hidden pr-4 min-h-0">
               {pendingTasks.length > 0 ? (
                 pendingTasks.map((task) => (
-                  <Link href={`/class#task-${task.id}`} key={task.id} className="block">
+                  <Link href={`/class?tab=tasks#task-${task.id}`} key={task.id} className="block">
                     <motion.div 
                       whileHover={{ x: 6 }}
                       whileTap={animations.tapScaleCard}

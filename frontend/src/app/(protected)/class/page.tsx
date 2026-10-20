@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Megaphone, CheckSquare, Users, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/common/PageHeader";
@@ -13,9 +14,34 @@ import type { ClassDetailsResponse, ClassAnnouncementResponse, ClassTaskResponse
 
 type Tab = "announcements" | "tasks" | "members";
 
-export default function ClassWorkspacePage() {
+function ClassWorkspaceContent() {
   const { user, isLoading: authLoading } = useAuth();
-  const [activeTab, setActiveTab] = useState<Tab>("announcements");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const tabParam = searchParams.get("tab") as Tab | null;
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    if (tabParam === "tasks" || tabParam === "members" || tabParam === "announcements") {
+      return tabParam;
+    }
+    return "announcements";
+  });
+
+  const handleTabChange = (newTab: Tab) => {
+    setActiveTab(newTab);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", newTab);
+    router.replace(`/class?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    const currentTab = searchParams.get("tab") as Tab | null;
+    if (currentTab === "tasks" || currentTab === "members" || currentTab === "announcements") {
+      setActiveTab(currentTab);
+    } else if (typeof window !== "undefined" && window.location.hash.startsWith("#task-")) {
+      setActiveTab("tasks");
+    }
+  }, [searchParams]);
   
   const [isAnnouncementDialogOpen, setIsAnnouncementDialogOpen] = useState(false);
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
@@ -62,6 +88,18 @@ export default function ClassWorkspacePage() {
     loadData();
   }, [classId, authLoading]);
 
+  useEffect(() => {
+    if (!isLoading && typeof window !== "undefined" && window.location.hash) {
+      const id = window.location.hash.slice(1);
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  }, [isLoading, activeTab]);
+
   if (authLoading || isLoading) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
@@ -90,21 +128,21 @@ export default function ClassWorkspacePage() {
         <div className="flex gap-4">
           <GlassButton
             variant={activeTab === "announcements" ? "primary" : "secondary"}
-            onClick={() => setActiveTab("announcements")}
+            onClick={() => handleTabChange("announcements")}
             className="rounded-full flex items-center gap-2 whitespace-nowrap"
           >
             <Megaphone className="w-4 h-4" /> Announcements
           </GlassButton>
           <GlassButton
             variant={activeTab === "tasks" ? "primary" : "secondary"}
-            onClick={() => setActiveTab("tasks")}
+            onClick={() => handleTabChange("tasks")}
             className="rounded-full flex items-center gap-2 whitespace-nowrap"
           >
             <CheckSquare className="w-4 h-4" /> Tasks
           </GlassButton>
           <GlassButton
             variant={activeTab === "members" ? "primary" : "secondary"}
-            onClick={() => setActiveTab("members")}
+            onClick={() => handleTabChange("members")}
             className="rounded-full flex items-center gap-2 whitespace-nowrap"
           >
             <Users className="w-4 h-4" /> Members
@@ -192,7 +230,7 @@ export default function ClassWorkspacePage() {
               </GlassCard>
             ) : (
               tasks.map((t) => (
-                <GlassCard key={t.id} className="p-6">
+                <GlassCard key={t.id} id={`task-${t.id}`} className="p-6">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <h3 className="text-xl font-bold font-headline">{t.title}</h3>
@@ -286,5 +324,19 @@ export default function ClassWorkspacePage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function ClassWorkspacePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-[50vh] items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <ClassWorkspaceContent />
+    </Suspense>
   );
 }

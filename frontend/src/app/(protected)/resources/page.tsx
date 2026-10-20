@@ -21,15 +21,16 @@ function ResourcesList() {
   const fetchResources = async () => {
     setIsLoading(true);
     try {
-      const res = await resourcesApi.getResources({
-        query: searchParams.get("query") || undefined,
-        resourceType: searchParams.get("resourceType") as any || undefined,
-        semester: searchParams.get("semester") ? Number(searchParams.get("semester")) : undefined,
-        status: "PUBLISHED", // Only show published resources
-        limit: 50,
-      });
+        const res = await resourcesApi.getResources({
+          page: 1,
+          limit: 50,
+          query: searchParams.get("query") || undefined,
+          resourceType: searchParams.get("resourceType") as any || undefined,
+          semester: searchParams.get("semester") ? Number(searchParams.get("semester")) : undefined,
+          status: "PUBLISHED", // Only show published resources
+        });
       setData(res);
-      setItems(res.data);
+      setItems([...res.data]);
       setError(null);
     } catch (err: any) {
       setError(err.message || "Failed to load resources");
