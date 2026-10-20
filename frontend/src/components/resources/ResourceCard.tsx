@@ -32,7 +32,7 @@ const getResourceIcon = (type: string) => {
 export function ResourceCard({ resource }: ResourceCardProps) {
   return (
     <motion.div
-      variants={animations.item}
+      variants={animations.fadeInUp}
       className="group relative flex flex-col rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm transition-all hover:shadow-md"
     >
       <div className="flex items-center gap-4 mb-4">
