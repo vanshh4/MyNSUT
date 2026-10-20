@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { PageHeader } from "@/components/common/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { ShieldCheck, Users, UserCog, ScrollText, Building2, ArrowRight } from "lucide-react";
+import { ShieldCheck, Users, UserCog, ScrollText, Building2, BookOpen, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const modules = [
@@ -12,6 +12,7 @@ const modules = [
   { i: ScrollText, t: "Audit Logs", x: "Search immutable audit logs for administrative actions.", href: "/admin/audit-logs", disabled: true },
   { i: Building2, t: "Societies", x: "Create and manage societies and their leadership.", href: "/admin/societies" },
   { i: Users, t: "Classes", x: "Manage branches, sections, and assign Class Representatives.", href: "/admin/classes" },
+  { i: BookOpen, t: "Resources", x: "Publish PYQs, notes, and academic resources to the student directory.", href: "/admin/resources" },
 ];
 
 export default function Page() {
