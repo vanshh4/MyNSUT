@@ -43,7 +43,8 @@ export const resourcesService = {
       where.OR = [
         { title: { contains: filters.query, mode: "insensitive" } },
         { description: { contains: filters.query, mode: "insensitive" } },
-        { subjectName: { contains: filters.query, mode: "insensitive" } }
+        { subjectName: { contains: filters.query, mode: "insensitive" } },
+        { subjectCode: { contains: filters.query, mode: "insensitive" } },
       ];
     }
 
