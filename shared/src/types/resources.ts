@@ -43,7 +43,7 @@ export const ResourceFiltersSchema = z.object({
   examSession: z.string().optional(),
   status: ResourceStatusSchema.optional(),
   page: z.coerce.number().min(1).optional().default(1),
-  limit: z.coerce.number().min(1).max(100).optional().default(20),
+  limit: z.coerce.number().min(1).max(1000).optional().default(20),
 });
 
 export type Resource = z.infer<typeof ResourceSchema>;
