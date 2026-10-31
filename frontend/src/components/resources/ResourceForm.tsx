@@ -5,6 +5,8 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { RESOURCE_TYPES, RESOURCE_STATUS } from "@mynsut/shared";
 import { resourcesApi } from "@/lib/api/resources";
 import type { CreateResourcePayload } from "@mynsut/shared";
+import { toast } from "react-hot-toast";
+import { CheckCircle2 } from "lucide-react";
 
 interface ResourceFormProps {
   onSuccess?: () => void;
@@ -21,6 +23,7 @@ const RESOURCE_TYPE_OPTIONS = [
 export function ResourceForm({ onSuccess }: ResourceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Required fields
   const [subjectName, setSubjectName] = useState("");
@@ -38,6 +41,7 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMessage(null);
 
     if (!subjectName.trim() || !subjectCode.trim() || !fileUrl.trim()) {
       setError("Subject name, subject code, and Google Drive link are required.");
@@ -74,6 +78,10 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
       setAcademicYear("");
       setDepartment("");
 
+      const msg = "Resource successfully published and is now live in the directory!";
+      setSuccessMessage(msg);
+      toast.success(msg);
+
       onSuccess?.();
     } catch (err: any) {
       setError(err.message || "Failed to create resource. Please try again.");
@@ -90,6 +98,13 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {successMessage && (
+        <div className="flex items-center gap-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 px-4 py-3.5 text-sm font-medium text-green-700 dark:text-green-400 animate-in fade-in duration-300">
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600 dark:text-green-400" />
+          {successMessage}
+        </div>
+      )}
+
       {error && (
         <div className="rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-400">
           {error}
@@ -239,11 +254,19 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
         </div>
       </div>
 
-      <div className="pt-2 flex justify-end">
+      <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {successMessage ? (
+          <p className="text-sm font-medium text-green-600 dark:text-green-400 flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            Resource published successfully!
+          </p>
+        ) : (
+          <div />
+        )}
         <GlassButton
           type="submit"
           variant="primary"
-          className="rounded-full px-8"
+          className="rounded-full px-8 ml-auto"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Publishing…" : "Publish Resource"}
