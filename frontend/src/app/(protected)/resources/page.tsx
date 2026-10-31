@@ -21,9 +21,10 @@ function groupBySubject(resources: Resource[]): Array<{
 }> {
   const map = new Map<string, { subjectCode: string; subjectName: string; resources: Resource[] }>();
   for (const r of resources) {
-    const key = r.subjectCode;
+    const key = (r.subjectCode || "").trim().toUpperCase();
+    if (!key) continue;
     if (!map.has(key)) {
-      map.set(key, { subjectCode: r.subjectCode, subjectName: r.subjectName, resources: [] });
+      map.set(key, { subjectCode: key, subjectName: r.subjectName || key, resources: [] });
     }
     map.get(key)!.resources.push(r);
   }
@@ -44,49 +45,53 @@ function ResourcesList() {
   const [draftQuery, setDraftQuery] = useState(searchParams.get("query") || "");
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const currentQuery = searchParams.get("query") || "";
 
   const fetchAllResources = useCallback(async (q: string) => {
     setIsLoading(true);
+    setError(null);
     try {
       // Fetch all published resources matching the query so we can group client-side
       const res = await resourcesApi.getResources({
         page: 1,
-        limit: 500, // generous ceiling — grouping is done client-side
-        query: q || undefined,
+        limit: 1000, // generous ceiling — grouping is done client-side
+        query: q?.trim() || undefined,
         status: "PUBLISHED",
       });
-      const grouped = groupBySubject([...res.data]);
+      const items: Resource[] = Array.isArray(res)
+        ? res
+        : Array.isArray(res?.data)
+        ? res.data
+        : [];
+      const grouped = groupBySubject(items);
       setAllSubjects(grouped);
       setTotalSubjects(grouped.length);
       setVisibleCount(PAGE_SIZE);
-      setError(null);
     } catch (err: any) {
-      setError(err.message || "Failed to load resources.");
+      setError(err?.message || "Failed to load resources.");
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Re-fetch when URL query changes
+  // Re-fetch when URL query changes (e.g. browser navigation or external link)
   useEffect(() => {
     const q = searchParams.get("query") || "";
     setQuery(q);
     setDraftQuery(q);
     fetchAllResources(q);
-  }, [currentQuery, fetchAllResources]);
+  }, [searchParams, fetchAllResources]);
 
   const handleSearch = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (draftQuery.trim()) {
-      params.set("query", draftQuery.trim());
-    } else {
-      params.delete("query");
+    const trimmed = draftQuery.trim();
+    setQuery(trimmed);
+    const params = new URLSearchParams();
+    if (trimmed) {
+      params.set("query", trimmed);
     }
-    router.push(`?${params.toString()}`);
+    const qs = params.toString();
+    router.push(qs ? `/resources?${qs}` : "/resources");
+    fetchAllResources(trimmed);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -95,7 +100,9 @@ function ResourcesList() {
 
   const handleClear = () => {
     setDraftQuery("");
+    setQuery("");
     router.push("/resources");
+    fetchAllResources("");
   };
 
   const visibleSubjects = allSubjects.slice(0, visibleCount);
