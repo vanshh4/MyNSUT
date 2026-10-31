@@ -8,7 +8,7 @@ import type {
 } from "@mynsut/shared";
 
 export const resourcesApi = {
-  getResources: async (filters: ResourceFilters): Promise<PaginatedResourceResponse> => {
+  getResources: async (filters: ResourceFilters): Promise<{ data: Resource[]; meta?: any }> => {
     const params = new URLSearchParams();
     if (filters.page) params.set("page", filters.page.toString());
     if (filters.limit) params.set("limit", filters.limit.toString());
@@ -23,8 +23,12 @@ export const resourcesApi = {
 
     const queryString = params.toString();
     const url = queryString ? `/resources?${queryString}` : `/resources`;
-    const response = await apiClient<PaginatedResourceResponse>(url, { method: "GET" });
-    return (response as any).data;
+    const response = await apiClient<Resource[]>(url, { method: "GET" });
+    const raw = response as any;
+    return {
+      data: Array.isArray(raw?.data) ? raw.data : [],
+      meta: raw?.meta,
+    };
   },
 
   getResourceById: async (id: string): Promise<Resource> => {
