@@ -1,7 +1,7 @@
 import { resourcesRepository } from "./resources.repository.js";
 import { ResourceNotFoundError, ResourceArchivedError } from "./resources.errors.js";
 import type { CreateResourcePayload, UpdateResourcePayload, ResourceFilters } from "@mynsut/shared";
-import type { Prisma } from "@prisma/client";
+import type { Prisma, ResourceType, ResourceStatus } from "@prisma/client";
 
 export const resourcesService = {
   async getResources(filters: ResourceFilters) {
@@ -12,11 +12,11 @@ export const resourcesService = {
     const where: Prisma.ResourceWhereInput = {};
 
     if (filters.status) {
-      where.status = filters.status;
+      where.status = filters.status as ResourceStatus;
     }
     
     if (filters.resourceType) {
-      where.resourceType = filters.resourceType;
+      where.resourceType = filters.resourceType as ResourceType;
     }
 
     if (filters.subjectCode) {
@@ -75,6 +75,8 @@ export const resourcesService = {
   async createResource(creatorId: string, data: CreateResourcePayload) {
     return resourcesRepository.create({
       ...data,
+      resourceType: data.resourceType as ResourceType,
+      status: data.status as ResourceStatus,
       creatorId,
     });
   },
@@ -88,7 +90,21 @@ export const resourcesService = {
       throw new ResourceArchivedError();
     }
     
-    return resourcesRepository.update(id, data);
+    const updateData: Prisma.ResourceUpdateInput = {};
+    if (data.title !== undefined) updateData.title = data.title;
+    if (data.description !== undefined) updateData.description = data.description;
+    if (data.resourceType !== undefined) updateData.resourceType = data.resourceType as ResourceType;
+    if (data.subjectCode !== undefined) updateData.subjectCode = data.subjectCode;
+    if (data.subjectName !== undefined) updateData.subjectName = data.subjectName;
+    if (data.department !== undefined) updateData.department = data.department;
+    if (data.semester !== undefined) updateData.semester = data.semester;
+    if (data.academicYear !== undefined) updateData.academicYear = data.academicYear;
+    if (data.examSession !== undefined) updateData.examSession = data.examSession;
+    if (data.fileUrl !== undefined) updateData.fileUrl = data.fileUrl;
+    if (data.source !== undefined) updateData.source = data.source;
+    if (data.status !== undefined) updateData.status = data.status as ResourceStatus;
+
+    return resourcesRepository.update(id, updateData);
   },
 
   async deleteResource(id: string) {

@@ -24,8 +24,8 @@ export const resourcesRepository = {
   async findMany(where: Prisma.ResourceWhereInput, skip?: number, take?: number) {
     return prisma.resource.findMany({
       where,
-      skip,
-      take,
+      ...(skip !== undefined ? { skip } : {}),
+      ...(take !== undefined ? { take } : {}),
       orderBy: { createdAt: "desc" },
     });
   },
