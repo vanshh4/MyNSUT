@@ -93,7 +93,7 @@ export default function Page() {
       <footer className="w-full py-2 flex justify-center items-center gap-[24px] bg-transparent">
         <div className="flex flex-col md:flex-row items-center gap-4 opacity-80 hover:opacity-100 transition-opacity">
           <p className="m-0 text-center font-label text-xs text-text-muted">
-            © 2025 MyNSUT
+            © 2026 MyNSUT
           </p>
         </div>
       </footer>
