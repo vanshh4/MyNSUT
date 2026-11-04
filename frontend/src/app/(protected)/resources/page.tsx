@@ -132,7 +132,7 @@ function ResourcesList() {
           </div>
           <button
             onClick={handleSearch}
-            className="rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white hover:bg-primary/90 transition-colors shadow-sm"
+            className="rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-on-primary hover:opacity-90 transition-all shadow-sm"
           >
             Search
           </button>
@@ -175,7 +175,7 @@ function ResourcesList() {
           {query && (
             <button
               onClick={handleClear}
-              className="mt-4 text-sm font-medium text-primary hover:opacity-80 transition-opacity"
+              className="mt-4 text-sm font-medium text-primary dark:text-blue-300 hover:opacity-80 transition-opacity"
             >
               Clear search
             </button>
