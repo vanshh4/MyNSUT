@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { RESOURCE_TYPES, RESOURCE_STATUS } from "@mynsut/shared";
 import { resourcesApi } from "@/lib/api/resources";
-import type { CreateResourcePayload } from "@mynsut/shared";
+import type { Resource, CreateResourcePayload, UpdateResourcePayload } from "@mynsut/shared";
 import { toast } from "react-hot-toast";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Trash2 } from "lucide-react";
 
 interface ResourceFormProps {
-  onSuccess?: () => void;
+  initialData?: Resource | null;
+  onSuccess?: (resource?: Resource) => void;
+  onCancel?: () => void;
+  onDelete?: (id: string) => void;
 }
 
 const RESOURCE_TYPE_OPTIONS = [
@@ -20,8 +23,16 @@ const RESOURCE_TYPE_OPTIONS = [
   { value: RESOURCE_TYPES.OTHER, label: "Other" },
 ];
 
-export function ResourceForm({ onSuccess }: ResourceFormProps) {
+const RESOURCE_STATUS_OPTIONS = [
+  { value: RESOURCE_STATUS.PUBLISHED, label: "Published (Visible to all students)" },
+  { value: RESOURCE_STATUS.DRAFT, label: "Draft (Hidden from students)" },
+  { value: RESOURCE_STATUS.ARCHIVED, label: "Archived (Hidden from directory)" },
+];
+
+export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: ResourceFormProps) {
+  const isEdit = Boolean(initialData?.id);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -37,6 +48,37 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
   const [semester, setSemester] = useState<string>("");
   const [academicYear, setAcademicYear] = useState<string>("");
   const [department, setDepartment] = useState<string>("");
+  const [status, setStatus] = useState<string>(RESOURCE_STATUS.PUBLISHED);
+
+  useEffect(() => {
+    if (initialData) {
+      setSubjectName(initialData.subjectName || "");
+      setSubjectCode(initialData.subjectCode || "");
+      setFileUrl(initialData.fileUrl || "");
+      setTitle(initialData.title || "");
+      setDescription(initialData.description || "");
+      setResourceType(initialData.resourceType || "");
+      setSemester(initialData.semester ? String(initialData.semester) : "");
+      setAcademicYear(initialData.academicYear ? String(initialData.academicYear) : "");
+      setDepartment(initialData.department || "");
+      setStatus(initialData.status || RESOURCE_STATUS.PUBLISHED);
+      setError(null);
+      setSuccessMessage(null);
+    } else {
+      setSubjectName("");
+      setSubjectCode("");
+      setFileUrl("");
+      setTitle("");
+      setDescription("");
+      setResourceType("");
+      setSemester("");
+      setAcademicYear("");
+      setDepartment("");
+      setStatus(RESOURCE_STATUS.PUBLISHED);
+      setError(null);
+      setSuccessMessage(null);
+    }
+  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,43 +92,83 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
 
     setIsSubmitting(true);
     try {
-      const payload: CreateResourcePayload = {
-        subjectName: subjectName.trim(),
-        subjectCode: subjectCode.trim().toUpperCase(),
-        fileUrl: fileUrl.trim(),
-        title: title.trim() || subjectName.trim(), // auto-fill from subjectName if empty
-        description: description.trim() || null,
-        resourceType: (resourceType || RESOURCE_TYPES.OTHER) as any,
-        semester: semester ? Number(semester) : null,
-        academicYear: academicYear ? Number(academicYear) : null,
-        department: department.trim() || null,
-        examSession: null,
-        source: null,
-        status: RESOURCE_STATUS.PUBLISHED as any,
-      };
+      if (isEdit && initialData?.id) {
+        const payload: UpdateResourcePayload = {
+          subjectName: subjectName.trim(),
+          subjectCode: subjectCode.trim().toUpperCase(),
+          fileUrl: fileUrl.trim(),
+          title: title.trim() || subjectName.trim(),
+          description: description.trim() || null,
+          resourceType: (resourceType || RESOURCE_TYPES.OTHER) as any,
+          semester: semester ? Number(semester) : null,
+          academicYear: academicYear ? Number(academicYear) : null,
+          department: department.trim() || null,
+          status: (status || RESOURCE_STATUS.PUBLISHED) as any,
+        };
 
-      await resourcesApi.createResource(payload);
+        const updated = await resourcesApi.updateResource(initialData.id, payload);
+        const msg = "Resource successfully updated and changes are live!";
+        setSuccessMessage(msg);
+        toast.success(msg);
+        onSuccess?.(updated);
+      } else {
+        const payload: CreateResourcePayload = {
+          subjectName: subjectName.trim(),
+          subjectCode: subjectCode.trim().toUpperCase(),
+          fileUrl: fileUrl.trim(),
+          title: title.trim() || subjectName.trim(),
+          description: description.trim() || null,
+          resourceType: (resourceType || RESOURCE_TYPES.OTHER) as any,
+          semester: semester ? Number(semester) : null,
+          academicYear: academicYear ? Number(academicYear) : null,
+          department: department.trim() || null,
+          examSession: null,
+          source: null,
+          status: (status || RESOURCE_STATUS.PUBLISHED) as any,
+        };
 
-      // Reset form
-      setSubjectName("");
-      setSubjectCode("");
-      setFileUrl("");
-      setTitle("");
-      setDescription("");
-      setResourceType("");
-      setSemester("");
-      setAcademicYear("");
-      setDepartment("");
+        const created = await resourcesApi.createResource(payload);
 
-      const msg = "Resource successfully published and is now live in the directory!";
-      setSuccessMessage(msg);
-      toast.success(msg);
+        // Reset form on create
+        setSubjectName("");
+        setSubjectCode("");
+        setFileUrl("");
+        setTitle("");
+        setDescription("");
+        setResourceType("");
+        setSemester("");
+        setAcademicYear("");
+        setDepartment("");
+        setStatus(RESOURCE_STATUS.PUBLISHED);
 
-      onSuccess?.();
+        const msg = "Resource successfully published and is now live in the directory!";
+        setSuccessMessage(msg);
+        toast.success(msg);
+        onSuccess?.(created);
+      }
     } catch (err: any) {
-      setError(err.message || "Failed to create resource. Please try again.");
+      setError(err.message || `Failed to ${isEdit ? "update" : "create"} resource. Please try again.`);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!initialData?.id || !onDelete) return;
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${initialData.title || initialData.subjectName}"? This action cannot be undone.`
+    );
+    if (!confirmDelete) return;
+
+    setIsDeleting(true);
+    try {
+      await resourcesApi.deleteResource(initialData.id);
+      toast.success("Resource deleted successfully");
+      onDelete(initialData.id);
+    } catch (err: any) {
+      setError(err.message || "Failed to delete resource. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -168,7 +250,7 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
       {/* Optional fields section */}
       <div>
         <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">
-          Optional Information
+          Optional Information & Categorization
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="sm:col-span-2">
@@ -251,26 +333,76 @@ export function ResourceForm({ onSuccess }: ResourceFormProps) {
               className={inputClass}
             />
           </div>
+
+          {/* Publication Status (available in both or edit mode) */}
+          <div className="sm:col-span-2">
+            <label className={labelClass}>Publication Status</label>
+            <select
+              value={status}
+              onChange={e => setStatus(e.target.value)}
+              className={selectClass}
+            >
+              {RESOURCE_STATUS_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-xs text-text-muted">
+              Published resources are instantly discoverable by students in the directory.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {successMessage ? (
-          <p className="text-sm font-medium text-green-600 dark:text-green-400 flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
-            Resource published successfully!
-          </p>
-        ) : (
-          <div />
-        )}
-        <GlassButton
-          type="submit"
-          variant="primary"
-          className="rounded-full px-8 ml-auto"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Publishing…" : "Publish Resource"}
-        </GlassButton>
+      <div className="pt-4 border-t border-glass-border flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          {onDelete && isEdit && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={isDeleting || isSubmitting}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              {isDeleting ? "Deleting…" : "Delete Resource"}
+            </button>
+          )}
+          {onCancel && (
+            <GlassButton
+              type="button"
+              variant="secondary"
+              className="rounded-full px-6 text-xs"
+              onClick={onCancel}
+              disabled={isSubmitting || isDeleting}
+            >
+              Cancel
+            </GlassButton>
+          )}
+        </div>
+
+        <div className="flex items-center gap-4 ml-auto">
+          {successMessage && (
+            <p className="text-xs font-medium text-green-600 dark:text-green-400 flex items-center gap-1.5 hidden sm:flex">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              {isEdit ? "Changes saved!" : "Published successfully!"}
+            </p>
+          )}
+          <GlassButton
+            type="submit"
+            variant="primary"
+            className="rounded-full px-8 text-on-primary"
+            disabled={isSubmitting || isDeleting}
+          >
+            {isSubmitting
+              ? isEdit
+                ? "Saving changes…"
+                : "Publishing…"
+              : isEdit
+              ? "Save Changes"
+              : "Publish Resource"}
+          </GlassButton>
+        </div>
       </div>
     </form>
   );
