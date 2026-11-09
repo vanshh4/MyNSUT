@@ -9,95 +9,153 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js"
+      "import": "./dist/types/index.js",
+      "default": "./dist/types/index.js"
     },
     "./constants/auth": {
       "types": "./dist/constants/auth.d.ts",
-      "import": "./dist/constants/auth.js"
+      "import": "./dist/constants/auth.js",
+      "default": "./dist/constants/auth.js"
     },
     "./constants/branches": {
       "types": "./dist/constants/branches.d.ts",
-      "import": "./dist/constants/branches.js"
+      "import": "./dist/constants/branches.js",
+      "default": "./dist/constants/branches.js"
     },
     "./constants/roles": {
       "types": "./dist/constants/roles.d.ts",
-      "import": "./dist/constants/roles.js"
+      "import": "./dist/constants/roles.js",
+      "default": "./dist/constants/roles.js"
     },
     "./constants/permissions": {
       "types": "./dist/constants/permissions.d.ts",
-      "import": "./dist/constants/permissions.js"
-    },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js"
-    },
-    "./types/api": {
-      "types": "./dist/types/api.d.ts",
-      "import": "./dist/types/api.js"
-    },
-    "./types/auth": {
-      "types": "./dist/types/auth.d.ts",
-      "import": "./dist/types/auth.js"
-    },
-    "./types/student": {
-      "types": "./dist/types/student.d.ts",
-      "import": "./dist/types/student.js"
+      "import": "./dist/constants/permissions.js",
+      "default": "./dist/constants/permissions.js"
     },
     "./constants/scopes": {
       "types": "./dist/constants/scopes.d.ts",
-      "import": "./dist/constants/scopes.js"
-    },
-    "./types/rbac": {
-      "types": "./dist/types/rbac.d.ts",
-      "import": "./dist/types/rbac.js"
-    },
-    "./types/audit": {
-      "types": "./dist/types/audit.d.ts",
-      "import": "./dist/types/audit.js"
+      "import": "./dist/constants/scopes.js",
+      "default": "./dist/constants/scopes.js"
     },
     "./constants/profileVisibility": {
       "types": "./dist/constants/profileVisibility.d.ts",
-      "import": "./dist/constants/profileVisibility.js"
+      "import": "./dist/constants/profileVisibility.js",
+      "default": "./dist/constants/profileVisibility.js"
     },
     "./constants/academic": {
       "types": "./dist/constants/academic.d.ts",
-      "import": "./dist/constants/academic.js"
-    },
-    "./types/privacy": {
-      "types": "./dist/types/privacy.d.ts",
-      "import": "./dist/types/privacy.js"
-    },
-    "./types/academic": {
-      "types": "./dist/types/academic.d.ts",
-      "import": "./dist/types/academic.js"
-    },
-    "./types/profile": {
-      "types": "./dist/types/profile.d.ts",
-      "import": "./dist/types/profile.js"
+      "import": "./dist/constants/academic.js",
+      "default": "./dist/constants/academic.js"
     },
     "./constants/class": {
       "types": "./dist/constants/class.d.ts",
-      "import": "./dist/constants/class.js"
-    },
-    "./types/class": {
-      "types": "./dist/types/class.d.ts",
-      "import": "./dist/types/class.js"
+      "import": "./dist/constants/class.js",
+      "default": "./dist/constants/class.js"
     },
     "./constants/notices": {
       "types": "./dist/constants/notices.d.ts",
-      "import": "./dist/constants/notices.js"
+      "import": "./dist/constants/notices.js",
+      "default": "./dist/constants/notices.js"
     },
-    "./types/notice": {
-      "types": "./dist/types/notice.d.ts",
-      "import": "./dist/types/notice.js"
+    "./constants/societies": {
+      "types": "./dist/constants/societies.d.ts",
+      "import": "./dist/constants/societies.js",
+      "default": "./dist/constants/societies.js"
     },
     "./constants/events": {
       "types": "./dist/constants/events.d.ts",
-      "import": "./dist/constants/events.js"
+      "import": "./dist/constants/events.js",
+      "default": "./dist/constants/events.js"
+    },
+    "./constants/resources": {
+      "types": "./dist/constants/resources.d.ts",
+      "import": "./dist/constants/resources.js",
+      "default": "./dist/constants/resources.js"
+    },
+    "./constants/*": {
+      "types": "./dist/constants/*.d.ts",
+      "import": "./dist/constants/*.js",
+      "default": "./dist/constants/*.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js",
+      "default": "./dist/types/index.js"
+    },
+    "./types/api": {
+      "types": "./dist/types/api.d.ts",
+      "import": "./dist/types/api.js",
+      "default": "./dist/types/api.js"
+    },
+    "./types/auth": {
+      "types": "./dist/types/auth.d.ts",
+      "import": "./dist/types/auth.js",
+      "default": "./dist/types/auth.js"
+    },
+    "./types/student": {
+      "types": "./dist/types/student.d.ts",
+      "import": "./dist/types/student.js",
+      "default": "./dist/types/student.js"
+    },
+    "./types/rbac": {
+      "types": "./dist/types/rbac.d.ts",
+      "import": "./dist/types/rbac.js",
+      "default": "./dist/types/rbac.js"
+    },
+    "./types/audit": {
+      "types": "./dist/types/audit.d.ts",
+      "import": "./dist/types/audit.js",
+      "default": "./dist/types/audit.js"
+    },
+    "./types/privacy": {
+      "types": "./dist/types/privacy.d.ts",
+      "import": "./dist/types/privacy.js",
+      "default": "./dist/types/privacy.js"
+    },
+    "./types/academic": {
+      "types": "./dist/types/academic.d.ts",
+      "import": "./dist/types/academic.js",
+      "default": "./dist/types/academic.js"
+    },
+    "./types/profile": {
+      "types": "./dist/types/profile.d.ts",
+      "import": "./dist/types/profile.js",
+      "default": "./dist/types/profile.js"
+    },
+    "./types/class": {
+      "types": "./dist/types/class.d.ts",
+      "import": "./dist/types/class.js",
+      "default": "./dist/types/class.js"
+    },
+    "./types/notice": {
+      "types": "./dist/types/notice.d.ts",
+      "import": "./dist/types/notice.js",
+      "default": "./dist/types/notice.js"
+    },
+    "./types/society": {
+      "types": "./dist/types/society.d.ts",
+      "import": "./dist/types/society.js",
+      "default": "./dist/types/society.js"
     },
     "./types/event": {
       "types": "./dist/types/event.d.ts",
-      "import": "./dist/types/event.js"
+      "import": "./dist/types/event.js",
+      "default": "./dist/types/event.js"
+    },
+    "./types/resource": {
+      "types": "./dist/types/resource.d.ts",
+      "import": "./dist/types/resource.js",
+      "default": "./dist/types/resource.js"
+    },
+    "./types/resources": {
+      "types": "./dist/types/resources.d.ts",
+      "import": "./dist/types/resources.js",
+      "default": "./dist/types/resources.js"
+    },
+    "./types/*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/types/*.js",
+      "default": "./dist/types/*.js"
     }
   },
   "files": [
@@ -107,7 +165,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+    "clean": "node -e \"const fs=require('node:fs');fs.rmSync('dist',{recursive:true,force:true});fs.rmSync('tsconfig.tsbuildinfo',{force:true});\""
   },
   "engines": {
     "node": ">=20.9.0"
