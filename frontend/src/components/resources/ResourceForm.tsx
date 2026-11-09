@@ -174,9 +174,9 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
 
   const labelClass = "block text-sm font-medium text-text-main mb-1.5";
   const inputClass =
-    "block w-full rounded-xl border border-glass-border bg-white/50 dark:bg-slate-800/50 px-3.5 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors";
+    "block w-full rounded-xl border border-glass-border bg-glass-surface px-3.5 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors";
   const selectClass =
-    "block w-full rounded-xl border border-glass-border bg-white/50 dark:bg-slate-800/50 px-3.5 py-2.5 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors";
+    "block w-full rounded-xl border border-glass-border bg-glass-surface px-3.5 py-2.5 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">

@@ -238,14 +238,14 @@ export default function AdminResourcesHubPage() {
         {/* Quick search input */}
         <div className="relative mb-4">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-            <Search className="h-4 w-4 text-slate-400" />
+            <Search className="h-4 w-4 text-text-muted" />
           </div>
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Quick search recent resources by subject or title…"
-            className="block w-full rounded-xl border border-glass-border bg-white dark:bg-slate-800/50 py-2.5 pl-10 pr-4 text-xs text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+            className="block w-full rounded-xl border border-glass-border bg-glass-surface backdrop-blur-xl py-2.5 pl-10 pr-4 text-xs text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
           />
         </div>
 
@@ -258,17 +258,17 @@ export default function AdminResourcesHubPage() {
             {search ? "No matching resources found." : "No resources uploaded yet."}
           </div>
         ) : (
-          <div className="divide-y divide-glass-border border border-glass-border rounded-xl bg-white/40 dark:bg-slate-900/40 overflow-hidden">
+          <div className="divide-y divide-glass-border border border-glass-border rounded-xl bg-glass-surface backdrop-blur-xl overflow-hidden">
             {filteredResources.slice(0, 6).map(resource => {
               const typeConf = TYPE_CONFIG[resource.resourceType] || TYPE_CONFIG.OTHER;
               return (
                 <div
                   key={resource.id}
-                  className="p-3.5 flex items-center justify-between gap-3 hover:bg-white/60 dark:hover:bg-slate-800/50 transition-colors"
+                  className="p-3.5 flex items-center justify-between gap-3 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 text-text-main">
                         {resource.subjectCode}
                       </span>
                       <span
@@ -300,13 +300,13 @@ export default function AdminResourcesHubPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Open Google Drive URL"
-                      className="p-1.5 text-text-muted hover:text-text-main rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+                      className="p-1.5 text-text-muted hover:text-text-main rounded-lg hover:bg-black/5 dark:hover:bg-white/5"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                     <Link
                       href={`/admin/resources/edit?id=${resource.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl border border-glass-border bg-white/70 dark:bg-slate-800 text-text-main hover:bg-primary hover:text-on-primary transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl border border-glass-border bg-glass-surface text-text-main hover:bg-primary hover:text-on-primary transition-colors"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                       Edit

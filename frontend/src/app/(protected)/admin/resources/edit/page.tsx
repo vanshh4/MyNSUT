@@ -243,19 +243,19 @@ function EditResourceContent() {
         <div className="flex flex-col gap-3.5 mb-5">
           <div className="relative w-full">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-              <Search className="h-4 w-4 text-slate-400" />
+              <Search className="h-4 w-4 text-text-muted" />
             </div>
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search by subject name, code (e.g. CS301), or title…"
-              className="block w-full rounded-xl border border-glass-border bg-white dark:bg-slate-800/50 py-2.5 pl-10 pr-9 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+              className="block w-full rounded-xl border border-glass-border bg-glass-surface backdrop-blur-xl py-2.5 pl-10 pr-9 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-text-muted hover:text-text-main"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -273,14 +273,14 @@ function EditResourceContent() {
                   "text-xs px-2.5 py-1 rounded-lg font-medium transition-colors border",
                   typeFilter === t
                     ? "bg-primary text-on-primary border-primary"
-                    : "border-glass-border bg-white/50 dark:bg-slate-800/50 text-text-muted hover:text-text-main"
+                    : "border-glass-border bg-black/5 dark:bg-white/5 text-text-muted hover:text-text-main"
                 )}
               >
                 {t === "ALL" ? "All Types" : t}
               </button>
             ))}
 
-            <div className="h-3 w-px bg-slate-300 dark:bg-slate-700 mx-1 hidden sm:block" />
+            <div className="h-3 w-px bg-glass-border mx-1 hidden sm:block" />
 
             <span className="text-xs font-medium text-text-muted mr-1">Status:</span>
             {["ALL", ...Object.values(RESOURCE_STATUS)].map(s => (
@@ -291,7 +291,7 @@ function EditResourceContent() {
                   "text-xs px-2.5 py-1 rounded-lg font-medium transition-colors border",
                   statusFilter === s
                     ? "bg-primary text-on-primary border-primary"
-                    : "border-glass-border bg-white/50 dark:bg-slate-800/50 text-text-muted hover:text-text-main"
+                    : "border-glass-border bg-black/5 dark:bg-white/5 text-text-muted hover:text-text-main"
                 )}
               >
                 {s === "ALL" ? "All" : s.charAt(0) + s.slice(1).toLowerCase()}
@@ -301,7 +301,7 @@ function EditResourceContent() {
         </div>
 
         {/* Resources list container */}
-        <div className="border border-glass-border rounded-xl bg-white/30 dark:bg-slate-900/30 overflow-hidden">
+        <div className="border border-glass-border rounded-xl bg-glass-surface backdrop-blur-xl overflow-hidden">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12 gap-2 text-text-muted">
               <Loader2 className="w-6 h-6 animate-spin text-primary" />
@@ -330,13 +330,13 @@ function EditResourceContent() {
                     className={cn(
                       "p-3.5 sm:px-4 flex items-center justify-between gap-4 cursor-pointer transition-colors",
                       isSelected
-                        ? "bg-primary/10 dark:bg-primary/20 ring-1 ring-inset ring-primary/40"
-                        : "hover:bg-white/60 dark:hover:bg-slate-800/50"
+                        ? "bg-primary/10 dark:bg-white/10 ring-1 ring-inset ring-primary/40"
+                        : "hover:bg-black/5 dark:hover:bg-white/5"
                     )}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 text-text-main">
                           {resource.subjectCode}
                         </span>
                         <span
@@ -384,7 +384,7 @@ function EditResourceContent() {
                         rel="noopener noreferrer"
                         onClick={e => e.stopPropagation()}
                         title="Open Google Drive link in new tab"
-                        className="p-1.5 rounded-lg text-text-muted hover:text-text-main hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-1.5 rounded-lg text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </a>
@@ -394,7 +394,7 @@ function EditResourceContent() {
                           "inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors",
                           isSelected
                             ? "bg-primary text-on-primary"
-                            : "border border-glass-border bg-white/70 dark:bg-slate-800 text-text-main hover:bg-primary hover:text-on-primary"
+                            : "border border-glass-border bg-glass-surface text-text-main hover:bg-primary hover:text-on-primary"
                         )}
                       >
                         {isSelected ? (

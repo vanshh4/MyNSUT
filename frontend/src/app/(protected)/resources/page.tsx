@@ -119,7 +119,7 @@ function ResourcesList() {
         <div className="flex gap-3">
           <div className="relative flex-1">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-              <Search className="h-4 w-4 text-slate-400" />
+              <Search className="h-4 w-4 text-text-muted" />
             </div>
             <input
               type="text"
@@ -127,7 +127,7 @@ function ResourcesList() {
               onChange={e => setDraftQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Search by subject name or code…"
-              className="block w-full rounded-2xl border border-glass-border bg-white dark:bg-slate-900 py-3 pl-11 pr-4 text-sm text-text-main placeholder:text-text-muted shadow-sm ring-0 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+              className="block w-full rounded-2xl border border-glass-border bg-glass-surface backdrop-blur-xl py-3 pl-11 pr-4 text-sm text-text-main placeholder:text-text-muted shadow-sm ring-0 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
           </div>
           <button
@@ -139,7 +139,7 @@ function ResourcesList() {
           {query && (
             <button
               onClick={handleClear}
-              className="rounded-2xl border border-glass-border bg-white dark:bg-slate-900 px-4 py-3 text-sm font-medium text-text-muted hover:text-text-main transition-colors"
+              className="rounded-2xl border border-glass-border bg-glass-surface backdrop-blur-xl px-4 py-3 text-sm font-medium text-text-muted hover:text-text-main transition-colors"
             >
               Clear
             </button>
@@ -162,9 +162,9 @@ function ResourcesList() {
           {error}
         </div>
       ) : allSubjects.length === 0 ? (
-        <div className="text-center py-16 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
-            <Search className="h-6 w-6 text-slate-400" />
+        <div className="text-center py-16 rounded-2xl border-2 border-dashed border-glass-border bg-glass-surface backdrop-blur-xl">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 dark:bg-white/10 mb-4">
+            <Search className="h-6 w-6 text-text-muted" />
           </div>
           <h3 className="text-sm font-semibold text-text-main">No subjects found</h3>
           <p className="mt-1 text-sm text-text-muted">
@@ -175,7 +175,7 @@ function ResourcesList() {
           {query && (
             <button
               onClick={handleClear}
-              className="mt-4 text-sm font-medium text-primary dark:text-blue-300 hover:opacity-80 transition-opacity"
+              className="mt-4 text-sm font-medium text-primary dark:text-primary-container hover:opacity-80 transition-opacity"
             >
               Clear search
             </button>
@@ -220,14 +220,14 @@ function ResourcesList() {
             >
               <button
                 onClick={loadMore}
-                className="flex items-center gap-2 rounded-full border border-glass-border bg-white dark:bg-slate-900 px-6 py-2.5 text-sm font-semibold text-text-main hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
+                className="flex items-center gap-2 rounded-full border border-glass-border bg-glass-surface backdrop-blur-xl px-6 py-2.5 text-sm font-semibold text-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-colors shadow-sm"
               >
                 <ChevronDown className="h-4 w-4" />
                 Load {Math.min(PAGE_SIZE, remaining)} more subjects
               </button>
               <button
                 onClick={loadAll}
-                className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 dark:bg-primary/10 px-6 py-2.5 text-sm font-semibold text-primary dark:text-blue-300 hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors"
+                className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 dark:bg-white/5 px-6 py-2.5 text-sm font-semibold text-primary dark:text-white hover:bg-primary/10 dark:hover:bg-white/10 transition-colors"
               >
                 <ChevronsDown className="h-4 w-4" />
                 Show all {totalSubjects} subjects
