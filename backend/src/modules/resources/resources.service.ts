@@ -73,12 +73,22 @@ export const resourcesService = {
   },
 
   async createResource(creatorId: string, data: CreateResourcePayload) {
-    return resourcesRepository.create({
-      ...data,
+    const createData: Prisma.ResourceUncheckedCreateInput = {
+      title: data.title,
+      subjectCode: data.subjectCode,
+      subjectName: data.subjectName,
+      fileUrl: data.fileUrl,
       resourceType: data.resourceType as ResourceType,
-      status: data.status as ResourceStatus,
+      status: (data.status as ResourceStatus) || "DRAFT",
       creatorId,
-    });
+      ...(data.description !== undefined ? { description: data.description } : {}),
+      ...(data.department !== undefined ? { department: data.department } : {}),
+      ...(data.semester !== undefined ? { semester: data.semester } : {}),
+      ...(data.academicYear !== undefined ? { academicYear: data.academicYear } : {}),
+      ...(data.examSession !== undefined ? { examSession: data.examSession } : {}),
+      ...(data.source !== undefined ? { source: data.source } : {}),
+    };
+    return resourcesRepository.create(createData);
   },
 
   async updateResource(id: string, data: UpdateResourcePayload) {
