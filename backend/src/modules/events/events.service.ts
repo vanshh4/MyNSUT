@@ -2,7 +2,7 @@ import { eventsRepository } from "./events.repository.js";
 import { EventNotFoundError, EventOwnershipError } from "./events.errors.js";
 import { logAction } from "../audit/audit.service.js";
 import { prisma } from "../../db/prisma.js";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export const eventsService = {
   async getEvents(filters: { societyId?: string; status?: string; upcoming?: boolean; page: number; limit: number }) {

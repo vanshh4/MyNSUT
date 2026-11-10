@@ -68,7 +68,7 @@ export async function listUserAssignments(userId: string): Promise<UserRolesSumm
 }
 
 export async function assignRole(command: AssignRoleCommand, actorId: string, ipAddress?: string): Promise<void> {
-  const roleDef = ROLE_DEFINITIONS[command.roleCode as keyof typeof ROLE_DEFINITIONS];
+  const roleDef = ROLE_DEFINITIONS[command.roleCode];
   if (!roleDef) throw new ApiError(400, "Invalid role code");
   if (roleDef.scope !== command.scope) {
     throw invalidRoleScopeAssignment();

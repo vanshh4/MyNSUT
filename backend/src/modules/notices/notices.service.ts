@@ -1,5 +1,5 @@
 import { noticesRepository } from "./notices.repository.js";
-import { CreateNoticeRequest, UpdateNoticeRequest, NoticeFilterQuery } from "./notices.validation.js";
+import type { CreateNoticeRequest, UpdateNoticeRequest, NoticeFilterQuery } from "./notices.validation.js";
 import { NoticeNotFoundError, UntrustedUrlError, NoticeArchivedError } from "./notices.errors.js";
 import * as auditService from "../audit/audit.service.js";
 import { Prisma } from "@prisma/client";

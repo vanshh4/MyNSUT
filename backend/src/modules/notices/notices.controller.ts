@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { noticesService } from "./notices.service.js";
 import {
   createNoticeSchema,
@@ -17,7 +17,7 @@ export const noticesController = {
       const filters = Object.fromEntries(
         Object.entries(rawFilters).filter(([_, v]) => v !== undefined)
       );
-      const result = await noticesService.getUnifiedFeed(req.auth!.userId, filters as UnifiedFeedFilters);
+      const result = await noticesService.getUnifiedFeed(req.auth!.userId, filters);
       res.status(200).json(apiResponse(result, "Unified feed retrieved successfully"));
     } catch (error) {
       res.status(400).json(apiResponse(null, "Invalid query parameters"));

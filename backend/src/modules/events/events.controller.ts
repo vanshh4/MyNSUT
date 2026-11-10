@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { eventsService } from "./events.service.js";
 import { createEventSchema, updateEventSchema, eventFilterSchema } from "./events.validation.js";
 import { apiResponse, apiErrorResponse } from "../../utils/apiResponse.js";

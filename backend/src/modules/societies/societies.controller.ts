@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { societiesService } from "./societies.service.js";
 import { createSocietySchema, updateSocietySchema, societyFilterSchema } from "./societies.validation.js";
 import { apiResponse } from "../../utils/apiResponse.js";

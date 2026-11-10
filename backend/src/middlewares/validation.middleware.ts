@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { ZodSchema, ZodError } from "zod";
+import type { ZodSchema} from "zod";
+import { ZodError } from "zod";
 import { ApiError } from "../utils/apiError.js";
 
 export function validateQuery(schema: ZodSchema): RequestHandler {

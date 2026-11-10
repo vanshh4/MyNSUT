@@ -1,6 +1,6 @@
 import { prisma } from "../../db/prisma.js";
-import { CreateSocietyPayload, UpdateSocietyPayload } from "@mynsut/shared";
-import { Prisma } from "@prisma/client";
+import type { CreateSocietyPayload, UpdateSocietyPayload } from "@mynsut/shared";
+import type { Prisma } from "@prisma/client";
 
 export const societiesRepository = {
   async getSocieties(params: { category?: string | undefined; skip?: number; take?: number }) {

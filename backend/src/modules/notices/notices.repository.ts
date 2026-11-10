@@ -1,6 +1,6 @@
 import { prisma } from "../../db/prisma.js";
-import { Prisma } from "@prisma/client";
-import { NoticeFilterQuery } from "./notices.validation.js";
+import type { Prisma } from "@prisma/client";
+import type { NoticeFilterQuery } from "./notices.validation.js";
 
 export const noticesRepository = {
   async create(data: Prisma.NoticeUncheckedCreateInput) {

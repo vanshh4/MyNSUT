@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { societyMembershipsService } from "./societyMemberships.service.js";
 import { addMemberSchema } from "./societyMemberships.validation.js";
 import { apiResponse } from "../../utils/apiResponse.js";

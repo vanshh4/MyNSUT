@@ -1,5 +1,5 @@
 import { societiesRepository } from "./societies.repository.js";
-import { CreateSocietyPayload, UpdateSocietyPayload } from "@mynsut/shared";
+import type { CreateSocietyPayload, UpdateSocietyPayload } from "@mynsut/shared";
 import { SocietyNotFoundError } from "./societies.errors.js";
 import { logAction } from "../audit/audit.service.js";
 import { prisma } from "../../db/prisma.js";

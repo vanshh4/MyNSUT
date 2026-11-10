@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { registrationsService } from "./registrations.service.js";
 import { registrationsRepository } from "./registrations.repository.js";
 import { registrationExportService } from "./registrationExport.service.js";
@@ -29,7 +29,7 @@ export const registrationsController = {
         return res.status(403).json(apiResponse(null, "Only students can register for events"));
       }
 
-      const result = await registrationsService.handleRegistrationAction(req.params.eventId as string, student.id, action as any);
+      const result = await registrationsService.handleRegistrationAction(req.params.eventId as string, student.id, action);
       res.status(200).json(apiResponse(result, "Action completed successfully"));
     } catch (error: any) {
       if (error.name === "ZodError") {

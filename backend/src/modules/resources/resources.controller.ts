@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { resourcesService } from "./resources.service.js";
 import {
   createResourceSchema,

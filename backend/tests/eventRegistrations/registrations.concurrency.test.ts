@@ -5,8 +5,8 @@ import { registrationsService } from '../../src/modules/eventRegistrations/regis
 describe('Event Registrations Concurrency', () => {
   let eventId: string;
   let societyId: string;
-  let students: string[] = [];
-  let userIds: string[] = [];
+  const students: string[] = [];
+  const userIds: string[] = [];
 
   beforeAll(async () => {
     // Create a dummy society
