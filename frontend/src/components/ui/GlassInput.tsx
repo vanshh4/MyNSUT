@@ -7,7 +7,8 @@ export interface GlassInputProps extends React.InputHTMLAttributes<HTMLInputElem
 
 export const GlassInput = React.forwardRef<HTMLInputElement, GlassInputProps>(
   ({ className, label, type, id, ...props }, ref) => {
-    const inputId = id || React.useId();
+    const generatedId = React.useId();
+    const inputId = id || generatedId;
 
     return (
       <div className="flex flex-col gap-1.5 w-full">
