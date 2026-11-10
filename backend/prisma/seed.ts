@@ -1,9 +1,11 @@
 import "dotenv/config";
 
-import { PrismaClient, RoleScope } from "@prisma/client";
+import { PrismaClient, RoleScope, ResourceType, ResourceStatus } from "@prisma/client";
 
 import { PERMISSIONS } from "../src/constants/permissions.js";
 import { ROLES } from "../src/constants/roles.js";
+import { BRANCH_CODES } from "../src/constants/branches.js";
+import { SECTIONS } from "../src/constants/sections.js";
 
 const prisma = new PrismaClient();
 
@@ -140,9 +142,9 @@ async function seedRolePermissions(): Promise<void> {
   await grantPermissions(ROLES.SOCIETY_MEMBER, societyMemberPermissionCodes);
 }
 
-async function seedOptionalSuperAdmin(): Promise<void> {
+async function seedOptionalSuperAdmin(): Promise<string | undefined> {
   const email = process.env.SUPER_ADMIN_EMAIL?.trim().toLowerCase();
-  if (!email) return;
+  if (!email) return undefined;
 
   if (!email.endsWith("@nsut.ac.in")) {
     throw new Error("SUPER_ADMIN_EMAIL must use the @nsut.ac.in domain.");
@@ -165,6 +167,8 @@ async function seedOptionalSuperAdmin(): Promise<void> {
     update: {},
     create: { userId: user.id, roleId: role.id },
   });
+
+  return user.id;
 }
 
 async function seedPrivacyDefaults(): Promise<void> {
@@ -193,13 +197,153 @@ async function seedPrivacyDefaults(): Promise<void> {
   });
 }
 
+async function seedDefaultAcademicClasses(): Promise<void> {
+  const cohorts = [2022, 2023, 2024, 2025];
+  for (const year of cohorts) {
+    for (const branch of BRANCH_CODES) {
+      for (const section of SECTIONS) {
+        const name = `${branch}-${year.toString().slice(-2)}-${section}`;
+        await prisma.academicClass.upsert({
+          where: {
+            admissionYear_branchCode_section: {
+              admissionYear: year,
+              branchCode: branch,
+              section,
+            },
+          },
+          update: {},
+          create: {
+            name,
+            admissionYear: year,
+            branchCode: branch,
+            section,
+            status: "ACTIVE",
+          },
+        });
+      }
+    }
+  }
+}
+
+const DEFAULT_SUBJECTS = [
+  { code: "BAS101", name: "Applied Mathematics I", credits: 4 },
+  { code: "BAS102", name: "Applied Physics", credits: 4 },
+  { code: "BAS103", name: "Applied Chemistry", credits: 4 },
+  { code: "BAS201", name: "Applied Mathematics II", credits: 4 },
+  { code: "UCS201", name: "Data Structures & Algorithms", credits: 4 },
+  { code: "UCS202", name: "Object Oriented Programming", credits: 4 },
+  { code: "UCS301", name: "Database Management Systems", credits: 4 },
+  { code: "UCS302", name: "Operating Systems", credits: 4 },
+  { code: "UCS303", name: "Computer Networks", credits: 4 },
+  { code: "UIT201", name: "Web Technology & Applications", credits: 4 },
+  { code: "UEC201", name: "Analog Electronics", credits: 4 },
+  { code: "UEC301", name: "Digital Signal Processing", credits: 4 },
+];
+
+async function seedDefaultSubjects(): Promise<void> {
+  await Promise.all(
+    DEFAULT_SUBJECTS.map((subject) =>
+      prisma.subject.upsert({
+        where: { code: subject.code },
+        update: { name: subject.name, credits: subject.credits },
+        create: subject,
+      })
+    )
+  );
+}
+
+async function seedDefaultResources(adminUserId?: string): Promise<void> {
+  const creator = adminUserId
+    ? await prisma.user.findUnique({ where: { id: adminUserId } })
+    : await prisma.user.findFirst();
+
+  if (!creator) {
+    return;
+  }
+
+  const defaultResources = [
+    {
+      title: "Mid-Semester Examination 2024 - Applied Mathematics I",
+      description: "Official question paper with detailed solutions and marking scheme.",
+      resourceType: ResourceType.PYQ,
+      subjectCode: "BAS101",
+      subjectName: "Applied Mathematics I",
+      department: "Mathematics",
+      semester: 1,
+      academicYear: 2024,
+      examSession: "Mid-Semester",
+      fileUrl: "https://drive.google.com/file/d/1example-midsem-maths/view",
+      source: "Academic Cell",
+      status: ResourceStatus.PUBLISHED,
+      creatorId: creator.id,
+    },
+    {
+      title: "Data Structures & Algorithms - Lecture Notes",
+      description: "Comprehensive lecture slides and handwritten notes covering trees, graphs, and dynamic programming.",
+      resourceType: ResourceType.NOTE,
+      subjectCode: "UCS201",
+      subjectName: "Data Structures & Algorithms",
+      department: "Computer Science & Engineering",
+      semester: 3,
+      academicYear: 2024,
+      examSession: "Autumn",
+      fileUrl: "https://drive.google.com/file/d/1example-dsa-notes/view",
+      source: "Department of CSE",
+      status: ResourceStatus.PUBLISHED,
+      creatorId: creator.id,
+    },
+    {
+      title: "Introduction to Algorithms (CLRS) - Study Guide",
+      description: "Curated reference notes and practice problems aligned with the NSUT syllabus.",
+      resourceType: ResourceType.REFERENCE,
+      subjectCode: "UCS201",
+      subjectName: "Data Structures & Algorithms",
+      department: "Computer Science & Engineering",
+      semester: 3,
+      academicYear: 2024,
+      examSession: "Autumn",
+      fileUrl: "https://drive.google.com/file/d/1example-clrs-guide/view",
+      source: "Faculty Reference",
+      status: ResourceStatus.PUBLISHED,
+      creatorId: creator.id,
+    },
+    {
+      title: "Database Management Systems - End-Semester 2023",
+      description: "Past year end-semester exam paper covering SQL, normalization, and concurrency control.",
+      resourceType: ResourceType.PYQ,
+      subjectCode: "UCS301",
+      subjectName: "Database Management Systems",
+      department: "Computer Science & Engineering",
+      semester: 5,
+      academicYear: 2023,
+      examSession: "End-Semester",
+      fileUrl: "https://drive.google.com/file/d/1example-dbms-pyq/view",
+      source: "Academic Cell",
+      status: ResourceStatus.PUBLISHED,
+      creatorId: creator.id,
+    },
+  ];
+
+  for (const r of defaultResources) {
+    const existing = await prisma.resource.findFirst({
+      where: { title: r.title, subjectCode: r.subjectCode },
+    });
+    if (!existing) {
+      await prisma.resource.create({ data: r });
+    }
+  }
+}
+
 async function main(): Promise<void> {
   await seedPermissions();
   await seedRoles();
   await seedRolePermissions();
-  await seedOptionalSuperAdmin();
+  const superAdminId = await seedOptionalSuperAdmin();
   await seedPrivacyDefaults();
-  console.log("MyNSUT Phase 4 seed completed successfully.");
+  await seedDefaultAcademicClasses();
+  await seedDefaultSubjects();
+  await seedDefaultResources(superAdminId);
+  console.log("MyNSUT Phase 9 baseline seed completed successfully.");
 }
 
 main()
