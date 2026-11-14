@@ -11,11 +11,19 @@ export const apiEndpoints = {
   dashboard: "/dashboard",
   profile: { me: "/students/me" },
   notices: {
+    feed: "/notices/feed",
     list: "/notices",
     detail: (id: string) => `/notices/${id}`,
     create: "/notices",
     update: (id: string) => `/notices/${id}`,
     delete: (id: string) => `/notices/${id}`,
+  },
+  resources: {
+    list: "/resources",
+    detail: (id: string) => `/resources/${id}`,
+    create: "/resources",
+    update: (id: string) => `/resources/${id}`,
+    delete: (id: string) => `/resources/${id}`,
   },
   societies: {
     list: "/societies",
@@ -39,7 +47,7 @@ export const apiEndpoints = {
       state: (eventId: string) => `/events/${eventId}/registrations/state`,
       action: (eventId: string) => `/events/${eventId}/registrations/action`,
       export: (eventId: string) => `/events/${eventId}/registrations/export`,
-    }
+    },
   },
   admin: {
     users: { search: "/admin/users", detail: (id: string) => `/admin/users/${id}` },
@@ -85,5 +93,5 @@ export const apiEndpoints = {
     delete: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}`,
     completions: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}/completions`,
     complete: (classId: string, taskId: string) => `/classes/${classId}/tasks/${taskId}/complete`,
-  }
+  },
 } as const;
