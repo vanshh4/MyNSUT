@@ -5,6 +5,8 @@ export const appConfig = {
   environment: env.NODE_ENV,
   port: env.PORT,
   apiPrefix: env.API_PREFIX,
+  trustProxy: env.TRUST_PROXY,
   isProduction: env.NODE_ENV === "production",
   isDevelopment: env.NODE_ENV === "development",
+  isTest: env.NODE_ENV === "test",
 } as const;

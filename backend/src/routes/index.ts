@@ -19,6 +19,7 @@ import { societyAnnouncementsRouter } from "../modules/societyAnnouncements/soci
 import eventsRoutes from "../modules/events/events.routes.js";
 import registrationsRoutes from "../modules/eventRegistrations/registrations.routes.js";
 import { resourcesRoutes } from "../modules/resources/resources.routes.js";
+import { authLimiter } from "../middlewares/rateLimit.middleware.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { healthRouter } from "./health.routes.js";
 
@@ -50,7 +51,7 @@ apiRouter.get("/", (_request, response) => {
 });
 
 apiRouter.use("/health", healthRouter);
-apiRouter.use("/auth", authRouter);
+apiRouter.use("/auth", authLimiter, authRouter);
 apiRouter.use("/students", studentsRouter);
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/audit-logs", auditRouter);
