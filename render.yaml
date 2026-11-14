@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: mynsut-backend
+    env: node
+    plan: starter
+    region: singapore
+    buildCommand: npm run build --workspace @mynsut/shared && npm run prisma:generate --workspace backend && npm run build --workspace backend
+    preDeployCommand: npm run prisma:deploy --workspace backend && npm run db:seed --workspace backend
+    startCommand: npm run start --workspace backend
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: API_PREFIX
+        value: /api/v1
+      - key: APP_NAME
+        value: MyNSUT API
+      - key: LOG_LEVEL
+        value: combined
+      - key: TRUST_PROXY
+        value: "true"
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: FRONTEND_AUTH_SUCCESS_URL
+        sync: false
+      - key: FRONTEND_AUTH_FAILURE_URL
+        sync: false
+      - key: SESSION_COOKIE_NAME
+        value: mynsut_session
+      - key: REDIS_URL
+        sync: false
