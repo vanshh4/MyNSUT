@@ -5,15 +5,20 @@ import { noticesRoutes } from "../../src/modules/notices/notices.routes.js";
 import { noticesService } from "../../src/modules/notices/notices.service.js";
 
 // Mock middleware to simulate auth and RBAC
-vi.mock("../../src/middlewares/auth.js", () => ({
-  requireAuth: (req: any, res: any, next: any) => {
-    req.user = { id: "user1" };
+vi.mock("../../src/middlewares/authenticate.middleware.js", () => ({
+  authenticateMiddleware: (req: any, _res: any, next: any) => {
+    req.auth = {
+      userId: "user1",
+      sessionId: "session1",
+      email: "test@nsut.ac.in",
+      user: { id: "user1", email: "test@nsut.ac.in", roles: [], permissions: [] },
+    };
     next();
-  }
+  },
 }));
 
-vi.mock("../../src/middlewares/rbac.js", () => ({
-  requirePermission: () => (req: any, res: any, next: any) => next()
+vi.mock("../../src/middlewares/requirePermission.middleware.js", () => ({
+  requirePermission: () => (_req: any, _res: any, next: any) => next(),
 }));
 
 vi.mock("../../src/modules/notices/notices.service.js");
