@@ -22,7 +22,9 @@
     "format:frontend": "npm run format --workspace frontend",
     "format:backend": "npm run format --workspace backend",
     "prisma:generate": "npm run prisma:generate --workspace backend",
+    "prisma:validate": "npm run prisma:validate --workspace backend",
     "prisma:migrate": "npm run prisma:migrate --workspace backend",
+    "prisma:deploy": "npm run prisma:deploy --workspace backend",
     "prisma:studio": "npm run prisma:studio --workspace backend",
     "db:seed": "npm run db:seed --workspace backend"
   },
