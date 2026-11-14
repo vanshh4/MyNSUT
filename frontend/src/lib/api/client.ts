@@ -14,17 +14,23 @@ export class ApiClientError extends Error {
   }
 }
 
+export function isApiClientError(value: unknown): value is ApiClientError {
+  return value instanceof ApiClientError;
+}
+
 function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Record<string, unknown>;
   return candidate.success === false && typeof candidate.message === "string";
 }
 
-function buildUrl(path: string): string {
+export function buildUrl(path: string): string {
   const base = env.NEXT_PUBLIC_API_BASE_URL.replace(/\/$/, "");
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   return `${base}${normalizedPath}`;
 }
+
+export const apiUrl = buildUrl;
 
 export async function apiClient<T>(path: string, init: RequestInit = {}): Promise<ApiResponse<T>> {
   const headers = new Headers(init.headers);
