@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { apiClient, apiUrl } from "./client";
 import { apiEndpoints } from "./endpoints";
 import type { 
   EventResponse as Event, 
@@ -6,7 +6,6 @@ import type {
   EventRegistrationState,
   EVENT_STATUS,
   PaginatedResponse,
-  ApiResponse
 } from "@mynsut/shared";
 
 export interface CreateEventPayload {
@@ -54,8 +53,7 @@ export const eventsApi = {
   },
 
   exportRegistrationsUrl: (eventId: string) => {
-    // Return the URL for downloading the CSV directly
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
-    return `${baseUrl}${apiEndpoints.events.registrations.export(eventId)}`;
+    // Return the same-origin URL for downloading the CSV directly through the Next.js proxy rewrite
+    return apiUrl(apiEndpoints.events.registrations.export(eventId));
   }
 };
