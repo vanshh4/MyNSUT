@@ -47,7 +47,17 @@ export type { EventResponse, EventRegistrationState, EventFilterParams } from ".
 export { CLASS_TASK_TYPE, isClassTaskType } from "../constants/class.js";
 export type { ClassTaskType } from "../constants/class.js";
 
-export type { UrlAttachment, ClassAnnouncementPayload, ClassAnnouncementResponse, ClassTaskPayload, ClassTaskResponse, ClassTaskCompletionSummary } from "./class.js";
+export type {
+  UrlAttachment,
+  ClassAnnouncementPayload,
+  ClassAnnouncementResponse,
+  ClassTaskPayload,
+  ClassTaskResponse,
+  ClassTaskCompletionSummary,
+  ClassTaskCompletionResponse,
+  ClassMember,
+  ClassDetailsResponse,
+} from "./class.js";
 
 export { NOTICE_CATEGORY, NOTICE_STATUS, isNoticeCategory, isNoticeStatus } from "../constants/notices.js";
 export type { NoticeCategory, NoticeStatus } from "../constants/notices.js";
