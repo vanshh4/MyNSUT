@@ -7,7 +7,15 @@ const backendOrigin = (process.env.BACKEND_INTERNAL_URL ?? "http://localhost:400
 
 const nextConfig: NextConfig = {
   devIndicators: false,
-  allowedDevOrigins: ["192.168.1.10", "192.168.1.11", "192.168.1.12", "192.168.1.7","192.168.1.21", "localhost", "10.103.6.147:3000"],
+  allowedDevOrigins: [
+    "192.168.1.10",
+    "192.168.1.11",
+    "192.168.1.12",
+    "192.168.1.7",
+    "192.168.1.21",
+    "localhost",
+    "10.103.6.147:3000",
+  ],
   async rewrites() {
     return [
       {
@@ -40,6 +48,10 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
           },
         ],
       },
