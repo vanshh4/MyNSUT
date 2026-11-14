@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run build --workspace @mynsut/shared && npm run build --workspace frontend",
+  "cleanUrls": true
+}
