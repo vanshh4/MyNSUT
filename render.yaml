@@ -7,7 +7,7 @@ services:
     buildCommand: npm run build --workspace @mynsut/shared && npm run prisma:generate --workspace backend && npm run build --workspace backend
     preDeployCommand: npm run prisma:deploy --workspace backend && npm run db:seed --workspace backend
     startCommand: npm run start --workspace backend
-    healthCheckPath: /api/v1/health
+    healthCheckPath: /api/v1/health?readiness=true
     autoDeploy: true
     envVars:
       - key: NODE_ENV
@@ -23,6 +23,8 @@ services:
       - key: TRUST_PROXY
         value: "true"
       - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
         sync: false
       - key: AUTH_SECRET
         generateValue: true
@@ -41,4 +43,6 @@ services:
       - key: SESSION_COOKIE_NAME
         value: mynsut_session
       - key: REDIS_URL
+        sync: false
+      - key: SENTRY_DSN
         sync: false
