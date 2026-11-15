@@ -200,10 +200,11 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className={labelClass}>
+            <label htmlFor="subjectName" className={labelClass}>
               Subject Name <span className="text-red-500">*</span>
             </label>
             <input
+              id="subjectName"
               type="text"
               value={subjectName}
               onChange={e => setSubjectName(e.target.value)}
@@ -214,10 +215,11 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
           </div>
 
           <div>
-            <label className={labelClass}>
+            <label htmlFor="subjectCode" className={labelClass}>
               Subject Code <span className="text-red-500">*</span>
             </label>
             <input
+              id="subjectCode"
               type="text"
               value={subjectCode}
               onChange={e => setSubjectCode(e.target.value.toUpperCase())}
@@ -229,10 +231,11 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
           </div>
 
           <div className="sm:col-span-2">
-            <label className={labelClass}>
+            <label htmlFor="fileUrl" className={labelClass}>
               Google Drive Link <span className="text-red-500">*</span>
             </label>
             <input
+              id="fileUrl"
               type="url"
               value={fileUrl}
               onChange={e => setFileUrl(e.target.value)}
@@ -254,8 +257,9 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="sm:col-span-2">
-            <label className={labelClass}>Title</label>
+            <label htmlFor="resourceTitle" className={labelClass}>Title</label>
             <input
+              id="resourceTitle"
               type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}

@@ -18,7 +18,7 @@ export const noticesApi = {
     if (filters?.cursor) params.set('cursor', filters.cursor);
     
     const queryString = params.toString();
-    const url = queryString ? `/notices/feed?${queryString}` : `/notices/feed`;
+    const url = queryString ? `${apiEndpoints.notices.feed}?${queryString}` : apiEndpoints.notices.feed;
 
     const response = await apiClient<any>(url, { method: "GET" });
     return (response as any).data as PaginatedUnifiedFeedResponse;

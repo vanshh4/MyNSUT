@@ -26,7 +26,8 @@
     "prisma:migrate": "npm run prisma:migrate --workspace backend",
     "prisma:deploy": "npm run prisma:deploy --workspace backend",
     "prisma:studio": "npm run prisma:studio --workspace backend",
-    "db:seed": "npm run db:seed --workspace backend"
+    "db:seed": "npm run db:seed --workspace backend",
+    "test:e2e": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,7 @@
   },
   "homepage": "https://github.com/vanshh4/MyNSUT2#readme",
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "concurrently": "^9.0.0"
   },
   "allowScripts": {}

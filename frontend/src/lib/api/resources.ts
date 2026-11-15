@@ -1,8 +1,8 @@
 import { apiClient } from "./client";
+import { apiEndpoints } from "./endpoints";
 import type { 
   Resource, 
   ResourceFilters, 
-  PaginatedResourceResponse,
   CreateResourcePayload,
   UpdateResourcePayload
 } from "@mynsut/shared";
@@ -22,7 +22,7 @@ export const resourcesApi = {
     if (filters.status) params.set("status", filters.status);
 
     const queryString = params.toString();
-    const url = queryString ? `/resources?${queryString}` : `/resources`;
+    const url = queryString ? `${apiEndpoints.resources.list}?${queryString}` : apiEndpoints.resources.list;
     const response = await apiClient<Resource[]>(url, { method: "GET" });
     const raw = response as any;
     return {
@@ -32,12 +32,12 @@ export const resourcesApi = {
   },
 
   getResourceById: async (id: string): Promise<Resource> => {
-    const response = await apiClient<Resource>(`/resources/${id}`, { method: "GET" });
+    const response = await apiClient<Resource>(apiEndpoints.resources.detail(id), { method: "GET" });
     return (response as any).data;
   },
 
   createResource: async (data: CreateResourcePayload): Promise<Resource> => {
-    const response = await apiClient<Resource>("/resources", {
+    const response = await apiClient<Resource>(apiEndpoints.resources.create, {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -45,7 +45,7 @@ export const resourcesApi = {
   },
 
   updateResource: async (id: string, data: UpdateResourcePayload): Promise<Resource> => {
-    const response = await apiClient<Resource>(`/resources/${id}`, {
+    const response = await apiClient<Resource>(apiEndpoints.resources.update(id), {
       method: "PATCH",
       body: JSON.stringify(data),
     });
@@ -53,6 +53,6 @@ export const resourcesApi = {
   },
 
   deleteResource: async (id: string): Promise<void> => {
-    await apiClient(`/resources/${id}`, { method: "DELETE" });
+    await apiClient(apiEndpoints.resources.delete(id), { method: "DELETE" });
   }
 };
