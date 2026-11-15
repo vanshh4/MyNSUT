@@ -33,7 +33,7 @@ export default function AdminNewResourcePage() {
         </Link>
         <Link
           href="/admin/resources/edit"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-primary/10 text-primary dark:text-blue-300 hover:bg-primary/20 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-primary/10 text-primary dark:text-primary-container hover:bg-primary/20 dark:hover:bg-white/10 transition-colors"
         >
           <Edit3 className="w-3.5 h-3.5" />
           Edit Existing Resource

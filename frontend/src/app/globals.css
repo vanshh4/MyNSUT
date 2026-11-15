@@ -100,6 +100,24 @@ select {
   font: inherit;
 }
 
+select {
+  color-scheme: light;
+}
+
+.dark select {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #191c1e;
+}
+
+.dark select option {
+  background-color: #1c1b1b;
+  color: #e5e2e1;
+}
+
 .material-symbols-outlined {
   display: inline-block;
   font-family: "Material Symbols Outlined";

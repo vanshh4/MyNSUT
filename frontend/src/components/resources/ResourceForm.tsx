@@ -176,7 +176,7 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
   const inputClass =
     "block w-full rounded-xl border border-glass-border bg-glass-surface px-3.5 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors";
   const selectClass =
-    "block w-full rounded-xl border border-glass-border bg-glass-surface px-3.5 py-2.5 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors";
+    "block w-full rounded-xl border border-glass-border bg-glass-surface px-3.5 py-2.5 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors cursor-pointer [color-scheme:light] dark:[color-scheme:dark] [&>option]:bg-white dark:[&>option]:bg-[#1c1b1b] [&>option]:text-text-main";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -289,9 +289,9 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
               onChange={e => setResourceType(e.target.value)}
               className={selectClass}
             >
-              <option value="">Select type…</option>
+              <option value="" className="bg-white dark:bg-[#1c1b1b] text-text-main">Select type…</option>
               {RESOURCE_TYPE_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>
+                <option key={opt.value} value={opt.value} className="bg-white dark:bg-[#1c1b1b] text-text-main">
                   {opt.label}
                 </option>
               ))}
@@ -305,9 +305,9 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
               onChange={e => setSemester(e.target.value)}
               className={selectClass}
             >
-              <option value="">Any semester</option>
+              <option value="" className="bg-white dark:bg-[#1c1b1b] text-text-main">Any semester</option>
               {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
-                <option key={s} value={s}>
+                <option key={s} value={s} className="bg-white dark:bg-[#1c1b1b] text-text-main">
                   Semester {s}
                 </option>
               ))}
@@ -347,7 +347,7 @@ export function ResourceForm({ initialData, onSuccess, onCancel, onDelete }: Res
               className={selectClass}
             >
               {RESOURCE_STATUS_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>
+                <option key={opt.value} value={opt.value} className="bg-white dark:bg-[#1c1b1b] text-text-main">
                   {opt.label}
                 </option>
               ))}
