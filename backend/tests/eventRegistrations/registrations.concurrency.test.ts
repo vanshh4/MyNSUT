@@ -3,6 +3,7 @@ import { prisma } from '../../src/db/prisma.js';
 import { registrationsService } from '../../src/modules/eventRegistrations/registrations.service.js';
 
 describe('Event Registrations Concurrency', () => {
+  const isCI = process.env.CI?.trim().toLowerCase() === 'true';
   let isDbAvailable = false;
   let eventId: string;
   let societyId: string;
@@ -13,7 +14,15 @@ describe('Event Registrations Concurrency', () => {
     try {
       await prisma.$connect();
       isDbAvailable = true;
-    } catch {
+    } catch (error) {
+      if (isCI) {
+        throw new Error(
+          `[FATAL] PostgreSQL test database is unreachable in CI environment (CI=true).\n` +
+            `Database-dependent concurrency integration tests cannot be skipped in automated CI pipelines.\n` +
+            `Ensure the PostgreSQL service container is running and healthy on port 5432.\n` +
+            `Underlying connection error: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
       console.warn('PostgreSQL database not available; skipping concurrency integration tests.');
       return;
     }
@@ -82,6 +91,11 @@ describe('Event Registrations Concurrency', () => {
 
   it('should not overbook the event when multiple users register concurrently', async (ctx) => {
     if (!isDbAvailable) {
+      if (isCI) {
+        throw new Error(
+          '[FATAL] Concurrency integration test was executed in CI (CI=true) without an available PostgreSQL database.'
+        );
+      }
       ctx.skip();
       return;
     }
