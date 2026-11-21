@@ -1,13 +1,76 @@
 import type { NextConfig } from "next";
 
-const backendOrigin = (process.env.BACKEND_INTERNAL_URL ?? "http://localhost:4000").replace(
-  /\/$/,
-  ""
-);
+function resolveBackendOrigin(phase?: string): string {
+  const isTypegen = process.argv.some((arg) => arg.includes("typegen"));
+  const isDev =
+    phase === "phase-development-server" ||
+    process.argv.some((arg) => arg.includes("dev"));
 
-const nextConfig: NextConfig = {
-  devIndicators: false,
-  allowedDevOrigins: [
+  // Enforce production validation during production builds or production server execution,
+  // while preserving localhost fallback during local development, test, and typegen.
+  const isProductionBuildOrServer =
+    !isDev &&
+    !isTypegen &&
+    (process.env.NODE_ENV === "production" ||
+      phase === "phase-production-build" ||
+      phase === "phase-production-server" ||
+      process.argv.some((arg) => arg.includes("build") || arg.includes("start")));
+
+  const rawUrl = process.env.BACKEND_INTERNAL_URL?.trim();
+
+  if (!isProductionBuildOrServer) {
+    // Preserve localhost fallback for local development, testing, and typegen
+    return (rawUrl || "http://localhost:4000").replace(/\/$/, "");
+  }
+
+  // Production validation: require valid remote URL and reject localhost
+  if (!rawUrl) {
+    throw new Error(
+      "[next.config.ts] FATAL: BACKEND_INTERNAL_URL is missing in production environment.\n" +
+        "You must configure BACKEND_INTERNAL_URL with the public URL of your backend service (e.g., https://mynsut-backend.onrender.com) " +
+        "so that Next.js /api/backend rewrites can route API requests."
+    );
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(rawUrl);
+  } catch {
+    throw new Error(
+      `[next.config.ts] FATAL: BACKEND_INTERNAL_URL is not a valid URL: "${rawUrl}".\n` +
+        "Provide a valid HTTP or HTTPS URL (e.g., https://mynsut-backend.onrender.com)."
+    );
+  }
+
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    throw new Error(
+      `[next.config.ts] FATAL: BACKEND_INTERNAL_URL must use http: or https: protocol. Received "${parsed.protocol}".`
+    );
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+  const isLoopback =
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    hostname === "0.0.0.0" ||
+    hostname.startsWith("127.");
+
+  if (isLoopback) {
+    throw new Error(
+      `[next.config.ts] FATAL: BACKEND_INTERNAL_URL cannot point to localhost or loopback address in production ("${rawUrl}").\n` +
+        "Provide the public or private URL of your live deployed backend service (e.g., https://mynsut-backend.onrender.com)."
+    );
+  }
+
+  return rawUrl.replace(/\/$/, "");
+}
+
+const nextConfig = (phase: string): NextConfig => {
+  const backendOrigin = resolveBackendOrigin(phase);
+  return {
+    devIndicators: false,
+    allowedDevOrigins: [
     "192.168.1.10",
     "192.168.1.11",
     "192.168.1.12",
@@ -59,6 +122,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  };
 };
 
 export default nextConfig;
