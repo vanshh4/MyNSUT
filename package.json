@@ -22,17 +22,24 @@
     "format": "npm run format --workspace frontend && npm run format --workspace backend",
     "format:frontend": "npm run format --workspace frontend",
     "format:backend": "npm run format --workspace backend",
+    "typecheck": "npm run typecheck --workspace @mynsut/shared && npm run typecheck --workspace backend && npm run typecheck --workspace frontend",
+    "typecheck:shared": "npm run typecheck --workspace @mynsut/shared",
+    "typecheck:backend": "npm run typecheck --workspace backend",
+    "typecheck:frontend": "npm run typecheck --workspace frontend",
+    "test": "npm run test --workspace backend && npm run test --workspace frontend",
+    "test:backend": "npm run test --workspace backend",
+    "test:frontend": "npm run test --workspace frontend",
+    "test:e2e": "playwright test",
     "prisma:generate": "npm run prisma:generate --workspace backend",
     "prisma:validate": "npm run prisma:validate --workspace backend",
     "prisma:migrate": "npm run prisma:migrate --workspace backend",
     "prisma:deploy": "npm run prisma:deploy --workspace backend",
     "prisma:studio": "npm run prisma:studio --workspace backend",
-    "db:seed": "npm run db:seed --workspace backend",
-    "test:e2e": "playwright test"
+    "db:seed": "npm run db:seed --workspace backend"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vanshh4/MyNSUT2.git"
+    "url": "git+https://github.com/vanshh4/MyNSUT.git"
   },
   "keywords": [
     "mynsut",
@@ -47,9 +54,9 @@
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/vanshh4/MyNSUT2/issues"
+    "url": "https://github.com/vanshh4/MyNSUT/issues"
   },
-  "homepage": "https://github.com/vanshh4/MyNSUT2#readme",
+  "homepage": "https://github.com/vanshh4/MyNSUT#readme",
   "devDependencies": {
     "@playwright/test": "^1.65.1",
     "concurrently": "^9.0.0"
