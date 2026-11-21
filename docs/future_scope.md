@@ -298,7 +298,7 @@ For Super Admin:
 
 ---
 
-## 12. Future Phase 10: Communication Features
+## 12. Deferred Milestone: Communication Features
 
 These should be added carefully to avoid moderation burden.
 
