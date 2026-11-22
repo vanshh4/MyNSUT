@@ -171,6 +171,9 @@
   "engines": {
     "node": ">=24.18.0"
   },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
   "devDependencies": {
     "typescript": "^5.9.3"
   }
