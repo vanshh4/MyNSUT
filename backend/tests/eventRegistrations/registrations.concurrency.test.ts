@@ -7,6 +7,7 @@ describe('Event Registrations Concurrency', () => {
   let isDbAvailable = false;
   let eventId: string;
   let societyId: string;
+  let classId: string;
   const students: string[] = [];
   const userIds: string[] = [];
 
@@ -30,8 +31,7 @@ describe('Event Registrations Concurrency', () => {
     // Create a dummy society
     const society = await prisma.society.create({
       data: {
-        name: 'Concurrency Test Society',
-        slug: 'concurrency-test-society',
+        name: `Concurrency Test Society ${Date.now()}`,
         category: 'ACADEMIC',
       }
     });
@@ -42,7 +42,6 @@ describe('Event Registrations Concurrency', () => {
       data: {
         societyId,
         title: 'Concurrency Test Event',
-        slug: 'concurrency-test-event',
         startDate: new Date(Date.now() + 86400000),
         endDate: new Date(Date.now() + 86400000 * 2),
         maxCapacity: 3,
@@ -52,21 +51,44 @@ describe('Event Registrations Concurrency', () => {
     });
     eventId = event.id;
 
+    // Create an academic class for students
+    const academicClass = await prisma.academicClass.upsert({
+      where: {
+        admissionYear_branchCode_section: {
+          admissionYear: 2099,
+          branchCode: 'CONC',
+          section: 'C1',
+        },
+      },
+      update: {},
+      create: {
+        name: 'Concurrency Test Class',
+        admissionYear: 2099,
+        branchCode: 'CONC',
+        section: 'C1',
+      },
+    });
+    classId = academicClass.id;
+
     // Create 5 students
     for (let i = 0; i < 5; i++) {
       const user = await prisma.user.create({
         data: {
-          email: `concurrency-test-${i}@nsut.ac.in`,
+          email: `concurrency-test-${Date.now()}-${i}@nsut.ac.in`,
           fullName: `Concurrency User ${i}`,
           status: 'ACTIVE'
         }
       });
       const student = await prisma.student.create({
         data: {
-          id: user.id,
-          rollNumber: `2024CS000${i}`,
-          branch: 'CS',
-          semester: 1
+          userId: user.id,
+          classId: academicClass.id,
+          umsRollNumber: `UMS-CONC-${Date.now()}-${i}`,
+          admissionYear: 2099,
+          branchCode: 'CONC',
+          rollNumber: `2099CONC00${i}`,
+          section: 'C1',
+          graduationYear: 2103,
         }
       });
       userIds.push(user.id);
@@ -77,15 +99,28 @@ describe('Event Registrations Concurrency', () => {
   afterAll(async () => {
     if (!isDbAvailable) return;
     try {
-      await prisma.eventRegistration.deleteMany({ where: { eventId } });
-      await prisma.eventWaitlistEntry.deleteMany({ where: { eventId } });
-      await prisma.eventInterest.deleteMany({ where: { eventId } });
-      await prisma.event.delete({ where: { id: eventId } });
-      await prisma.society.delete({ where: { id: societyId } });
-      await prisma.student.deleteMany({ where: { id: { in: students } } });
-      await prisma.user.deleteMany({ where: { id: { in: userIds } } });
+      if (eventId) {
+        await prisma.eventRegistration.deleteMany({ where: { eventId } });
+        await prisma.eventWaitlistEntry.deleteMany({ where: { eventId } });
+        await prisma.eventInterest.deleteMany({ where: { eventId } });
+        await prisma.event.delete({ where: { id: eventId } }).catch(() => {});
+      }
+      if (societyId) {
+        await prisma.society.delete({ where: { id: societyId } }).catch(() => {});
+      }
+      if (students.length > 0) {
+        await prisma.student.deleteMany({ where: { id: { in: students } } });
+      }
+      if (userIds.length > 0) {
+        await prisma.user.deleteMany({ where: { id: { in: userIds } } });
+      }
+      if (classId) {
+        await prisma.academicClass.delete({ where: { id: classId } }).catch(() => {});
+      }
     } catch {
       // Ignore cleanup error if already cleared
+    } finally {
+      await prisma.$disconnect().catch(() => {});
     }
   });
 
