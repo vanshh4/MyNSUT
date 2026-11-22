@@ -18,7 +18,7 @@ This runbook defines the operational procedures for deploying, maintaining, migr
 │                   Render Web Service                   │
 │   Backend: Express API (Node.js 24.18.0 LTS pinned)    │
 │   Host: https://mynsut-backend.onrender.com            │
-│   Pre-Deploy Hook: npm run prisma:deploy               │
+│   Build Command Migration: npm run prisma:deploy       │
 └─────────────┬───────────────────────────┬──────────────┘
               │                           │
   DATABASE_URL│(Pooler :6543)    DIRECT_URL│(Direct :5432)
@@ -91,7 +91,7 @@ To achieve zero downtime during updates and database migrations, deployments MUS
 [ Step 1: Quality Gate & Automated Tests (CI) ]
                      │
                      ▼
-[ Step 2: Render Pre-Deploy Command: prisma migrate deploy ]
+[ Step 2: Render Build Command: prisma migrate deploy ]
   - Uses DIRECT_URL (bypasses PgBouncer)
   - Applies forward-compatible migrations
                      │
@@ -129,12 +129,17 @@ npm run test
 npm run test:e2e
 ```
 
-#### 2. Database Migrations (Render Pre-Deploy Hook)
-In Render's service configuration (`render.yaml`), specify:
+#### 2. Database Migrations (Render Free Build Command Chaining)
+On Render Free-tier web services, `preDeployCommand` is unsupported by the platform. Therefore, transactional Prisma migrations are executed directly within the service's `buildCommand` in `render.yaml`:
 ```yaml
-preDeployCommand: npm run prisma:deploy --workspace backend
+buildCommand: npm run build --workspace @mynsut/shared && npm run prisma:generate --workspace backend && npm run prisma:deploy --workspace backend && npm run build --workspace backend
 ```
-This runs `prisma migrate deploy` inside `backend/` using `DIRECT_URL` (direct unpooled TCP connection to port 5432). It guarantees migrations complete before any new web server code starts listening for user traffic.
+This runs `prisma migrate deploy` inside `backend/` using `DIRECT_URL` (direct unpooled TCP connection to port 5432).
+
+**Why Running Migrations in Build Command is Safe & Optimal for Render Free**:
+1. **Build Gate Protection**: If any migration fails, the build step fails immediately. Render aborts the deployment and does not launch the new container, leaving any existing deployment running unharmed.
+2. **Cold-Start Performance**: Running migrations during the build step ensures that subsequent cold-start container wakeups (after Render's 15-minute idle spin-down) execute instantaneously via `startCommand` without incurring database migration latency or risking startup probe timeouts.
+3. **Automated Client Generation**: Running `prisma:generate` immediately before `prisma:deploy` and `build` guarantees the generated Prisma client is synchronized with the schema before compiling backend TypeScript code.
 
 #### 3. Initial Database Seeding (One-Time Manual Operation)
 Database seeding (`backend/prisma/seed.ts`) is intentionally **decoupled from routine deployments**:
@@ -243,9 +248,9 @@ neon branches delete migration-test
 - **Execution Time**: ~60–90 seconds while containers swap.
 
 ### 5.3 Scenario C: Database Migration Failure or Data Corruption
-*Symptoms: Failed DDL migration in pre-deploy hook or data inconsistency.*
-1. **Pre-Deploy Migration Failure**:
-   - If a migration fails during the `preDeployCommand` hook, Render automatically halts the deployment pipeline. The existing running backend container is left untouched and continues serving traffic against the uncorrupted schema.
+*Symptoms: Failed DDL migration in build command or data inconsistency.*
+1. **Build-Time Migration Failure**:
+   - If a migration fails during the `buildCommand` hook, Render automatically halts the deployment pipeline. The existing running backend container is left untouched and continues serving traffic against the uncorrupted schema.
 2. **Post-Deploy Data Corruption or Breaking Schema (Neon PITR Recovery)**:
    - When data corruption occurs or an unrecoverable schema error bypasses testing, use Neon PITR as a database disaster recovery mechanism:
    - Navigate to the **Neon Console** &rarr; **Backups / Timeline**.
@@ -276,7 +281,7 @@ neon branches delete migration-test
 
 ## 7. Pre-Launch Beta Deployment Checklist
 
-- [ ] All 10 Prisma schema migrations applied cleanly via `DIRECT_URL`.
+- [ ] All 10 Prisma schema migrations applied cleanly via `DIRECT_URL` during Render build command.
 - [ ] Initial database seed preconditions verified (production database confirmed, migrations complete), executed once via GitHub Actions workflow (`workflow_dispatch`), and recorded.
 - [ ] Google Cloud OAuth consent screen configured with authorized domain `nsut.ac.in` and production redirect URI matching Vercel host (`https://<project>.vercel.app/api/backend/auth/google/callback`).
 - [ ] `BACKEND_INTERNAL_URL` configured in Vercel production environment pointing to live Render service (e.g. `https://mynsut-backend.onrender.com`).

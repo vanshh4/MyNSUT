@@ -4,23 +4,31 @@ services:
     env: node
     plan: free
     region: singapore
-    buildCommand: npm run build --workspace @mynsut/shared && npm run prisma:generate --workspace backend && npm run build --workspace backend
+    buildCommand: npm run build --workspace @mynsut/shared && npm run prisma:generate --workspace backend && npm run prisma:deploy --workspace backend && npm run build --workspace backend
     # --------------------------------------------------------------------------
-    # Database Lifecycle & Pre-Deploy Configuration:
+    # Database Lifecycle & Free-Tier Migration Configuration:
     # --------------------------------------------------------------------------
-    # preDeployCommand runs before the new service instance starts taking traffic.
-    # We strictly run transactional Prisma migrations here using DIRECT_URL.
+    # Note: Render Free tier does not support `preDeployCommand`.
+    # Therefore, transactional Prisma migrations (`prisma migrate deploy`) are executed
+    # during `buildCommand` using DIRECT_URL (direct unpooled TCP to port 5432).
+    #
+    # WHY MIGRATIONS RUN IN BUILDCOMMAND:
+    # 1. Build Failure Gate: If a migration fails, the build halts immediately,
+    #    preventing an unready or broken container from launching.
+    # 2. Cold-Start Preservation: Running migrations during build ensures that
+    #    subsequent cold-start wakeups (after 15 min of idle spin-down) do not
+    #    incur database migration overhead, keeping wake-up latency fast.
     #
     # WHY SEEDING IS DECOUPLED FROM ROUTINE DEPLOYMENTS:
     # 1. Deployment Latency: Running upserts across hundreds of cohort classes,
-    #    subjects, and demo records on every build increases pre-deploy time
-    #    and delays zero-downtime rolling container swaps.
+    #    subjects, and demo records on every build increases build time
+    #    and delays rolling container swaps.
     # 2. Unwanted Data Re-creation: prisma/seed.ts populates sample academic
     #    resources. Running it on every deploy would resurrect demo resources
     #    that administrators intentionally removed or updated in production.
     # 3. Constraint Collision Hazard: Live administrative modifications to classes,
     #    sections, or subjects could conflict with hardcoded seed definitions,
-    #    causing unexpected pre-deploy command failure and aborting rollouts.
+    #    causing unexpected build command failure and aborting rollouts.
     #
     # WHEN SEEDING IS APPROPRIATE:
     # - Execute ONCE upon initial deployment to a fresh database branch to populate
@@ -33,7 +41,6 @@ services:
     # manually triggered GitHub Actions workflow:
     # Actions -> "Production Database Seed" (workflow_dispatch) -> type "SEED_PRODUCTION"
     # --------------------------------------------------------------------------
-    preDeployCommand: npm run prisma:deploy --workspace backend
     startCommand: npm run start --workspace backend
     healthCheckPath: /api/v1/health?readiness=true
     autoDeploy: true
