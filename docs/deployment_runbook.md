@@ -45,7 +45,7 @@ This runbook defines the operational procedures for deploying, maintaining, migr
 | :--- | :--- | :--- |
 | `NODE_VERSION` | Pinned Node.js runtime version | `24.18.0` |
 | `NODE_ENV` | Environment indicator | `production` |
-| `PORT` | Local binding port on host | `4000` (Render defaults to `10000`) |
+| `PORT` | Local binding port on host | Automatically injected by Render (defaults to `10000`; backend binds to `process.env.PORT || 4000`) |
 | `API_PREFIX` | Base REST route prefix | `/api/v1` |
 | `APP_NAME` | Service identifier | `MyNSUT API` |
 | `LOG_LEVEL` | Morgan logging format | `combined` |
@@ -70,6 +70,16 @@ This runbook defines the operational procedures for deploying, maintaining, migr
 | `NEXT_PUBLIC_APP_URL` | Canonical public URL of the frontend app | `https://<your-project>.vercel.app` |
 | `NEXT_PUBLIC_API_BASE_URL` | Same-origin API prefix for browser fetch calls | `/api/backend` |
 | `BACKEND_INTERNAL_URL` | Destination host for proxy rewrites (**mandatory in production**; localhost rejected) | `https://mynsut-backend.onrender.com` |
+
+### 2.3 Free-Tier Operational Characteristics & Resource Limits
+
+To maintain a zero-cost operational profile for the beta launch, MyNSUT operates entirely on free tiers. The operational boundaries and behavior under these tiers are:
+
+| Platform / Service | Free-Tier Constraints | Operational Behavior & Mitigations |
+| :--- | :--- | :--- |
+| **Render Web Service (Free)** | • 0.1 CPU, 512 MB RAM<br>• 750 free instance hours/month<br>• No interactive Shell or SSH access<br>• Sleeps after 15 min inactivity | • **Cold Starts**: After 15 minutes of inactivity, the instance spins down. The first incoming request triggers a spin-up taking ~50 seconds. Subsequent requests execute with sub-100ms latency.<br>• **No Shell**: Initial database seeding cannot be run via Render Dashboard Shell; it is executed securely via GitHub Actions (`workflow_dispatch`).<br>• **Dynamic Port**: Render dynamically assigns `PORT` (e.g. `10000`); Express binds dynamically to `process.env.PORT`. |
+| **Neon PostgreSQL (Free)** | • 1 Project, 0.5 GiB max storage<br>• Compute auto-suspends after 5 min idle<br>• PgBouncer pooler (:6543) up to 100 pooled connections<br>• 24-hour continuous WAL PITR window | • **Compute Auto-Suspend**: Inactive compute automatically suspends. Incoming connections wake the database within 1–2 seconds.<br>• **Storage Cap**: The 0.5 GiB storage is ample for hundreds of thousands of student records and academic metadata; binary files and notes are stored on external object storage or distributed links.<br>• **PITR Recovery**: Point-in-time continuous WAL recovery is available for 24 hours. |
+| **Vercel Edge (Hobby Free)** | • Global CDN Edge deployment<br>• Serverless SSR execution<br>• Rewrites to Render backend | • Next.js frontend pages and proxy rewrites (`/api/backend/*`) execute serverlessly with global caching. |
 
 ---
 
@@ -143,15 +153,18 @@ Database seeding (`backend/prisma/seed.ts`) is intentionally **decoupled from ro
 * **Rerun Safety Policy**:
   - The seed script should **only be rerun after reviewing its behavior and confirming that rerunning it is safe** for the current database state (e.g., verifying that custom administrative modifications, live timetable entries, or pruned sample resources will not be unintentionally overwritten or re-created).
 * **How to Execute Initial Seed**:
-  * **Option A (Recommended — Render Dashboard Shell)**:
-    1. Navigate to [Render Dashboard](https://dashboard.render.com) &rarr; select **`mynsut-backend`**.
-    2. Open the **Shell** tab.
-    3. Execute:
-       ```bash
-       npm run db:seed --workspace backend
-       ```
-    4. Confirm log output: `"MyNSUT Phase 9 baseline seed completed successfully."`
-  * **Option B (Remote CLI with Production Credentials)**:
+  * **Option A (Recommended — GitHub Actions "Production Database Seed" Workflow)**:
+    1. Navigate to the GitHub repository &rarr; **Actions** tab.
+    2. Select the **"Production Database Seed"** workflow from the left sidebar.
+    3. Click **"Run workflow"**.
+    4. In the confirmation input field, type exactly: `SEED_PRODUCTION`.
+    5. Ensure target environment is set to `production`.
+    6. Click the green **"Run workflow"** button.
+    7. Inspect the workflow run logs. Verify that the safety checks pass and confirm the final step outputs: `"MyNSUT Phase 9 baseline seed completed successfully."`.
+    > [!NOTE]
+    > This workflow uses repository secrets (`PRODUCTION_DATABASE_URL`, `PRODUCTION_DIRECT_URL`, `PRODUCTION_SUPER_ADMIN_EMAIL`), validates that the target database is remote and not a local/test database, builds the required workspace packages, and securely executes the idempotent seed script.
+
+  * **Option B (Controlled Local CLI with Production Credentials)**:
     ```bash
     DATABASE_URL="<neon-pooled-url>" DIRECT_URL="<neon-direct-url>" npm run db:seed --workspace backend
     ```
@@ -264,7 +277,7 @@ neon branches delete migration-test
 ## 7. Pre-Launch Beta Deployment Checklist
 
 - [ ] All 10 Prisma schema migrations applied cleanly via `DIRECT_URL`.
-- [ ] Initial database seed preconditions verified (production database confirmed, migrations complete), executed once via Render Shell, and recorded.
+- [ ] Initial database seed preconditions verified (production database confirmed, migrations complete), executed once via GitHub Actions workflow (`workflow_dispatch`), and recorded.
 - [ ] Google Cloud OAuth consent screen configured with authorized domain `nsut.ac.in` and production redirect URI matching Vercel host (`https://<project>.vercel.app/api/backend/auth/google/callback`).
 - [ ] `BACKEND_INTERNAL_URL` configured in Vercel production environment pointing to live Render service (e.g. `https://mynsut-backend.onrender.com`).
 - [ ] `TRUST_PROXY=true` confirmed in backend environment.
