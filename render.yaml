@@ -2,7 +2,7 @@ services:
   - type: web
     name: mynsut-backend
     env: node
-    plan: starter
+    plan: free
     region: singapore
     buildCommand: npm run build --workspace @mynsut/shared && npm run prisma:generate --workspace backend && npm run build --workspace backend
     # --------------------------------------------------------------------------
@@ -28,10 +28,10 @@ services:
     #   role-permission mappings, baseline academic classes, and Super Admin.
     #
     # HOW TO PERFORM THE INITIAL SEED MANUALLY:
-    # Option A (Recommended - Render Shell):
-    #   1. In Render Dashboard -> select "mynsut-backend" -> open "Shell" tab.
-    #   2. Run: npm run db:seed --workspace backend
-    #   3. Verify output: "MyNSUT Phase 9 baseline seed completed successfully."
+    # Note: Render Free tier does not include Dashboard Shell/SSH access.
+    # Production database seeding is executed exclusively through the secure,
+    # manually triggered GitHub Actions workflow:
+    # Actions -> "Production Database Seed" (workflow_dispatch) -> type "SEED_PRODUCTION"
     # --------------------------------------------------------------------------
     preDeployCommand: npm run prisma:deploy --workspace backend
     startCommand: npm run start --workspace backend
@@ -42,8 +42,6 @@ services:
         value: 24.18.0
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 4000
       - key: API_PREFIX
         value: /api/v1
       - key: APP_NAME
