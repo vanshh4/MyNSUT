@@ -38,6 +38,8 @@ services:
     healthCheckPath: /api/v1/health?readiness=true
     autoDeploy: true
     envVars:
+      - key: NODE_VERSION
+        value: 24.18.0
       - key: NODE_ENV
         value: production
       - key: PORT

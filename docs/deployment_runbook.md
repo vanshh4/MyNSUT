@@ -16,7 +16,7 @@ This runbook defines the operational procedures for deploying, maintaining, migr
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │                   Render Web Service                   │
-│   Backend: Express API (Node.js 20.18.0 pinned)        │
+│   Backend: Express API (Node.js 24.18.0 LTS pinned)    │
 │   Host: https://mynsut-backend.onrender.com            │
 │   Pre-Deploy Hook: npm run prisma:deploy               │
 └─────────────┬───────────────────────────┬──────────────┘
@@ -33,16 +33,17 @@ This runbook defines the operational procedures for deploying, maintaining, migr
 
 > [!NOTE]
 > - **Domain Routing**: Initial production deployment uses the canonical Vercel-assigned domain (`https://<project>.vercel.app`). Mapping an institutional custom domain (`https://mynsut.com`) can be configured at any point post-launch by adding the domain in Vercel, updating `FRONTEND_URL` on Render, and updating Google OAuth Authorized Redirect URIs with zero codebase modifications.
-> - **Backend Runtime**: The backend Express service runs on Node.js 20.18.0 (currently pinned; runtime upgrade to a supported LTS version pending).
+> - **Backend Runtime**: The backend Express service runs on Node.js 24.18.0 LTS (pinned).
 
 ---
 
 ## 2. Infrastructure Inventory & Environment Variables
 
 ### 2.1 Backend Environment (`backend/.env` / Render Dashboard)
-*Runtime: Node.js 20.18.0 (currently pinned; runtime upgrade to a supported LTS version pending)*
+*Runtime: Node.js 24.18.0 LTS (pinned)*
 | Variable | Description | Example / Production Setting |
 | :--- | :--- | :--- |
+| `NODE_VERSION` | Pinned Node.js runtime version | `24.18.0` |
 | `NODE_ENV` | Environment indicator | `production` |
 | `PORT` | Local binding port on host | `4000` (Render defaults to `10000`) |
 | `API_PREFIX` | Base REST route prefix | `/api/v1` |
