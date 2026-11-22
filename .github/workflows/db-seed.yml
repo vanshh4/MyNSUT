@@ -1,0 +1,98 @@
+name: Production Database Seed
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "SEED_PRODUCTION" to authorize execution'
+        required: true
+        type: string
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+
+concurrency:
+  group: production-db-seed
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  seed-database:
+    name: Execute Production Seed
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Validate confirmation input
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "SEED_PRODUCTION" ]; then
+            echo "::error::Execution rejected. Confirmation string '${{ github.event.inputs.confirm }}' does not match 'SEED_PRODUCTION'."
+            exit 1
+          fi
+          echo "Confirmation verified. Proceeding with controlled production seeding."
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npm run prisma:generate --workspace backend
+
+      - name: Build shared package
+        run: npm run build:shared
+
+      - name: Validate production database endpoint
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::PRODUCTION_DATABASE_URL secret is not configured in GitHub repository or environment secrets."
+            exit 1
+          fi
+
+          # Safety gate: Ensure the database URL points to a remote host and never to a local or test database
+          if [[ "$DATABASE_URL" == *"localhost"* ]] || [[ "$DATABASE_URL" == *"127.0.0.1"* ]] || [[ "$DATABASE_URL" == *"mynsut_test"* ]]; then
+            echo "::error::Safety gate violation: DATABASE_URL appears to target a local or test database."
+            exit 1
+          fi
+
+          if [[ "$DATABASE_URL" != *"neon.tech"* ]]; then
+            echo "::warning::DATABASE_URL does not contain 'neon.tech'. Ensure this is the intended production host."
+          fi
+
+          echo "Target database sanity check passed."
+
+      - name: Execute production database seed
+        id: seed
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+          SUPER_ADMIN_EMAIL: ${{ secrets.PRODUCTION_SUPER_ADMIN_EMAIL }}
+          NODE_ENV: production
+        run: |
+          echo "Starting idempotent baseline database seed..."
+          npm run db:seed --workspace backend
+
+      - name: Generate execution summary
+        if: always()
+        run: |
+          echo "### Production Database Seeding Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered By**: @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target Host**: Neon Serverless PostgreSQL" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status == 'success' && '✅ Succeeded' || '❌ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
